@@ -25,7 +25,7 @@ class Player {
         const audioSource = audioCtx.createMediaElementSource(this.song1);
         this.analyser = audioCtx.createAnalyser();
         audioSource.connect(this.analyser);
-        // audioCtx.setSinkId({ type: "none" });
+        audioCtx.setSinkId({ type: "none" });
         this.analyser.connect(audioCtx.destination);
         this.analyser.fftSize = fftSize;
         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
