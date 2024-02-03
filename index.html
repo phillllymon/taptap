@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styleReset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <center>
+        
+        <div id="game-container" class="game-container">
+            <div id="modal-background"></div>
+            <div id="start-modal">
+                <button id="start-button">Enter Game</button>
+            </div>
+            <div id="choose-modal" class="hidden">
+                Choose song:
+                <select id="select-song">
+                    <option value="anthem">anthem</option>
+                    <option value="boondock">boondock</option>
+                    <option value="brownEyed">brownEyed</option>
+                    <option value="danger">danger</option>
+                    <option value="evenRats">evenRats</option>
+                    <option value="everyTime">everyTime</option>
+                    <option value="fatLip">fatLip</option>
+                    <option value="feeling">feeling</option>
+                    <option value="oops">oops</option>
+                    <option value="rocknRoll">rocknRoll</option>
+                    <option value="smallThings">smallThings</option>
+                    <option value="sandstorm">sandstorm</option>
+                    <option value="sellOut">sellOut</option>
+                    <option value="semiCharmed">semiCharmed</option>
+                    <option value="stairway">stairway</option>
+                    <option value="starlight">starlight</option>
+                    <option value="sweetChild">sweetChild</option>
+                    <option value="takeOnMe">takOnMe</option>
+                    <option value="vivaldi">vivaldi</option>
+                    <option value="volcano">volcano</option>
+                </select>
+                <br>
+                <br>
+                - or -
+                <br>
+                <br>
+                <input id="file-input" type="file" />
+            </div>
+            <div id="full-screen">&#x2197;</div>
+            <div id="play-area" class="play-area">
+                
+                
+                <div id="menu-right">
+                    <div id="choose-button" class="level">Choose song</div>
+                </div>
+                <div id="slides-container">
+                    <div id="slides" class="slides">
+                        <div id="slide-left" class="slide">
+                            <!-- <div id="test-note2" class="note"></div> -->
+                            <div id="tapper-left" class="tapper"></div>
+                        </div>
+                        <div id="slide-a" class="slide">
+                            <div id="tapper-a" class="tapper"></div>
+                        </div>
+                        <div id="slide-b" class="slide">
+                            <div id="tapper-b" class="tapper"></div>
+                        </div>
+                        <div id="slide-right" class="slide">
+                            <!-- <div id="test-note" class="note"></div> -->
+                            <div id="tapper-right" class="tapper"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="fog-gradient"></div>
+                <div id="song-label"></div>
+                <div id="rock-meter">
+                    <div id="meter-green" class="meter-color"></div>
+                    <div id="meter-yellow" class="meter-color"></div>
+                    <div id="meter-red" class="meter-color"></div>
+                    <div id="meter-needle"></div>
+                </div>
+                <div id="play-controls">
+                    <div id="button-play" class="control-button">&#9654;&#65039;</div>
+                    <div id="button-pause" class="control-button">&#x23F8;</div>
+                    <div id="button-restart" class="control-button">&#9198;&#65039;</div>
+                </div>
+                <div id="level-selector">
+                    Difficulty:
+                    <div id="level-1" class="level">stupid</div>
+                    <div id="level-2" class="level">easy</div>
+                    <div id="level-3" class="level">medium</div>
+                    <div id="level-4" class="level">hard</div>
+                    <div id="level-5" class="level">crazy</div>
+                </div>
+                <div id="slides-selector">
+                    Slides:
+                    <div id="slides-2" class="level">2</div>
+                    <div id="slides-3" class="level">3</div>
+                    <div id="slides-4" class="level">4</div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    <script type="text/javascript" src="./player.js"></script>
+    <script type="text/javascript" src="./noteWriter.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+</body>
+</html>
