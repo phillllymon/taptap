@@ -89,4 +89,8 @@ class Player {
         this.analyser.getByteFrequencyData(this.dataArray);
         return this.dataArray;
     }
+
+    setVolume(val) {
+        this.song2.volume = val;
+    }
 }

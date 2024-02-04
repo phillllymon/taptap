@@ -24,8 +24,13 @@ class NoteWriter {
         for (let i = 0; i < data.length; i++) {
             const arr = data[i];
             const midIdx = Math.floor(arr.length / 2);
-            amt += arr[midIdx];
+            const midArr = [arr[midIdx - 2], arr[midIdx - 1], arr[midIdx], arr[midIdx + 1], arr[midIdx + 2]];
+            midArr.forEach((val) => {
+
+                amt += val;
+            });
         }
+        // console.log(amt);
         for (let i = 0; i < slideIds.length; i++) {
             
 
@@ -49,8 +54,13 @@ class NoteWriter {
 
 
             
+            
 
-            if (midVal > beforeMax && midVal > afterMax && amt > 300) {
+            if (midVal > beforeMax && midVal > afterMax && amt > 500) {
+            // if (midVal > beforeMax && midVal > afterMax) {
+
+                
+
                 if (mobile && slideIds.length > 2) {
                     const now = performance.now();
                     const gap = (1.0 / notesPerSecond) * 1000;
@@ -79,11 +89,13 @@ class NoteWriter {
                         const rightTime = now - this.lastRight;
                         if (this.leftSlides.includes(slideIds[i])) {
                             if (leftTime > gap) {
+                                // console.log(amt);
                                 addNote(slideIds[i]);
                                 this.lastLeft = performance.now();
                             }
                         } else { // we're on the right side
                             if (rightTime > gap) {
+                                // console.log(amt);
                                 addNote(slideIds[i]);
                                 this.lastRight = performance.now();
                             }

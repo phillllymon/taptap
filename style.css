@@ -254,6 +254,10 @@
     box-shadow: 0px 3px 10px orange;
 }
 
+.note-marked {
+    background-color: green;
+}
+
 .tapper {
     position: absolute;
     top: 400px;

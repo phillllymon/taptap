@@ -1,13 +1,30 @@
 console.log("initiating");
 
-document.getElementById("start-button").addEventListener("click", () => {
-    document.getElementById("start-modal").classList.add("hidden");
-    document.getElementById("modal-background").classList.add("hidden");
-    main();
-});
+// document.getElementById("start-button").addEventListener("click", () => {
+//     document.getElementById("start-modal").classList.add("hidden");
+//     document.getElementById("modal-background").classList.add("hidden");
+//     main();
+// });
 
 
-function main() {
+// function main() {
+
+// const twang1 = new Audio("./effects/twang1.m4a");
+// const twang2 = new Audio("./effects/twang2.m4a");
+// const twang3 = new Audio("./effects/twang3.m4a");
+
+const twangs = [
+    // new Audio("./effects/twang1.m4a"),
+    // new Audio("./effects/twang2.m4a"),
+    // new Audio("./effects/twang3.m4a"),
+    // new Audio("./effects/twang4.m4a"),
+    // new Audio("./effects/twang5.m4a"),
+    new Audio("./effects/twang6.m4a"),
+    // new Audio("./effects/twang7.m4a"),
+    new Audio("./effects/twang8.m4a"),
+    new Audio("./effects/twang9.m4a"),
+];
+
 
 
 const targetBounds = {
@@ -143,7 +160,8 @@ function activateTapper(tapperId, slideId, leavingClass) {
         }, 200);
         target[0].classList.add(leavingClass);
         targets[slideId].delete(target);
-        notesHit += 1;
+        triggerHitNote();
+        
         if (notesHit > 30) {
             notesHit = Math.floor(notesHit / 2);
             notesMissed = Math.floor(notesMissed / 2);
@@ -371,7 +389,7 @@ function moveNotes(dt) {
         if (newTop > targetBounds.bottom && note[3] === true) {
             note[3] = false;
             targets[note[2]].delete(note);
-            notesMissed += 1;
+            triggerMissedNote();
         }
         if (newTop > slideLength) {
             note[0].remove();
@@ -381,12 +399,26 @@ function moveNotes(dt) {
 }
 
 // note in form of [<ele>, posTop, slideId, target], where target is boolean
-function addNote(slideId) {
+function addNote(slideId, marked = false) {
     const newNote = document.createElement("div");
     newNote.classList.add("note");
+    if (marked) {
+        newNote.classList.add("note-marked");
+    }
     newNote.style.top = "0px";
     notes.add([newNote, 0, slideId, false]);
     document.getElementById(slideId).appendChild(newNote);
+}
+
+function triggerHitNote() {
+    player.setVolume(1);
+    notesHit += 1;
+}
+
+function triggerMissedNote() {
+    twangs[Math.floor(twangs.length * Math.random())].play();
+    player.setVolume(0.3);
+    notesMissed += 1;
 }
 
 function killAllNotes() {
@@ -540,4 +572,4 @@ function detectMobile() {
     }
 }
 
-} // end of main function
+// } // end of main function
