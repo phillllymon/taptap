@@ -21,7 +21,7 @@ const twangs = [
     // new Audio("./effects/twang5.m4a"),
     new Audio("./effects/twang6.m4a"),
     // new Audio("./effects/twang7.m4a"),
-    new Audio("./effects/twang8.m4a"),
+    // new Audio("./effects/twang8.m4a"),
     new Audio("./effects/twang9.m4a"),
 ];
 
@@ -35,7 +35,8 @@ const targetBounds = {
 let notesHit = 0;
 let notesMissed = 0;
 
-let songDelay = 3000;
+// let songDelay = 3000;
+let songDelay = 4000;
 let noteSpeed = Math.floor(400 / ( (songDelay / 1000.0) / 2 ));
 
 console.log(noteSpeed);
@@ -45,11 +46,17 @@ let slideLength = 500;
 let notesPerSecond = 6; // 6 is pretty good
 const notes = new Set();
 const targets = {
-    "slide-right": new Set(),
-    "slide-left": new Set(),
-    "slide-a": new Set(),
-    "slide-b": new Set()
+    // "slide-right": new Set(),
+    // "slide-left": new Set(),
+    // "slide-a": new Set(),
+    // "slide-b": new Set()
+    "slider-right": new Set(),
+    "slider-left": new Set(),
+    "slider-a": new Set(),
+    "slider-b": new Set()
 }
+let sliderPos = 0;
+
 let numSlides = 2;
 
 if (detectMobile()) {
@@ -123,16 +130,20 @@ document.addEventListener("touchend", () => {
 
 document.addEventListener("keydown", (e) => {
     if(e.code === "KeyD") {
-        activateTapper("tapper-left", "slide-left", "note-leaving-left");
+        // activateTapper("tapper-left", "slide-left", "note-leaving-left");
+        activateTapper("tapper-left", "slider-left", "note-leaving-left");
     }
     if(e.code === "KeyK") {
-        activateTapper("tapper-right", "slide-right", "note-leaving-right");
+        // activateTapper("tapper-right", "slide-right", "note-leaving-right");
+        activateTapper("tapper-right", "slider-right", "note-leaving-right");
     }
     if(e.code === "KeyV") {
-        activateTapper("tapper-a", "slide-a", "note-leaving-left");
+        // activateTapper("tapper-a", "slide-a", "note-leaving-left");
+        activateTapper("tapper-a", "slider-a", "note-leaving-left");
     }
     if(e.code === "KeyN") {
-        activateTapper("tapper-b", "slide-b", "note-leaving-right");
+        // activateTapper("tapper-b", "slide-b", "note-leaving-right");
+        activateTapper("tapper-b", "slider-b", "note-leaving-right");
     }
 });
 
@@ -155,10 +166,10 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
     for (const target of tapperTargets) {
         notes.delete(target);
-        setTimeout(() => {
-            target[0].remove();
-        }, 200);
-        target[0].classList.add(leavingClass);
+        target[0].remove();
+        
+        // target[0].classList.add(leavingClass);
+        showNoteLeaving(slideId, leavingClass);
         targets[slideId].delete(target);
         triggerHitNote();
         
@@ -189,6 +200,7 @@ restartButton.addEventListener("click", () => {
     player.restart();
     stopAnimation();
     showPlayButton();
+    resetSliders();
 
 });
 
@@ -210,13 +222,25 @@ document.getElementById("file-input").addEventListener("change", (e) => {
     reader.readAsBinaryString(file);
 });
 
+function resetSliders() {
+    sliderPos = 0;
+    [
+        "slider-left",
+        "slider-a",
+        "slider-b",
+        "slider-right"
+    ].forEach((slider) => {
+        document.getElementById(slider).style.top = "0px";
+    });
+}
+
 function selectUploadedSong(songData) {
     stopAnimation();
     player.pause();
     player.setSource(songData);
     showPlayButton();
     hideModal();
-
+    resetSliders();
 }
 
 function selectSong(songName) {
@@ -227,7 +251,7 @@ function selectSong(songName) {
     showPlayButton();
     document.getElementById("song-label").innerText = currentSong;
     hideModal();
-
+    resetSliders();
 }
 
 function disablePlayControls() {
@@ -320,13 +344,16 @@ function animate() {
 
     let arrays = [array2, array3];
     let slideIds = ["slide-left", "slide-right"];
+    // let slideIds = ["slider-left", "slider-right"];
 
     if (numSlides === 3) {
         arrays = [array1, array2, array4];
         slideIds = ["slide-left", "slide-a", "slide-right"];
+        // slideIds = ["slider-left", "slider-a", "slider-right"];
     } else if (numSlides === 4) {
         arrays = [array1, array2, array3, array4];
         slideIds = ["slide-left", "slide-a", "slide-b", "slide-right"];
+        // slideIds = ["slider-left", "slider-a", "slider-b", "slider-right"];
     }
 
     noteWriter.writeNotes(
@@ -377,9 +404,22 @@ function updateMeter() {
 
 // dt in milliseconds
 function moveNotes(dt) {
+    const movement = (noteSpeed * (dt / 1000));
+    sliderPos += movement;
+    [
+        "slider-left",
+        "slider-a",
+        "slider-b",
+        "slider-right"
+    ].forEach((slider) => {
+        document.getElementById(slider).style.top = `${sliderPos}px`;
+    });
+
+
     for (const note of notes) {
-        const newTop = note[1] + (noteSpeed * (dt / 1000));
-        note[0].style.top = `${newTop}px`;
+        // const newTop = note[1] + (noteSpeed * (dt / 1000));
+        const newTop = note[1] + movement;
+        // note[0].style.top = `${newTop}px`;
         note[1] = newTop;
 
         if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
@@ -398,6 +438,16 @@ function moveNotes(dt) {
     }
 }
 
+function showNoteLeaving(slideId, leavingClass) {
+    const newNote = document.createElement("div");
+    newNote.classList.add("note");
+    newNote.classList.add(leavingClass);
+    document.getElementById(slideId).parentElement.appendChild(newNote);
+    setTimeout(() => {
+        newNote.remove();
+    }, 200);
+}
+
 // note in form of [<ele>, posTop, slideId, target], where target is boolean
 function addNote(slideId, marked = false) {
     const newNote = document.createElement("div");
@@ -405,8 +455,11 @@ function addNote(slideId, marked = false) {
     if (marked) {
         newNote.classList.add("note-marked");
     }
-    newNote.style.top = "0px";
+    // newNote.style.top = "200px";
+    newNote.style.top = `-${sliderPos}px`;
     notes.add([newNote, 0, slideId, false]);
+    console.log(slideId);
+    console.log(sliderPos);
     document.getElementById(slideId).appendChild(newNote);
 }
 

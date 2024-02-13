@@ -89,14 +89,26 @@ class NoteWriter {
                         const rightTime = now - this.lastRight;
                         if (this.leftSlides.includes(slideIds[i])) {
                             if (leftTime > gap) {
-                                // console.log(amt);
-                                addNote(slideIds[i]);
+
+                                const slideIdArr = slideIds[i].split("");
+                                const sliderIdStart = slideIdArr.slice(0, 5);
+                                const sliderIdFinish = slideIdArr.slice(5, slideIdArr.length);
+                                const sliderId = [...sliderIdStart, "r", ...sliderIdFinish].join("");
+                                addNote(sliderId);
+                                
+                                // addNote(slideIds[i]);
                                 this.lastLeft = performance.now();
                             }
                         } else { // we're on the right side
                             if (rightTime > gap) {
-                                // console.log(amt);
-                                addNote(slideIds[i]);
+
+                                const slideIdArr = slideIds[i].split("");
+                                const sliderIdStart = slideIdArr.slice(0, 5);
+                                const sliderIdFinish = slideIdArr.slice(5, slideIdArr.length);
+                                const sliderId = [...sliderIdStart, "r", ...sliderIdFinish].join("");
+                                addNote(sliderId);
+                                
+                                // addNote(slideIds[i]);
                                 this.lastRight = performance.now();
                             }
                         }

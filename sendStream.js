@@ -1,180 +1,131 @@
 
 
 
+let chunksA = [];
 
+const audioA = new Audio();
+const audioB = new Audio();
 
-
-
-
-
-
-    
-
-
-
-
-
-// navigator.mediaDevices.selectAudioOutput().then((res) => {
-    // console.log(res);
-    // navigator.mediaDevices.getUserMedia({ audio: true }).then((r) => {
-    //     console.log(r);
-    // });
-// });
-
-
-const playButton = document.getElementById("play");
-
-
-playButton.addEventListener("click", () => {
-    navigator.mediaDevices.enumerateDevices().then((res) => {
-        console.log(res);
+[
+    ["playA", audioA],
+    ["playB", audioB],
+].forEach((set) => {
+    document.getElementById(set[0]).addEventListener("click", () => {
+        set[1].play();
     });
 });
 
-console.log("here");
+// navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+navigator.mediaDevices.getUserMedia({ audio: {
+    noiseSuppression: false,
+    echoCancellation: false
+} }).then((stream) => {
 
-navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-    const mediaRecorder = new MediaRecorder(stream);
-
-    const recordButton = document.getElementById("record");
-    const stopButton = document.getElementById("stop");
-    // const playButton = document.getElementById("play");
-
-    const audio0 = new Audio();
-    const audio1 = new Audio();
-    const audio2 = new Audio();
-    const audio3 = new Audio();
-    const audio4 = new Audio();
-
-    // const audioCtx = new AudioContext();
-    // audioCtx.createMediaElementSource(audio0);
-    // audioCtx.setSinkId("HSZ1HBpdQ23QbiicQxlzYUaYEX+qazokaQdqJFq0gbE=").then((res) => {
-    //     console.log(res);
-    // });
-
-    let chunks = [];
-    let startTime;
-    let blob;
-    let theInterval;
-    let audio = audio0;
+    const mediaRecorderA = new MediaRecorder(stream);
+    console.log("recording...");
     
-    const clips = [];
+    mediaRecorderA.start();
+    setTimeout(() => {
+        mediaRecorderA.stop();
+        console.log("done recording");
+    }, 3000);
 
-    // recordButton.addEventListener("click", () => {
-    //     mediaRecorder.start();
-    //     setTimeout(() => {
-    //         mediaRecorder.stop();
-    //         blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-    //         const audioURL = window.URL.createObjectURL(blob);
-    //         audio1.src = audioURL;
-    //     }, 2000);
-    // });
-
-    stopButton.addEventListener("click", () => {
-        mediaRecorder.stop();
-        console.log("no longer recording");
-    });
-    
-    let i = 0;
-    recordButton.addEventListener("click", () => {
-        mediaRecorder.start();
-        console.log("recording...");
-        theInterval = setInterval(() => {
-            if (i > 4) {
-                mediaRecorder.stop();
-                clearInterval(theInterval);
-                console.log("done recording");
-            } else {
-                if (i === 0) {
-                    audio = audio0;
-                }
-                if (i === 1) {
-                    audio = audio1;
-                }
-                if (i === 2) {
-                    audio = audio2;
-                }
-                if (i === 3) {
-                    audio = audio3;
-                }
-                if (i === 4) {
-                    audio = audio4;
-                }
-                mediaRecorder.stop();
-                mediaRecorder.start();
-                
-                
-
-                // chunks = [];
-                // mediaRecorder.start();
-                
-                
-                console.log("C");
-                i += 1;
-            }
-        }, 1000);
-    });
-
-    
-
-    mediaRecorder.ondataavailable = (e) => {
-        chunks.push(e.data);
+    mediaRecorderA.ondataavailable = (e) => {
+        chunksA.push(e.data);
     };
 
-    mediaRecorder.onstop = () => {
-        blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-        chunks = [];
+    mediaRecorderA.onstop = () => {
+        console.log("chunks length: " + chunksA.length);
+        const blob = new Blob(chunksA, { type: "audio/ogg; codecs=opus" });
+
+        newBlob = new Blob(chunksA, { type: "audio/ogg; codecs=opus" });
+
+        
+
+        fetch("https://graffiti.red/API/public/", {
+            method: "POST",
+            body: JSON.stringify({
+                action: "retrieve",
+                name: "test"
+            })
+        }).then((res) => {
+            res.json().then((r) => {
+                console.log(r);
+            });
+        });
+
+        chunksA = [];
         const audioURL = window.URL.createObjectURL(blob);
-        audio.src = audioURL;
+        audioA.src = audioURL;
+        console.log("A ready to play");
+
+        // experiment with string saving here
+        const reader = new FileReader();
+        reader.onload = (readerE) => {
+            const str = btoa(readerE.target.result);
+
+            // console.log(typeof str);
+            // console.log(str.length);
+
+            const strToSave = JSON.stringify({
+                data: "some other data",
+                str: str
+            });
+
+            saveToDatabase("streamData", strToSave).then(() => {
+                console.log("sent to database");
+                getFromDatabase("streamData").then((val) => {
+                    console.log("back from database");
+                    const retrievedObj = JSON.parse(val);
+                    console.log(retrievedObj.data);
+                    const strToUse = retrievedObj.str;
+                    audioB.src = `data:audio/x-wav;base64,${strToUse}`;
+                    console.log("B ready");
+                });
+            });
+
+            // audioB.src = `data:audio/x-wav;base64,${str}`;
+        };
+        reader.readAsBinaryString(blob);
+
+
+        
+        // END experiment
+        
     };
-    [
-        ["play0", audio0],
-        ["play1", audio1],
-        ["play2", audio2],
-        ["play3", audio3],
-        ["play4", audio4],
-    ].forEach((set) => {
-        document.getElementById(set[0]).addEventListener("click", () => {
-            set[1].play();
+});
+
+function saveToDatabase(name, str) {
+    return new Promise((resolve) => {
+        fetch("https://graffiti.red/API/public/", {
+            method: "POST",
+            body: JSON.stringify({
+                action: "set",
+                name: name,
+                value: str
+            })
+        }).then((res) => {
+            res.json().then(() => {
+                resolve();
+            });
         });
     });
-       
-    document.getElementById("playAll").addEventListener("click", () => {
-        let j = 0;
-        const playInterval = setInterval(() => {
-            if (j > 4) {
-                clearInterval(playInterval);
-                console.log("done playing");
-            } else {
-                if (j === 0) {
-                    
-                    audio0.play();
-                }
-                if (j === 1) {
-                    audio0.pause();
-                    audio1.play();
-                }
-                if (j === 2) {
-                    audio1.pause();
-                    audio2.play();
-                }
-                if (j === 3) {
-                    audio2.pause();
-                    audio3.play();
-                }
-                if (j === 4) {
-                    audio3.pause();
-                    audio4.play();
-                }
-                j += 1;
-            }
-        }, 1000);
+}
+
+function getFromDatabase(name) {
+    return new Promise((resolve) => {
+        fetch("https://graffiti.red/API/public/", {
+            method: "POST",
+            body: JSON.stringify({
+                action: "retrieve",
+                name: name
+            })
+        }).then((res) => {
+            res.json().then((r) => {
+                resolve(r.value);
+            });
+        });
     });
-
-});
-
-
-
-// const mediaRecorder = new MediaRecorder(stream);
+}
 
 

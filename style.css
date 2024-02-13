@@ -239,6 +239,15 @@
     text-align: center;
 }
 
+.slider {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 600px;
+    background-color: green;
+    text-align: center;
+}
+
 .note {
     position: absolute;
     left: 50%;
@@ -306,6 +315,10 @@
     0%      {opacity: 1; top: 400px; left: 50%}
     100%    {opacity: 0.5; top: 200px; left: -500px}
 }
+/* @keyframes note-leave-left {
+    0%      {opacity: 1; transform: translate(0px, 0px)}
+    100%    {opacity: 0.5; transform: translate(-500px, -500px)}
+} */
 
 .hidden {
     display: none;
