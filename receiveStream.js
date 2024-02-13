@@ -20,7 +20,7 @@ getFromDatabase("streamData").then((val) => {
 let poll;
 let wait;
 const dt = 2000;
-const switchTime = 2900; // make slightly lower than piece length for no gap
+const switchTime = 3000; // make slightly lower than piece length for no gap
 
 function playStream() {
     if (dataStarted) {
