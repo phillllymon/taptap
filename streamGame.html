@@ -1,0 +1,79 @@
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styleReset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <center>
+        
+        <div id="game-container" class="game-container">
+            <div id="modal-background" class="hidden"></div>
+            <div id="full-screen">&#x2197;</div>
+            <div id="play-area" class="play-area">
+                <div id="menu-right">
+                    <div id="choose-button" class="level">Choose song</div>
+                </div>
+                <div id="slides-container">
+                    <div id="slides" class="slides">
+                        <div id="slide-left" class="slide">
+                            <!-- <div id="test-note2" class="note"></div> -->
+                            <div id="slider-left" class="slider"></div>
+                            <div id="tapper-left" class="tapper"></div>
+                            <!-- <div id="slider-left-fly" class="hidden"></div> -->
+                        </div>
+                        <div id="slide-a" class="slide">
+                            <div id="slider-a" class="slider"></div>
+                            <div id="tapper-a" class="tapper"></div>
+                        </div>
+                        <div id="slide-b" class="slide">
+                            <div id="slider-b" class="slider"></div>
+                            <div id="tapper-b" class="tapper"></div>
+                        </div>
+                        <div id="slide-right" class="slide">
+                            <div id="slider-right" class="slider"></div>
+                            <!-- <div id="test-note" class="note"></div> -->
+                            <div id="tapper-right" class="tapper"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="fog-gradient"></div>
+                <div id="song-label"></div>
+                <div id="rock-meter">
+                    <div id="meter-green" class="meter-color"></div>
+                    <div id="meter-yellow" class="meter-color"></div>
+                    <div id="meter-red" class="meter-color"></div>
+                    <div id="meter-needle"></div>
+                </div>
+                <div id="play-controls">
+                    <div id="button-play" class="control-button">&#9654;&#65039;</div>
+                    <div id="button-pause" class="control-button">&#x23F8;</div>
+                    <div id="button-restart" class="control-button">&#9198;&#65039;</div>
+                </div>
+                <div id="level-selector">
+                    Difficulty:
+                    <div id="level-1" class="level">stupid</div>
+                    <div id="level-2" class="level">easy</div>
+                    <div id="level-3" class="level">medium</div>
+                    <div id="level-4" class="level">hard</div>
+                    <div id="level-5" class="level">crazy</div>
+                </div>
+                <div id="slides-selector">
+                    Slides:
+                    <div id="slides-2" class="level">2</div>
+                    <div id="slides-3" class="level">3</div>
+                    <div id="slides-4" class="level">4</div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    <script type="text/javascript" src="./player.js"></script>
+    <script type="text/javascript" src="./noteWriter.js"></script>
+    <script type="text/javascript" src="./mainStream.js"></script>
+</body>
+</html>

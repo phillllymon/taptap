@@ -17,6 +17,7 @@ class Player {
             this.playing2 = false;
             this.timeToStart2 = delay;
             onEnd();
+            console.log("ending at " + performance.now());
         });
         this.waiting = false;
 
@@ -29,9 +30,11 @@ class Player {
         this.analyser.connect(audioCtx.destination);
         this.analyser.fftSize = fftSize;
         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+
     }
 
     start() {
+        console.log("starting at " + performance.now());
         this.song1.play();
         this.playing1 = true;
         this.timeStarted = performance.now();
@@ -47,6 +50,19 @@ class Player {
             this.song2.play();
             this.playing2 = true;
         }
+
+        // setTimeout(() => {
+        //     if (this.sourceWaiting) {
+        //         this.song1.setAttribute("src", this.sourceWaiting);
+        //     }
+        // }, 2500);
+
+        // setTimeout(() => {
+        //     if (this.sourceWaiting) {
+        //         this.song2.setAttribute("src", this.sourceWaiting);
+        //     }
+        // }, 5500);
+
     }
 
     pause() {
@@ -92,5 +108,10 @@ class Player {
 
     setVolume(val) {
         this.song2.volume = val;
+    }
+
+    // methods for streaming mode
+    setSourceStream(songData) {
+        this.sourceWaiting = songData;
     }
 }
