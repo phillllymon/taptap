@@ -119,10 +119,10 @@ activateSlidesSelector();
 showPlayButton();
 
 [
-    ["tapper-left", "slide-left", "note-leaving-left"],
-    ["tapper-right", "slide-right", "note-leaving-right"],
-    ["tapper-a", "slide-a", "note-leaving-left"],
-    ["tapper-b", "slide-b", "note-leaving-right"]
+    ["tapper-left", "slider-left", "note-leaving-left"],
+    ["tapper-right", "slider-right", "note-leaving-right"],
+    ["tapper-a", "slider-a", "note-leaving-left"],
+    ["tapper-b", "slider-b", "note-leaving-right"]
 ].forEach((idSet) => {
     document.getElementById(idSet[1]).addEventListener("touchstart", () => {
         activateTapper(...idSet);
