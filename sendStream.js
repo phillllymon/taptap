@@ -3,6 +3,7 @@ let chunksA = [];
 let chunksB = [];
 const timing = 3000;
 let wait;
+let currentRecorder = "A";
 
 // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 navigator.mediaDevices.getUserMedia({ audio: {
@@ -13,78 +14,68 @@ navigator.mediaDevices.getUserMedia({ audio: {
     const mediaRecorderA = new MediaRecorder(stream);
     const mediaRecorderB = new MediaRecorder(stream);
 
+    [
+        [mediaRecorderA, chunksA],
+        [mediaRecorderB, chunksB]
+    ].forEach((recordSet) => {
+        recordSet[0].ondataavailable = (e) => {
+            recordSet[1].push(e.data);
+        };
+        recordSet[0].onstop = () => {
+            const blob = new Blob(recordSet[1], { type: "audio/ogg; codecs=opus" });
+            
+            // clear chunks array
+            const numChunks = recordSet[1].length;
+            for(let i = 0; i < numChunks; i++) {
+                recordSet[1].shift();
+            }
+
+            const reader = new FileReader();
+            reader.onload = (readerE) => {
+                const str = btoa(readerE.target.result);
+                const strToSave = JSON.stringify({
+                    data: "some other data",
+                    str: str
+                });
+    
+                saveToDatabase("streamData", strToSave);
+            };
+            reader.readAsBinaryString(blob);
+        };
+    });
+
+    document.getElementById("record").addEventListener("click", () => {
+        let player = mediaRecorderA;
+        if (currentRecorder === "B") {
+            player = mediaRecorderB;
+        }
+
+        player.start();
+        wait = setTimeout(() => {
+            switchRecorder();
+        }, timing);
+        console.log("recording....");
+    });
 
     document.getElementById("stop").addEventListener("click", () => {
         clearTimeout(wait);
         console.log("stopped");
     });
 
-    console.log("recording...");
-    
-    mediaRecorderA.start();
-    wait = setTimeout(() => {
-        switchTo("B");
-    }, timing);
-
-    mediaRecorderA.ondataavailable = (e) => {
-        chunksA.push(e.data);
-    };
-
-    mediaRecorderA.onstop = () => {
-        const blob = new Blob(chunksA, { type: "audio/ogg; codecs=opus" });
-        chunksA = [];
-
-        const reader = new FileReader();
-        reader.onload = (readerE) => {
-            const str = btoa(readerE.target.result);
-            const strToSave = JSON.stringify({
-                data: "some other data",
-                str: str
-            });
-
-            saveToDatabase("streamData", strToSave);
-        };
-        reader.readAsBinaryString(blob);
-    };
-
-    mediaRecorderB.ondataavailable = (e) => {
-        chunksB.push(e.data);
-    };
-
-    mediaRecorderB.onstop = () => {
-        const blob = new Blob(chunksB, { type: "audio/ogg; codecs=opus" });
-        chunksB = [];
-
-        const reader = new FileReader();
-        reader.onload = (readerE) => {
-            const str = btoa(readerE.target.result);
-            const strToSave = JSON.stringify({
-                data: "some other data",
-                str: str
-            });
-
-            saveToDatabase("streamData", strToSave);
-        };
-        reader.readAsBinaryString(blob);
-    };
-
-    function switchTo(recorder) {
-        if (recorder === "A") {
-            mediaRecorderA.start();
-            mediaRecorderB.stop();
-        } else {
+    function switchRecorder() {
+        if (currentRecorder === "A") {
             mediaRecorderB.start();
             mediaRecorderA.stop();
+            currentRecorder = B;
+        } else {
+            mediaRecorderA.start();
+            mediaRecorderB.stop();
+            currentRecorder = A;
         }
         wait = setTimeout(() => {
-            if (recorder === "A") {
-                switchTo("B");
-            } else {
-                switchTo("A");
-            }
+            switchRecorder();
         }, timing);
     }
-
 });
 
 

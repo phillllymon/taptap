@@ -59,6 +59,13 @@ let sliderPos = 0;
 
 let numSlides = 2;
 
+let idLookup = {
+    "slide-left": "slide-left",
+    "slide-a": "slide-a",
+    "slide-b": "slide-b",
+    "slide-right": "slide-right"
+}
+
 if (detectMobile()) {
     console.log("mobile woo!");
     addMobileStyle();
@@ -79,6 +86,13 @@ if (detectMobile()) {
         targetBounds.bottom = 1.05 * travelLength;
 
         slideLength = travelLength * 1.3;
+
+        idLookup = {
+            "slide-left": "slider-left",
+            "slide-a": "slider-a",
+            "slide-b": "slider-b",
+            "slide-right": "slider-right"
+        }
 
         console.log("mobile stuff done");
     }, 500);
@@ -119,17 +133,19 @@ activateSlidesSelector();
 showPlayButton();
 
 [
-    ["tapper-left", "slider-left", "note-leaving-left"],
-    ["tapper-right", "slider-right", "note-leaving-right"],
-    ["tapper-a", "slider-a", "note-leaving-left"],
-    ["tapper-b", "slider-b", "note-leaving-right"]
+    ["tapper-left", "slide-left", "note-leaving-left"],
+    ["tapper-right", "slide-right", "note-leaving-right"],
+    ["tapper-a", "slide-a", "note-leaving-left"],
+    ["tapper-b", "slide-b", "note-leaving-right"]
 ].forEach((idSet) => {
-    document.getElementById(idSet[1]).addEventListener("touchstart", () => {
+    // document.getElementById(idSet[1]).addEventListener("touchstart", () => {
+    document.getElementById(idSet[1]).addEventListener("mousedown", () => {
         activateTapper(...idSet);
     });
 });
 
-document.addEventListener("touchend", () => {
+// document.addEventListener("touchend", () => {
+document.addEventListener("mouseup", () => {
     deactivateTappers();
 });
 
@@ -164,8 +180,10 @@ function deactivateTappers() {
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
+    console.log(tapperId);
     document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
-    const tapperTargets = targets[slideId];
+    const idToUse = idLookup[slideId];
+    const tapperTargets = targets[idToUse];
     if (tapperTargets.size === 0) {
         notesMissed += 1;
     }
@@ -174,8 +192,8 @@ function activateTapper(tapperId, slideId, leavingClass) {
         target[0].remove();
         
         // target[0].classList.add(leavingClass);
-        showNoteLeaving(slideId, leavingClass);
-        targets[slideId].delete(target);
+        showNoteLeaving(idToUse, leavingClass);
+        targets[idToUse].delete(target);
         triggerHitNote();
         
         if (notesHit > 30) {
