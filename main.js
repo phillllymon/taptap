@@ -69,14 +69,19 @@ if (detectMobile()) {
         document.getElementById("game-container").requestFullscreen();
     });
 
+    setTimeout(() => {
 
-    songDelay = 4000;
-    const viewWidth = document.getElementById("game-container").clientWidth;
-    const travelLength = 1.5 * viewWidth;
-    noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
-    targetBounds.top = 0.93 * travelLength;
-    targetBounds.bottom = 1.05 * travelLength;
-    slideLength = travelLength * 1.3;
+        songDelay = 4000;
+        const viewWidth = document.getElementById("game-container").clientWidth;
+        const travelLength = 1.5 * viewWidth;
+        noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
+        targetBounds.top = 0.93 * travelLength;
+        targetBounds.bottom = 1.05 * travelLength;
+
+        slideLength = travelLength * 1.3;
+
+        console.log("mobile stuff done");
+    }, 500);
 }
 
 const array1 = [0];
