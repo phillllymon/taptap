@@ -13,25 +13,22 @@ const targetBounds = {
 let notesHit = 0;
 let notesMissed = 0;
 
+// let songDelay = 3000;
 let songDelay = 4000;
-// let songDelay = 4000;
 let noteSpeed = Math.floor(400 / ( (songDelay / 1000.0) / 2 ));
+
+console.log(noteSpeed);
 
 let slideLength = 500;
 // const noteSpeed = 400; // px/s
 let notesPerSecond = 6; // 6 is pretty good
 const notes = new Set();
 const targets = {
-    // "slide-right": new Set(),
-    // "slide-left": new Set(),
-    // "slide-a": new Set(),
-    // "slide-b": new Set(),
-    "slider-right": new Set(),
-    "slider-left": new Set(),
-    "slider-a": new Set(),
-    "slider-b": new Set()
+    "slide-right": new Set(),
+    "slide-left": new Set(),
+    "slide-a": new Set(),
+    "slide-b": new Set()
 }
-let sliderPos = 0;
 
 let numSlides = 2;
 
@@ -45,13 +42,19 @@ if (detectMobile()) {
         document.getElementById("game-container").requestFullscreen();
     });
 
-    songDelay = 4000;
-    const viewWidth = document.getElementById("game-container").clientWidth;
-    const travelLength = 1.5 * viewWidth;
-    noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
-    targetBounds.top = 0.93 * travelLength;
-    targetBounds.bottom = 1.05 * travelLength;
-    slideLength = travelLength * 1.3;
+    setTimeout(() => {
+
+        songDelay = 4000;
+        const viewWidth = document.getElementById("game-container").clientWidth;
+        const travelLength = 1.5 * viewWidth;
+        noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
+        targetBounds.top = 0.93 * travelLength;
+        targetBounds.bottom = 1.05 * travelLength;
+
+        slideLength = travelLength * 1.3;
+
+        console.log("mobile stuff done");
+    }, 500);
 }
 
 const array1 = [0];
@@ -68,101 +71,13 @@ const times4 = [0];
 
 document.getElementById("song-label").innerText = "stream";
 
-const playButton = document.getElementById("button-play");
-const pauseButton = document.getElementById("button-pause");
-const restartButton = document.getElementById("button-restart");
-
-// stream business ------------------------------------- START
-let playerA;
-let playerB;
-
-let currentPlayer;
-const timing = 2000;
-const chunckSize = 3000;
-
-let playInterval;
-let getInterval;
-
-playButton.addEventListener("click", () => {
-    getFromDatabase("streamData").then((val) => {
-        const retrievedObj = JSON.parse(val);
-        const strToUse = retrievedObj.str;
-        playerA = new Player(`data:audio/x-wav;base64,${strToUse}`, songDelay, 32, () => {});
-        playerB = new Player(`data:audio/x-wav;base64,${strToUse}`, songDelay, 32, () => {});
-        currentPlayer = "A";
-
-        console.log("first data retrieved");
-
-        // set up data grabbing
-        getInterval = setInterval(() => {
-            getFromDatabase("streamData").then((res) => {
-                const obj = JSON.parse(res);
-                if (currentPlayer === "A") {
-                    console.log("Setting B");
-                    playerB.setSource(`data:audio/x-wav;base64,${obj.str}`);
-                } else {
-                    console.log("Setting A");
-                    playerA.setSource(`data:audio/x-wav;base64,${obj.str}`);
-                }
-            });
-        }, timing);
-
-        // set up playing
-        playerA.start();
-        playInterval = setInterval(() => {
-            if (currentPlayer === "A") {
-                console.log("B B B B B");
-                playerB.start();
-                currentPlayer = "B";
-            } else {
-                console.log("A A A A A");
-                playerA.start();
-                currentPlayer = "A";
-            }
-        }, chunckSize);
-
-        runAnimation();
-        showPauseButton();
-    });
-    
-});
-
-pauseButton.addEventListener("click", () => {
-    clearInterval(getInterval);
-    clearInterval(playInterval);
-    stopAnimation();
-    showPlayButton();
-});
-
-
-
-// const player = new Player(`./songs/${currentSong}.m4a`, songDelay, 32, () => {
-//     stopAnimation();
-//     showRestartButton();
-// });
-
-
-function getFromDatabase(name) {
-    return new Promise((resolve) => {
-        fetch("https://graffiti.red/API/public/", {
-            method: "POST",
-            body: JSON.stringify({
-                action: "retrieve",
-                name: name
-            })
-        }).then((res) => {
-            res.json().then((r) => {
-                resolve(r.value);
-            });
-        });
-    });
-}
-// stream business ------------------------------------- FINISH
-
 const noteWriter = new NoteWriter();
 
 let animating = false;
 let time;
+
+const playButton = document.getElementById("button-play");
+const pauseButton = document.getElementById("button-pause");
 
 activateLevelSelector();
 activateSlidesSelector();
@@ -185,20 +100,16 @@ document.addEventListener("touchend", () => {
 
 document.addEventListener("keydown", (e) => {
     if(e.code === "KeyD") {
-        // activateTapper("tapper-left", "slide-left", "note-leaving-left");
-        activateTapper("tapper-left", "slider-left", "note-leaving-left");
+        activateTapper("tapper-left", "slide-left", "note-leaving-left");
     }
     if(e.code === "KeyK") {
-        // activateTapper("tapper-right", "slide-right", "note-leaving-right");
-        activateTapper("tapper-right", "slider-right", "note-leaving-right");
+        activateTapper("tapper-right", "slide-right", "note-leaving-right");
     }
     if(e.code === "KeyV") {
-        // activateTapper("tapper-a", "slide-a", "note-leaving-left");
-        activateTapper("tapper-a", "slider-a", "note-leaving-left");
+        activateTapper("tapper-a", "slide-a", "note-leaving-left");
     }
     if(e.code === "KeyN") {
-        // activateTapper("tapper-b", "slide-b", "note-leaving-right");
-        activateTapper("tapper-b", "slider-b", "note-leaving-right");
+        activateTapper("tapper-b", "slide-b", "note-leaving-right");
     }
 });
 
@@ -235,17 +146,18 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
 }
 
-function resetSliders() {
-    sliderPos = 0;
-    [
-        "slider-left",
-        "slider-a",
-        "slider-b",
-        "slider-right"
-    ].forEach((slider) => {
-        document.getElementById(slider).style.top = "0px";
-    });
-}
+playButton.addEventListener("click", () => {
+    player.start();
+    runAnimation();
+    showPauseButton();
+
+});
+pauseButton.addEventListener("click", () => {
+    player.pause();
+    stopAnimation();
+    showPlayButton();
+
+});
 
 function runAnimation() {
     time = performance.now();
@@ -270,10 +182,7 @@ function animate() {
     const dt = newTime - time;
     time = newTime;
 
-    let dataArray = playerB.getDataArray();
-    if (currentPlayer === "A") {
-        dataArray = playerA.getDataArray();
-    }
+    const dataArray = player.getDataArray();
 
     array1.push(averageOf(dataArray.slice(0, 4)));
     array2.push(averageOf(dataArray.slice(4, 8)));
@@ -342,19 +251,10 @@ function updateMeter() {
 // dt in milliseconds
 function moveNotes(dt) {
     const movement = (noteSpeed * (dt / 1000));
-    sliderPos += movement;
-    [
-        "slider-left",
-        "slider-a",
-        "slider-b",
-        "slider-right"
-    ].forEach((slider) => {
-        document.getElementById(slider).style.top = `${sliderPos}px`;
-    });
-
 
     for (const note of notes) {
         const newTop = note[1] + movement;
+        note[0].style.top = `${newTop}px`;
         note[1] = newTop;
 
         if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
@@ -391,32 +291,18 @@ function addNote(slideId, marked = false) {
         newNote.classList.add("note-marked");
     }
     // newNote.style.top = "200px";
-    newNote.style.top = `-${sliderPos}px`;
+    newNote.style.top = "0px";
     notes.add([newNote, 0, slideId, false]);
-    // console.log(slideId);
-    // console.log(sliderPos);
     document.getElementById(slideId).appendChild(newNote);
 }
 
 function triggerHitNote() {
-    let player;
-    if (currentPlayer === "A") {
-        player = playerA;
-    } else {
-        player = playerB;
-    }
     player.setVolume(1);
     notesHit += 1;
 }
 
 function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
-    let player;
-    if (currentPlayer === "A") {
-        player = playerA;
-    } else {
-        player = playerB;
-    }
     player.setVolume(0.3);
     notesMissed += 1;
 }
@@ -428,12 +314,10 @@ function killAllNotes() {
 function showPlayButton() {
     playButton.classList.remove("hidden");
     pauseButton.classList.add("hidden");
-    restartButton.classList.add("hidden");
 }
 function showPauseButton() {
     playButton.classList.add("hidden");
     pauseButton.classList.remove("hidden");
-    restartButton.classList.add("hidden");
 }
 
 function selectSlides(n) {
@@ -527,6 +411,15 @@ function deselectLevels() {
     });
 }
 
+function showModal() {
+    document.getElementById("modal-background").classList.remove("hidden");
+    document.getElementById("choose-modal").classList.remove("hidden");
+}
+function hideModal() {
+    document.getElementById("modal-background").classList.add("hidden");
+    document.getElementById("choose-modal").classList.add("hidden");
+}
+
 function addMobileStyle() {
     const link = document.createElement("link");
 
@@ -557,3 +450,5 @@ function detectMobile() {
         }); 
     }
 }
+
+// } // end of main function

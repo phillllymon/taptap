@@ -142,10 +142,12 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
     for (const target of tapperTargets) {
         notes.delete(target);
-        target[0].remove();
         
-        // target[0].classList.add(leavingClass);
-        showNoteLeaving(slideId, leavingClass);
+        
+        target[0].classList.add(leavingClass);
+        setTimeout(() => {
+            target[0].remove();
+        }, 500);
         targets[slideId].delete(target);
         triggerHitNote();
         
@@ -387,16 +389,6 @@ function moveNotes(dt) {
             notes.delete(note);
         }
     }
-}
-
-function showNoteLeaving(slideId, leavingClass) {
-    const newNote = document.createElement("div");
-    newNote.classList.add("note");
-    newNote.classList.add(leavingClass);
-    document.getElementById(slideId).parentElement.appendChild(newNote);
-    setTimeout(() => {
-        newNote.remove();
-    }, 200);
 }
 
 // note in form of [<ele>, posTop, slideId, target], where target is boolean

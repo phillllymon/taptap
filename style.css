@@ -282,14 +282,6 @@
     z-index: 1;
 }
 
-#test-note {
-    top: 150vw;
-}
-
-#test-note2 {
-    top: 0px;
-}
-
 .note-leaving-right {
     top: 400px;
     animation-name: note-leave-right;
