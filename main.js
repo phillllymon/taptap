@@ -1,31 +1,9 @@
 console.log("initiating");
 
-// document.getElementById("start-button").addEventListener("click", () => {
-//     document.getElementById("start-modal").classList.add("hidden");
-//     document.getElementById("modal-background").classList.add("hidden");
-//     main();
-// });
-
-
-// function main() {
-
-// const twang1 = new Audio("./effects/twang1.m4a");
-// const twang2 = new Audio("./effects/twang2.m4a");
-// const twang3 = new Audio("./effects/twang3.m4a");
-
 const twangs = [
-    // new Audio("./effects/twang1.m4a"),
-    // new Audio("./effects/twang2.m4a"),
-    // new Audio("./effects/twang3.m4a"),
-    // new Audio("./effects/twang4.m4a"),
-    // new Audio("./effects/twang5.m4a"),
     new Audio("./effects/twang6.m4a"),
-    // new Audio("./effects/twang7.m4a"),
-    // new Audio("./effects/twang8.m4a"),
     new Audio("./effects/twang9.m4a"),
 ];
-
-
 
 const targetBounds = {
     top: 385,
@@ -46,25 +24,13 @@ let slideLength = 500;
 let notesPerSecond = 6; // 6 is pretty good
 const notes = new Set();
 const targets = {
-    // "slide-right": new Set(),
-    // "slide-left": new Set(),
-    // "slide-a": new Set(),
-    // "slide-b": new Set()
-    "slider-right": new Set(),
-    "slider-left": new Set(),
-    "slider-a": new Set(),
-    "slider-b": new Set()
+    "slide-right": new Set(),
+    "slide-left": new Set(),
+    "slide-a": new Set(),
+    "slide-b": new Set()
 }
-let sliderPos = 0;
 
 let numSlides = 2;
-
-let idLookup = {
-    "slide-left": "slide-left",
-    "slide-a": "slide-a",
-    "slide-b": "slide-b",
-    "slide-right": "slide-right"
-}
 
 if (detectMobile()) {
     console.log("mobile woo!");
@@ -86,13 +52,6 @@ if (detectMobile()) {
         targetBounds.bottom = 1.05 * travelLength;
 
         slideLength = travelLength * 1.3;
-
-        idLookup = {
-            "slide-left": "slider-left",
-            "slide-a": "slider-a",
-            "slide-b": "slider-b",
-            "slide-right": "slider-right"
-        }
 
         console.log("mobile stuff done");
     }, 500);
@@ -138,33 +97,29 @@ showPlayButton();
     ["tapper-a", "slide-a", "note-leaving-left"],
     ["tapper-b", "slide-b", "note-leaving-right"]
 ].forEach((idSet) => {
-    // document.getElementById(idSet[1]).addEventListener("touchstart", () => {
-    document.getElementById(idSet[1]).addEventListener("mousedown", () => {
+    document.getElementById(idSet[1]).addEventListener("touchstart", () => {
+    // document.getElementById(idSet[1]).addEventListener("mousedown", () => {
         activateTapper(...idSet);
     });
 });
 
-// document.addEventListener("touchend", () => {
-document.addEventListener("mouseup", () => {
+document.addEventListener("touchend", () => {
+// document.addEventListener("mouseup", () => {
     deactivateTappers();
 });
 
 document.addEventListener("keydown", (e) => {
     if(e.code === "KeyD") {
-        // activateTapper("tapper-left", "slide-left", "note-leaving-left");
-        activateTapper("tapper-left", "slider-left", "note-leaving-left");
+        activateTapper("tapper-left", "slide-left", "note-leaving-left");
     }
     if(e.code === "KeyK") {
-        // activateTapper("tapper-right", "slide-right", "note-leaving-right");
-        activateTapper("tapper-right", "slider-right", "note-leaving-right");
+        activateTapper("tapper-right", "slide-right", "note-leaving-right");
     }
     if(e.code === "KeyV") {
-        // activateTapper("tapper-a", "slide-a", "note-leaving-left");
-        activateTapper("tapper-a", "slider-a", "note-leaving-left");
+        activateTapper("tapper-a", "slide-a", "note-leaving-left");
     }
     if(e.code === "KeyN") {
-        // activateTapper("tapper-b", "slide-b", "note-leaving-right");
-        activateTapper("tapper-b", "slider-b", "note-leaving-right");
+        activateTapper("tapper-b", "slide-b", "note-leaving-right");
     }
 });
 
@@ -180,10 +135,8 @@ function deactivateTappers() {
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
-    console.log(tapperId);
     document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
-    const idToUse = idLookup[slideId];
-    const tapperTargets = targets[idToUse];
+    const tapperTargets = targets[slideId];
     if (tapperTargets.size === 0) {
         notesMissed += 1;
     }
@@ -192,8 +145,8 @@ function activateTapper(tapperId, slideId, leavingClass) {
         target[0].remove();
         
         // target[0].classList.add(leavingClass);
-        showNoteLeaving(idToUse, leavingClass);
-        targets[idToUse].delete(target);
+        showNoteLeaving(slideId, leavingClass);
+        targets[slideId].delete(target);
         triggerHitNote();
         
         if (notesHit > 30) {
@@ -245,25 +198,12 @@ document.getElementById("file-input").addEventListener("change", (e) => {
     reader.readAsBinaryString(file);
 });
 
-function resetSliders() {
-    sliderPos = 0;
-    [
-        "slider-left",
-        "slider-a",
-        "slider-b",
-        "slider-right"
-    ].forEach((slider) => {
-        document.getElementById(slider).style.top = "0px";
-    });
-}
-
 function selectUploadedSong(songData) {
     stopAnimation();
     player.pause();
     player.setSource(songData);
     showPlayButton();
     hideModal();
-    resetSliders();
 }
 
 function selectSong(songName) {
@@ -274,7 +214,6 @@ function selectSong(songName) {
     showPlayButton();
     document.getElementById("song-label").innerText = currentSong;
     hideModal();
-    resetSliders();
 }
 
 function disablePlayControls() {
@@ -428,21 +367,10 @@ function updateMeter() {
 // dt in milliseconds
 function moveNotes(dt) {
     const movement = (noteSpeed * (dt / 1000));
-    sliderPos += movement;
-    [
-        "slider-left",
-        "slider-a",
-        "slider-b",
-        "slider-right"
-    ].forEach((slider) => {
-        document.getElementById(slider).style.top = `${sliderPos}px`;
-    });
-
 
     for (const note of notes) {
-        // const newTop = note[1] + (noteSpeed * (dt / 1000));
         const newTop = note[1] + movement;
-        // note[0].style.top = `${newTop}px`;
+        note[0].style.top = `${newTop}px`;
         note[1] = newTop;
 
         if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
@@ -479,10 +407,8 @@ function addNote(slideId, marked = false) {
         newNote.classList.add("note-marked");
     }
     // newNote.style.top = "200px";
-    newNote.style.top = `-${sliderPos}px`;
+    newNote.style.top = "0px";
     notes.add([newNote, 0, slideId, false]);
-    console.log(slideId);
-    console.log(sliderPos);
     document.getElementById(slideId).appendChild(newNote);
 }
 
