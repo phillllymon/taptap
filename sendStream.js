@@ -1,7 +1,7 @@
 
 let chunksA = [];
 let chunksB = [];
-const timing = 3000;
+const timing = 10000;
 let wait;
 let currentRecorder = "A";
 
@@ -66,11 +66,11 @@ navigator.mediaDevices.getUserMedia({ audio: {
         if (currentRecorder === "A") {
             mediaRecorderB.start();
             mediaRecorderA.stop();
-            currentRecorder = B;
+            currentRecorder = "B";
         } else {
             mediaRecorderA.start();
             mediaRecorderB.stop();
-            currentRecorder = A;
+            currentRecorder = "A";
         }
         wait = setTimeout(() => {
             switchRecorder();

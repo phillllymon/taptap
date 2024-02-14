@@ -19,8 +19,17 @@ getFromDatabase("streamData").then((val) => {
 
 let poll;
 let wait;
-const dt = 2000;
-const switchTime = 3000; // make slightly lower than piece length for no gap
+let dt = 2000;
+let switchTime = 3000; // make slightly lower than piece length for no gap
+
+document.getElementById("piece-size").addEventListener("change", (e) => {
+    switchTime = e.target.value;
+    console.log("pieces size changed to " + e.target.value);
+});
+document.getElementById("poll-time").addEventListener("change", (e) => {
+    dt = e.target.value;
+    console.log("poll time changed to " + e.target.value);
+});
 
 function playStream() {
     if (dataStarted) {
