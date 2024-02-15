@@ -57,6 +57,24 @@ if (detectMobile()) {
     }, 500);
 }
 
+const playButton = document.getElementById("button-play");
+const pauseButton = document.getElementById("button-pause");
+
+// stream stuff here ---------------------------------
+const playerStream = new PlayerStream(4000, addNote);
+
+playButton.addEventListener("click", () => {
+    playerStream.play();
+    showPauseButton();
+    runAnimation();
+});
+pauseButton.addEventListener("click", () => {
+    playerStream.pause();
+    showPlayButton();
+    stopAnimation();
+});
+// end stream stuff ----------------------------------
+
 const array1 = [0];
 const times1 = [0];
 
@@ -75,9 +93,6 @@ const noteWriter = new NoteWriter();
 
 let animating = false;
 let time;
-
-const playButton = document.getElementById("button-play");
-const pauseButton = document.getElementById("button-pause");
 
 activateLevelSelector();
 activateSlidesSelector();
@@ -132,10 +147,12 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
     for (const target of tapperTargets) {
         notes.delete(target);
-        target[0].remove();
         
-        // target[0].classList.add(leavingClass);
-        showNoteLeaving(slideId, leavingClass);
+        target[0].classList.add(leavingClass);
+        setTimeout(() => {
+            target[0].remove();
+        }, 500);
+        
         targets[slideId].delete(target);
         triggerHitNote();
         
@@ -145,19 +162,6 @@ function activateTapper(tapperId, slideId, leavingClass) {
         }
     }
 }
-
-playButton.addEventListener("click", () => {
-    player.start();
-    runAnimation();
-    showPauseButton();
-
-});
-pauseButton.addEventListener("click", () => {
-    player.pause();
-    stopAnimation();
-    showPlayButton();
-
-});
 
 function runAnimation() {
     time = performance.now();
@@ -169,69 +173,61 @@ function stopAnimation() {
     animating = false;
 }
 
-function averageOf(arr) {
-    let sum = 0;
-    arr.forEach((val) => {
-        sum += val;
-    });
-    return sum / arr.length;
-}
-
-function animate() {
+function animate() { // TODO ........ will have to coordinate with notes retrieved from playerStream
     const newTime = performance.now();
     const dt = newTime - time;
     time = newTime;
 
-    const dataArray = player.getDataArray();
+    // const dataArray = player.getDataArray();
 
-    array1.push(averageOf(dataArray.slice(0, 4)));
-    array2.push(averageOf(dataArray.slice(4, 8)));
-    array3.push(averageOf(dataArray.slice(8, 12)));
-    array4.push(averageOf(dataArray.slice(12, 16)));
-    times1.push(time);
-    times2.push(time);
-    times3.push(time);
-    times4.push(time);
+    // array1.push(averageOf(dataArray.slice(0, 4)));
+    // array2.push(averageOf(dataArray.slice(4, 8)));
+    // array3.push(averageOf(dataArray.slice(8, 12)));
+    // array4.push(averageOf(dataArray.slice(12, 16)));
+    // times1.push(time);
+    // times2.push(time);
+    // times3.push(time);
+    // times4.push(time);
 
-    // get arrays down to data for songDelay time
-    while (times1[0] < time - songDelay) {
-        array1.shift();
-        times1.shift();
-    }
-    while (times2[0] < time - songDelay) {
-        array2.shift();
-        times2.shift();
-    }
-    while (times3[0] < time - songDelay) {
-        array3.shift();
-        times3.shift();
-    }
-    while (times4[0] < time - songDelay) {
-        array4.shift();
-        times4.shift();
-    }
+    // // get arrays down to data for songDelay time
+    // while (times1[0] < time - songDelay) {
+    //     array1.shift();
+    //     times1.shift();
+    // }
+    // while (times2[0] < time - songDelay) {
+    //     array2.shift();
+    //     times2.shift();
+    // }
+    // while (times3[0] < time - songDelay) {
+    //     array3.shift();
+    //     times3.shift();
+    // }
+    // while (times4[0] < time - songDelay) {
+    //     array4.shift();
+    //     times4.shift();
+    // }
 
-    let arrays = [array2, array3];
-    let slideIds = ["slide-left", "slide-right"];
-    // let slideIds = ["slider-left", "slider-right"];
+    // let arrays = [array2, array3];
+    // let slideIds = ["slide-left", "slide-right"];
+    // // let slideIds = ["slider-left", "slider-right"];
 
-    if (numSlides === 3) {
-        arrays = [array1, array2, array4];
-        slideIds = ["slide-left", "slide-a", "slide-right"];
-        // slideIds = ["slider-left", "slider-a", "slider-right"];
-    } else if (numSlides === 4) {
-        arrays = [array1, array2, array3, array4];
-        slideIds = ["slide-left", "slide-a", "slide-b", "slide-right"];
-        // slideIds = ["slider-left", "slider-a", "slider-b", "slider-right"];
-    }
+    // if (numSlides === 3) {
+    //     arrays = [array1, array2, array4];
+    //     slideIds = ["slide-left", "slide-a", "slide-right"];
+    //     // slideIds = ["slider-left", "slider-a", "slider-right"];
+    // } else if (numSlides === 4) {
+    //     arrays = [array1, array2, array3, array4];
+    //     slideIds = ["slide-left", "slide-a", "slide-b", "slide-right"];
+    //     // slideIds = ["slider-left", "slider-a", "slider-b", "slider-right"];
+    // }
 
-    noteWriter.writeNotes(
-        arrays,
-        slideIds,
-        notesPerSecond,
-        addNote,
-        true
-    );
+    // noteWriter.writeNotes(
+    //     arrays,
+    //     slideIds,
+    //     notesPerSecond,
+    //     addNote,
+    //     true
+    // );
 
     moveNotes(dt);
     updateMeter();
@@ -273,16 +269,6 @@ function moveNotes(dt) {
     }
 }
 
-function showNoteLeaving(slideId, leavingClass) {
-    const newNote = document.createElement("div");
-    newNote.classList.add("note");
-    newNote.classList.add(leavingClass);
-    document.getElementById(slideId).parentElement.appendChild(newNote);
-    setTimeout(() => {
-        newNote.remove();
-    }, 200);
-}
-
 // note in form of [<ele>, posTop, slideId, target], where target is boolean
 function addNote(slideId, marked = false) {
     const newNote = document.createElement("div");
@@ -297,13 +283,13 @@ function addNote(slideId, marked = false) {
 }
 
 function triggerHitNote() {
-    player.setVolume(1);
+    playerStream.setVolume(1);
     notesHit += 1;
 }
 
 function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
-    player.setVolume(0.3);
+    playerStream.setVolume(0.3);
     notesMissed += 1;
 }
 

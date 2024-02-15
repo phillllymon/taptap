@@ -7,12 +7,6 @@ class NoteWriter {
         this.rightSlides = ["slide-b", "slide-right"];
         this.rightId = "slide-right";
         this.leftId = "slide-left";
-        this.lastPerSlide = {
-            "slide-left": 0,
-            "slide-a": 0,
-            "slide-b": 0,
-            "slide-right": 0
-        }
     }
 
     // data is array of arrays same length as slideIds

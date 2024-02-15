@@ -1,9 +1,52 @@
+let lastLeft = performance.now();
+let lastMid = performance.now();
+let lastRight = performance.now();
+const leftSlides = ["slide-left", "slide-a"];
+const rightSlides = ["slide-b", "slide-right"];
+const rightId = "slide-right";
+const leftId = "slide-left";
 
 let chunksA = [];
 let chunksB = [];
 const timing = 10000;
 let wait;
 let currentRecorder = "A";
+
+const array1 = [0];
+const times1 = [0];
+
+const array2 = [0];
+const times2 = [0];
+
+const array3 = [0];
+const times3 = [0];
+
+const array4 = [0];
+const times4 = [0];
+
+// TODO: save these to database from game and fetch here
+const songDelay = 4000;
+const notesPerSecond = 6;
+const slideIds = [
+    "slide-left",
+    "slide-a",
+    "slide-b",
+    "slide-right"
+];
+const data = [
+    array1,
+    array2,
+    array3,
+    array4
+];
+
+
+// will be sent along with the song pieces
+let notesArrA = [];
+let notesArrB = [];
+let startTime = performance.now();
+
+
 
 // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 navigator.mediaDevices.getUserMedia({ audio: {
@@ -14,9 +57,132 @@ navigator.mediaDevices.getUserMedia({ audio: {
     const mediaRecorderA = new MediaRecorder(stream);
     const mediaRecorderB = new MediaRecorder(stream);
 
+    // analyzer stuff ----------------START
+    const audioCtx = new AudioContext();
+    const audioSource = audioCtx.createMediaStreamSource(stream);
+    const analyser = audioCtx.createAnalyser();
+    audioSource.connect(analyser);
+    analyser.fftSize = 32;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+
+
+
+    
+
+    let time = performance.now();
+    animate();
+
+    function animate() {
+        time = performance.now();
+        
+        analyser.getByteFrequencyData(dataArray);
+
+        array1.push(averageOf(dataArray.slice(0, 4)));
+        array2.push(averageOf(dataArray.slice(4, 8)));
+        array3.push(averageOf(dataArray.slice(8, 12)));
+        array4.push(averageOf(dataArray.slice(12, 16)));
+        times1.push(time);
+        times2.push(time);
+        times3.push(time);
+        times4.push(time);
+
+        // get arrays down to data for songDelay time
+        while (times1[0] < time - songDelay) {
+            array1.shift();
+            times1.shift();
+        }
+        while (times2[0] < time - songDelay) {
+            array2.shift();
+            times2.shift();
+        }
+        while (times3[0] < time - songDelay) {
+            array3.shift();
+            times3.shift();
+        }
+        while (times4[0] < time - songDelay) {
+            array4.shift();
+            times4.shift();
+        }
+
+        for (let i = 0; i < slideIds.length; i++) {
+            const arr = data[i];
+            const midIdx = Math.floor(arr.length / 2);
+            const midVal = arr[midIdx] - arr[midIdx - 1];
+            const leg = arr.length / (2 * notesPerSecond);
+            const beforeIdx = midIdx - leg;
+            const afterIdx = midIdx + leg;
+            const beforeArr = arr.slice(beforeIdx, midIdx);
+            const beforeMax = Math.max(...beforeArr.map((val, n) => {
+                return n === 0 ? 0 : val - beforeArr[n - 1];
+            }));
+            const afterArr = arr.slice(midIdx + 1, afterIdx);
+            const afterMax = Math.max(...afterArr.map((val, n) => {
+                return n === 0 ? 0 : val - afterArr[n - 1];
+            }));
+
+            if (midVal > beforeMax && midVal > afterMax) {
+                const noteTime = performance.now() - startTime;
+                if (slideIds.length > 2) {
+                    const now = performance.now();
+                    const gap = (1.0 / notesPerSecond) * 1000;
+                    if (slideIds.length === 3) {
+                        const leftTime = now - lastLeft;
+                        const midTime = now - lastMid;
+                        const rightTime = now - lastRight;
+                        if (slideIds[i] === rightId) {
+                            if (leftTime > gap || midTime > gap) {
+                                addNote(slideIds[i], noteTime);
+                                lastRight = performance.now();
+                            }
+                        } else if (slideIds[i] === leftId) {
+                            if (midTime > gap || rightTime > gap) {
+                                addNote(slideIds[i], noteTime);
+                                lastLeft = performance.now();
+                            }
+                        } else {
+                            if (leftTime > gap || rightTime > gap) {
+                                addNote(slideIds[i], noteTime);
+                                lastMid = performance.now();
+                            }
+                        }
+                    } else { // we have 4 slides
+                        const leftTime = now - lastLeft;
+                        const rightTime = now - lastRight;
+                        if (leftSlides.includes(slideIds[i])) {
+                            if (leftTime > gap) {
+                                addNote(slideIds[i], noteTime);
+                                lastLeft = performance.now();
+                            }
+                        } else { // we're on the right side
+                            if (rightTime > gap) {
+                                addNote(slideIds[i], noteTime);
+                                lastRight = performance.now();
+                            }
+                        }
+                    }
+                } else {
+                    addNote(slideIds[i], noteTime);
+                }
+            }
+        }
+
+        
+
+
+
+        // for equalizer on sendStream page
+        for (let i = 0; i < 16; i++) {
+            document.getElementById(`col${i}`).style.height = `${dataArray[i]}px`;
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // analyzer stuff ------------------END
+
     [
-        [mediaRecorderA, chunksA],
-        [mediaRecorderB, chunksB]
+        [mediaRecorderA, chunksA, notesArrA],
+        [mediaRecorderB, chunksB, notesArrB]
     ].forEach((recordSet) => {
         recordSet[0].ondataavailable = (e) => {
             recordSet[1].push(e.data);
@@ -34,23 +200,31 @@ navigator.mediaDevices.getUserMedia({ audio: {
             reader.onload = (readerE) => {
                 const str = btoa(readerE.target.result);
                 const strToSave = JSON.stringify({
-                    data: "some other data",
+                    data: recordSet[2],
                     str: str
                 });
     
+                // console.log("---------");
+                // console.log(currentRecorder);
+                // console.log(recordSet[2]);
+                // console.log("----------")
                 saveToDatabase("streamData", strToSave);
+
+                // clear notes array
+                const numNotes = recordSet[2].length;
+                for(let i = 0; i < numNotes; i++) {
+                    recordSet[2].shift();
+                }
             };
             reader.readAsBinaryString(blob);
         };
     });
 
     document.getElementById("record").addEventListener("click", () => {
-        let player = mediaRecorderA;
-        if (currentRecorder === "B") {
-            player = mediaRecorderB;
-        }
+        const player = currentRecorder === "A" ? mediaRecorderA : mediaRecorderB;
 
         player.start();
+        startTime = performance.now();
         wait = setTimeout(() => {
             switchRecorder();
         }, timing);
@@ -65,10 +239,12 @@ navigator.mediaDevices.getUserMedia({ audio: {
     function switchRecorder() {
         if (currentRecorder === "A") {
             mediaRecorderB.start();
+            startTime = performance.now();
             mediaRecorderA.stop();
             currentRecorder = "B";
         } else {
             mediaRecorderA.start();
+            startTime = performance.now();
             mediaRecorderB.stop();
             currentRecorder = "A";
         }
@@ -78,106 +254,18 @@ navigator.mediaDevices.getUserMedia({ audio: {
     }
 });
 
+function addNote(slideId, time) {
+    const notesArr = currentRecorder === "A" ? notesArrA : notesArrB;
+    notesArr.push([slideId, time]);
+}
 
-
-
-
-
-
-
-// let chunksA = [];
-
-// const audioA = new Audio();
-// const audioB = new Audio();
-
-// [
-//     ["playA", audioA],
-//     ["playB", audioB],
-// ].forEach((set) => {
-//     document.getElementById(set[0]).addEventListener("click", () => {
-//         set[1].play();
-//     });
-// });
-
-// // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-// navigator.mediaDevices.getUserMedia({ audio: {
-//     noiseSuppression: false,
-//     echoCancellation: false
-// } }).then((stream) => {
-
-//     const mediaRecorderA = new MediaRecorder(stream);
-//     console.log("recording...");
-    
-//     mediaRecorderA.start();
-//     setTimeout(() => {
-//         mediaRecorderA.stop();
-//         console.log("done recording");
-//     }, 3000);
-
-//     mediaRecorderA.ondataavailable = (e) => {
-//         chunksA.push(e.data);
-//     };
-
-//     mediaRecorderA.onstop = () => {
-//         console.log("chunks length: " + chunksA.length);
-//         const blob = new Blob(chunksA, { type: "audio/ogg; codecs=opus" });
-
-//         newBlob = new Blob(chunksA, { type: "audio/ogg; codecs=opus" });
-
-        
-
-//         fetch("https://graffiti.red/API/public/", {
-//             method: "POST",
-//             body: JSON.stringify({
-//                 action: "retrieve",
-//                 name: "test"
-//             })
-//         }).then((res) => {
-//             res.json().then((r) => {
-//                 console.log(r);
-//             });
-//         });
-
-//         chunksA = [];
-//         const audioURL = window.URL.createObjectURL(blob);
-//         audioA.src = audioURL;
-//         console.log("A ready to play");
-
-//         // experiment with string saving here
-//         const reader = new FileReader();
-//         reader.onload = (readerE) => {
-//             const str = btoa(readerE.target.result);
-
-//             // console.log(typeof str);
-//             // console.log(str.length);
-
-//             const strToSave = JSON.stringify({
-//                 data: "some other data",
-//                 str: str
-//             });
-
-//             saveToDatabase("streamData", strToSave).then(() => {
-//                 console.log("sent to database");
-//                 getFromDatabase("streamData").then((val) => {
-//                     console.log("back from database");
-//                     const retrievedObj = JSON.parse(val);
-//                     console.log(retrievedObj.data);
-//                     const strToUse = retrievedObj.str;
-//                     audioB.src = `data:audio/x-wav;base64,${strToUse}`;
-//                     console.log("B ready");
-//                 });
-//             });
-
-//             // audioB.src = `data:audio/x-wav;base64,${str}`;
-//         };
-//         reader.readAsBinaryString(blob);
-
-
-        
-//         // END experiment
-        
-//     };
-// });
+function averageOf(arr) {
+    let sum = 0;
+    arr.forEach((val) => {
+        sum += val;
+    });
+    return sum / arr.length;
+}
 
 function saveToDatabase(name, str) {
     return new Promise((resolve) => {

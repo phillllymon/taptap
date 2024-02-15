@@ -1,0 +1,16 @@
+#equalizer {
+    height: 300px;
+    width: 512px;
+    border: 1px solid black;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.column {
+    width: 32px;
+    height: 2px;
+    background-color: red;
+}
