@@ -173,61 +173,10 @@ function stopAnimation() {
     animating = false;
 }
 
-function animate() { // TODO ........ will have to coordinate with notes retrieved from playerStream
+function animate() {
     const newTime = performance.now();
     const dt = newTime - time;
     time = newTime;
-
-    // const dataArray = player.getDataArray();
-
-    // array1.push(averageOf(dataArray.slice(0, 4)));
-    // array2.push(averageOf(dataArray.slice(4, 8)));
-    // array3.push(averageOf(dataArray.slice(8, 12)));
-    // array4.push(averageOf(dataArray.slice(12, 16)));
-    // times1.push(time);
-    // times2.push(time);
-    // times3.push(time);
-    // times4.push(time);
-
-    // // get arrays down to data for songDelay time
-    // while (times1[0] < time - songDelay) {
-    //     array1.shift();
-    //     times1.shift();
-    // }
-    // while (times2[0] < time - songDelay) {
-    //     array2.shift();
-    //     times2.shift();
-    // }
-    // while (times3[0] < time - songDelay) {
-    //     array3.shift();
-    //     times3.shift();
-    // }
-    // while (times4[0] < time - songDelay) {
-    //     array4.shift();
-    //     times4.shift();
-    // }
-
-    // let arrays = [array2, array3];
-    // let slideIds = ["slide-left", "slide-right"];
-    // // let slideIds = ["slider-left", "slider-right"];
-
-    // if (numSlides === 3) {
-    //     arrays = [array1, array2, array4];
-    //     slideIds = ["slide-left", "slide-a", "slide-right"];
-    //     // slideIds = ["slider-left", "slider-a", "slider-right"];
-    // } else if (numSlides === 4) {
-    //     arrays = [array1, array2, array3, array4];
-    //     slideIds = ["slide-left", "slide-a", "slide-b", "slide-right"];
-    //     // slideIds = ["slider-left", "slider-a", "slider-b", "slider-right"];
-    // }
-
-    // noteWriter.writeNotes(
-    //     arrays,
-    //     slideIds,
-    //     notesPerSecond,
-    //     addNote,
-    //     true
-    // );
 
     moveNotes(dt);
     updateMeter();
@@ -436,5 +385,3 @@ function detectMobile() {
         }); 
     }
 }
-
-// } // end of main function
