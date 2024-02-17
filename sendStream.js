@@ -48,7 +48,9 @@ let startTime = performance.now();
 
 // p2p woo!
 const connector = new Connector((m) => {console.log(m)}, () => {console.log("p2p connected")});
-console.log("connection id: " + connector.offerConnection());
+const streamId = connector.offerConnection();
+console.log("connection id: " + streamId);
+document.getElementById("stream-id").innerText = streamId;
 
 // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 navigator.mediaDevices.getUserMedia({ audio: {
