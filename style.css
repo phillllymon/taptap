@@ -25,6 +25,19 @@
     z-index: 3;
 }
 
+#id-modal {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    width: 250px;
+    padding: 15px;
+    transform: translate(-50%, -50%);
+    background-color: rgb(214, 0, 118);
+    box-shadow: 0px 5px 10px gray;
+    border-radius: 5px;
+    z-index: 3;
+}
+
 #start-modal {
     position: fixed;
     top: 30%;

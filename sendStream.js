@@ -26,7 +26,7 @@ const times4 = [0];
 
 // TODO: save these to database from game and fetch here
 const songDelay = 4000;
-const notesPerSecond = 6;
+const notesPerSecond = 8;
 const slideIds = [
     "slide-left",
     "slide-a",
@@ -46,7 +46,9 @@ let notesArrA = [];
 let notesArrB = [];
 let startTime = performance.now();
 
-
+// p2p woo!
+const connector = new Connector((m) => {console.log(m)}, () => {console.log("p2p connected")});
+console.log("connection id: " + connector.offerConnection());
 
 // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 navigator.mediaDevices.getUserMedia({ audio: {
@@ -204,11 +206,16 @@ navigator.mediaDevices.getUserMedia({ audio: {
                     str: str
                 });
     
-                // console.log("---------");
-                // console.log(currentRecorder);
-                // console.log(recordSet[2]);
-                // console.log("----------")
-                saveToDatabase("streamData", strToSave);
+                // what I want.....
+                console.log("WANT TO SEND")
+                if (connector.connected) {
+                    // console.log(strToSave);
+                    console.log("-----SENDING-----");
+                    connector.send(strToSave);
+                }
+
+                // old way (stupid way)
+                // saveToDatabase("streamData", strToSave);
 
                 // clear notes array
                 const numNotes = recordSet[2].length;

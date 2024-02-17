@@ -1,4 +1,4 @@
-console.log("I am the leader");
+console.log("I am the follower");
 
 const connector = new Connector(onMessage, onConnect);
 
@@ -10,11 +10,13 @@ function onConnect () {
     console.log("Connected!");
 };
 
+
 document.getElementById("start").addEventListener("click", () => {
-    const id = connector.offerConnection();
-    console.log("connection id: " + id);
+    const id = document.getElementById("num").value;
+    console.log("trying to find connection with id " + id);
+    connector.findConnection(id);
 });
 
 document.getElementById("send").addEventListener("click", () => {
-    connector.send("Woo a message!");
+    connector.send("test message");
 });
