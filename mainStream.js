@@ -87,7 +87,7 @@ const times3 = [0];
 const array4 = [0];
 const times4 = [0];
 
-document.getElementById("song-label").innerText = "stream";
+document.getElementById("song-label").innerText = "stream...";
 
 const noteWriter = new NoteWriter();
 

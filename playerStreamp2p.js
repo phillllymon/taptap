@@ -16,6 +16,7 @@ class PlayerStream {
         this.overlap = false;
         this.handleIncomingData = (message) => {
             console.log("data received");
+            document.getElementById("song-label").innerText = "data received";
             // console.log(message);
             const obj = JSON.parse(message);
 
