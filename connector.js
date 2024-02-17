@@ -32,8 +32,10 @@ class Connector {
         };
         
         this.offerNum = Math.floor(100000 * Math.random());
+        console.log("BBBBBBBBB");
         this.connection.onicecandidate = (e) => {
-            if (e.candidate) {
+            // if (e.candidate) {
+            if (e.candidate && i === 0) {
                 const candidateKey = `${this.offerNum}candidate${this.candidateNum}`;
                 saveToDatabase(candidateKey, JSON.stringify(e.candidate));
                 saveToDatabase(`${this.offerNum}candidateNum`, JSON.stringify(this.candidateNum));
