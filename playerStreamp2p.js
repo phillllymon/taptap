@@ -59,6 +59,10 @@ class PlayerStream {
                 this.dataStarted = true;
                 document.getElementById("modal-background").classList.add("hidden");
                 document.getElementById("id-modal").classList.add("hidden");
+                setTimeout(() => {
+                    document.getElementById("song-label").innerText = "sending test message";
+                    this.connector.send("this is a test and you are a poopface");
+                }, 3000);
             });
         });
     }
