@@ -291,6 +291,11 @@ function averageOf(arr) {
 }
 
 function animate() {
+    // calibrate lag
+    if (player.song1.currentTime > 4.0) {
+        player.song1.currentTime = player.song2.currentTime + 4.0;
+    }
+
     const newTime = performance.now();
     const dt = newTime - time;
     time = newTime;
