@@ -28,7 +28,15 @@ const targets = {
     "slide-left": new Set(),
     "slide-a": new Set(),
     "slide-b": new Set()
-}
+};
+
+const tapperKeys = [
+    "KeyD",
+    "KeyV",
+    "KeyN",
+    "KeyK"
+];
+let algorithm = "old";
 
 let numSlides = 2;
 
@@ -36,10 +44,21 @@ if (detectMobile()) {
     console.log("mobile woo!");
     addMobileStyle();
 
+    document.getElementById("full-screen-modal").classList.remove("hidden");
+    document.getElementById("modal-background").classList.remove("hidden");
+    
     const fullButton = document.getElementById("full-screen");
 
     fullButton.addEventListener("click", () => {
         document.getElementById("game-container").requestFullscreen();
+        document.getElementById("full-screen-modal").classList.add("hidden");
+        document.getElementById("modal-background").classList.add("hidden");
+        
+    });
+
+    document.getElementById("small-screen").addEventListener("click", () => {
+        document.getElementById("full-screen-modal").classList.add("hidden");
+        document.getElementById("modal-background").classList.add("hidden");
     });
 
     setTimeout(() => {
@@ -86,6 +105,7 @@ const playButton = document.getElementById("button-play");
 const pauseButton = document.getElementById("button-pause");
 const restartButton = document.getElementById("button-restart");
 
+activateSettings();
 activateLevelSelector();
 activateSlidesSelector();
 showPlayButton();
@@ -107,30 +127,47 @@ document.addEventListener("touchend", () => {
     deactivateTappers();
 });
 
+let waitingForKey = false;
+document.addEventListener("keypress", (e) => {
+    if (waitingForKey) {
+        tapperKeys[waitingForKey[1]] = e.code;
+        document.getElementById(waitingForKey[0]).innerText = e.code;
+        document.getElementById("save-settings").disabled = false;
+        waitingForKey = false;
+    }
+});
 document.addEventListener("keydown", (e) => {
-    if(e.code === "KeyD") {
+    if(e.code === tapperKeys[0]) {
         activateTapper("tapper-left", "slide-left", "note-leaving-left");
     }
-    if(e.code === "KeyK") {
-        activateTapper("tapper-right", "slide-right", "note-leaving-right");
-    }
-    if(e.code === "KeyV") {
+    if(e.code === tapperKeys[1]) {
         activateTapper("tapper-a", "slide-a", "note-leaving-left");
     }
-    if(e.code === "KeyN") {
+    if(e.code === tapperKeys[2]) {
         activateTapper("tapper-b", "slide-b", "note-leaving-right");
+    }
+    if(e.code === tapperKeys[3]) {
+        activateTapper("tapper-right", "slide-right", "note-leaving-right");
     }
 });
 
-document.addEventListener("keyup", () => {
-    deactivateTappers();
+document.addEventListener("keyup", (e) => {
+    if(e.code === tapperKeys[0]) {
+        deactivateTapper("tapper-left");
+    }
+    if(e.code === tapperKeys[1]) {
+        deactivateTapper("tapper-a");
+    }
+    if(e.code === tapperKeys[2]) {
+        deactivateTapper("tapper-b");
+    }
+    if(e.code === tapperKeys[3]) {
+        deactivateTapper("tapper-right");
+    }
 });
 
-function deactivateTappers() {
-    document.getElementById("tapper-left").style.backgroundColor = "rgba(168,0,93,0.2)";
-    document.getElementById("tapper-right").style.backgroundColor = "rgba(168,0,93,0.2)";
-    document.getElementById("tapper-a").style.backgroundColor = "rgba(168,0,93,0.2)";
-    document.getElementById("tapper-b").style.backgroundColor = "rgba(168,0,93,0.2)";
+function deactivateTapper(tapperId) {
+    document.getElementById(tapperId).style.backgroundColor = "rgba(168,0,93,0.2)";
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
@@ -158,7 +195,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
 }
 
 document.getElementById("choose-button").addEventListener("click", () => {
-    showModal();
+    showModal("choose");
 });
 
 playButton.addEventListener("click", () => {
@@ -203,7 +240,7 @@ function selectUploadedSong(songData) {
     player.pause();
     player.setSource(songData);
     showPlayButton();
-    hideModal();
+    hideModal("choose");
     killAllNotes();
 }
 
@@ -214,7 +251,7 @@ function selectSong(songName) {
     player.setSource(`./songs/${currentSong}.m4a`);
     showPlayButton();
     document.getElementById("song-label").innerText = currentSong;
-    hideModal();
+    hideModal("choose");
     killAllNotes();
 }
 
@@ -266,7 +303,9 @@ function animate() {
 
     masterData = [
         [array1, array2, array3, array4],
-        times1
+        times1,
+        numSlides,
+        algorithm
     ]
 
     // get arrays down to data for songDelay time
@@ -309,29 +348,6 @@ function animate() {
         true,
         masterData
     );
-
-    // add notes
-    // [
-    //     // [array2, "slide-left"],
-    //     // [array3, "slide-right"]
-    //     [array1, "slide-left"],
-    //     [array2, "slide-a"],
-    //     [array3, "slide-b"],
-    //     [array4, "slide-right"]
-    // ].forEach((set) => {
-    //     const arr = set[0];
-    //     const midIdx = Math.floor(arr.length / 2);
-    //     const midVal = arr[midIdx];
-    //     const leg = arr.length / (2 * notesPerSecond);
-    //     const beforeIdx = midIdx - leg;
-    //     const afterIdx = midIdx + leg;
-    //     const beforeMax = Math.max(...arr.slice(beforeIdx, midIdx));
-    //     const afterMax = Math.max(...arr.slice(midIdx + 1, afterIdx));
-    //     // console.log(arr);
-    //     if (midVal > beforeMax && midVal > afterMax) {
-    //         addNote(set[1]);
-    //     }
-    // });
 
     moveNotes(dt);
     updateMeter();
@@ -511,13 +527,55 @@ function deselectLevels() {
     });
 }
 
-function showModal() {
-    document.getElementById("modal-background").classList.remove("hidden");
-    document.getElementById("choose-modal").classList.remove("hidden");
+function activateSettings() {
+    document.getElementById("settings").addEventListener("click", () => {
+        showModal("settings");
+    });
+    document.getElementById("save-settings").addEventListener("click", () => {
+        hideModal("settings");
+    });
+    const keyInfo = [
+        ["change-left", "left-key"],
+        ["change-a", "a-key"],
+        ["change-b", "b-key"],
+        ["change-right", "right-key"]
+    ];
+    for (let i = 0; i < keyInfo.length; i++) {
+        document.getElementById(keyInfo[i][1]).innerText = tapperKeys[i];
+        document.getElementById(keyInfo[i][0]).addEventListener("click", () => {
+            document.getElementById(keyInfo[i][1]).innerText = "-";
+            document.getElementById("save-settings").disabled = true;
+            waitingForKey = [keyInfo[i][1], i];
+        });
+    }
+    document.getElementById("switch-algorithm").addEventListener("click", () => {
+        if (algorithm === "new") {
+            algorithm = "old";
+            document.getElementById("algorithm").innerText = "using algorithm B";
+        } else {
+            algorithm = "new";
+            document.getElementById("algorithm").innerText = "using algorithm A";
+        }
+    });
 }
-function hideModal() {
+
+function showModal(modal) {
+    if (modal === "choose") {
+        document.getElementById("choose-modal").classList.remove("hidden");
+    }
+    if (modal === "settings") {
+        document.getElementById("settings-modal").classList.remove("hidden");    
+    }
+    document.getElementById("modal-background").classList.remove("hidden");
+}
+function hideModal(modal) {
+    if (modal === "choose") {
+        document.getElementById("choose-modal").classList.add("hidden");
+    }
+    if (modal === "settings") {
+        document.getElementById("settings-modal").classList.add("hidden");
+    }
     document.getElementById("modal-background").classList.add("hidden");
-    document.getElementById("choose-modal").classList.add("hidden");
 }
 
 function addMobileStyle() {
@@ -550,5 +608,3 @@ function detectMobile() {
         }); 
     }
 }
-
-// } // end of main function

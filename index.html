@@ -13,12 +13,53 @@
         
         <div id="game-container" class="game-container">
             <div id="modal-background" class="hidden"></div>
-            <!-- <div id="full-screen-modal">
+            <div id="full-screen-modal" class="hidden">
                 <button id="full-screen">Use full screen</button>
                 <br>
                 <br>
                 <button id="small-screen">Little wimpy screen</button>
-            </div> -->
+            </div>
+            <div id="settings-modal" class="hidden">
+                Tapper keys:
+                <br>
+                <br>
+                <div id="change-tappers">
+                    <div>
+                        <button id="change-left">Change</button>
+                        <br>
+                        <center id="left-key"></center>
+                    </div>
+                    <div>
+                        <button id="change-a">Change</button>
+                        <br>
+                        <center id="a-key"></center>
+                    </div>
+                    <div>
+                        <button id="change-b">Change</button>
+                        <br>
+                        <center id="b-key"></center>
+                    </div>
+                    <div>
+                        <button id="change-right">Change</button>
+                        <br>
+                        <center id="right-key"></center>
+                    </div>
+                </div>
+                <br>
+                <br>
+                    <button id="switch-algorithm">Switch algorithm</button>
+                    <br>
+                    <center id="algorithm">Using algorithm A</center>
+                    <br>
+                    <p>
+                        Algorithm A is more dynamic. With algorithm B you will
+                        get more repetitive notes.
+                    </p>
+                
+                <br>
+                <br>
+                <button id="save-settings">Save</button>
+            </div>
             <div id="choose-modal" class="hidden">
                 Choose song:
                 <select id="select-song">
@@ -56,11 +97,13 @@
                 <br>
                 <input id="file-input" type="file" />
             </div>
-            <div id="full-screen">&#x2197;</div>
+            
             <div id="play-area" class="play-area">
                 <!-- <div id="noter" class="noter"></div> -->
                 
                 <div id="menu-right">
+                    <div id="settings" class="level">Settings</div>
+                    <br>
                     <div id="choose-button" class="level">Choose song</div>
                 </div>
                 <div id="slides-container">

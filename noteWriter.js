@@ -21,8 +21,9 @@ class NoteWriter {
         const vals = [];
 
         let amt = 0;
-        for (let i = 0; i < data.length; i++) {
-            const arr = data[i];
+        const dataArrays = masterData[0];
+        for (let i = 0; i < dataArrays.length; i++) {
+            const arr = dataArrays[i];
             const midIdx = Math.floor(arr.length / 2);
             const thisVal = arr[midIdx];
             vals.push(thisVal);
@@ -74,6 +75,7 @@ class NoteWriter {
         const twoSecondLeg = 2000.0 / milsPerNode;
         const leg = Math.floor(twoSecondLeg / notesPerSecond);
 
+
         for (let i = 0; i < arrays.length; i++) {
             const arr = arrays[i];
             const midVal = arr[midIdx] - arr[midIdx - 1];
@@ -81,18 +83,12 @@ class NoteWriter {
             const beforeIdx = midIdx - leg;
             const afterIdx = midIdx + leg;
             const beforeArr = arr.slice(beforeIdx, midIdx);
-            const beforeTimes = times.slice(beforeIdx, midIdx);
             const beforeMax = Math.max(...beforeArr.map((val, n) => {
                 return n === 0 ? 0 : val - beforeArr[n - 1];
-                console.log(beforeTimes[n] - beforeTimes[n - 1]);
-                console.log(val - beforeArr[n - 1]);
-                return n === 0 ? 0 : 1.0 * (val - beforeArr[n - 1]) / (beforeTimes[n] - beforeTimes[n - 1]);
             }));
             const afterArr = arr.slice(midIdx + 1, afterIdx);
-            const afterTimes = times.slice(midIdx + 1, afterIdx);
             const afterMax = Math.max(...afterArr.map((val, n) => {
                 return n === 0 ? 0 : val - afterArr[n - 1];
-                return n === 0 ? 0 : 1.0 * (val - afterArr[n - 1]) / (afterTimes[n] - afterTimes[n - 1]);
             }));
         // NEW END ---------------
 
@@ -129,7 +125,7 @@ class NoteWriter {
                     return;
                 }    
             
-                let newWay = true;
+                let newWay = algorithm === "new";
 
                 if (newWay) {
                     // --------------------- experimental notes --------------------
@@ -140,26 +136,32 @@ class NoteWriter {
                     }).sort();
 
                     let slide = "slide-left";
-                    if (thisToneVal > sortedTones[0]) {
-                        slide = "slide-a";
-                        if (thisToneVal > sortedTones[1]) {
-                            slide = "slide-b"
-                            if (thisToneVal > sortedTones[2]){
+                    const numSlides = masterData[2];
+                    if (numSlides === 4) {
+                        if (thisToneVal > sortedTones[0]) {
+                            slide = "slide-a";
+                            if (thisToneVal > sortedTones[1]) {
+                                slide = "slide-b"
+                                if (thisToneVal > sortedTones[2]){
+                                    slide = "slide-right";
+                                }
+                            }
+                        }
+                    } else if (numSlides === 3) {
+                        if (thisToneVal > sortedTones[0]) {
+                            slide = "slide-a";
+                            if (thisToneVal > sortedTones[2]) {
                                 slide = "slide-right";
                             }
+                        }
+                    } else {
+                        if (thisToneVal > sortedTones[1]) {
+                            slide = "slide-right";
                         }
                     }
 
                     recentToneVals.push(thisToneVal);
                     recentToneVals.shift();
-                    
-                    
-
-
-                    // console.log(recentToneVals.map((val) => {
-                    //     const myVal = val;
-                    //     return myVal;
-                    // }));
 
                     const gap = (1.0 / notesPerSecond) * 1000;
                     const now = performance.now();
@@ -173,11 +175,25 @@ class NoteWriter {
                         }
                         
                     } else if (slide === "slide-a") {
-                        if (leftTime > gap) {
-
-                            addNote("slide-a", marked);
-                            this.lastLeft = performance.now();
-
+                        if (numSlides === 3) {
+                            const midGap = performance.now() - this.lastMid;
+                            if (midGap > gap) {
+                                this.lastMid = performance.now();
+                                if (leftTime > gap || rightTime > gap) {
+                                    addNote("slide-a", marked);
+                                    if (leftTime < gap) {
+                                        this.lastRight = performance.now();
+                                    }
+                                    if (rightTime < gap) {
+                                        this.lastLeft = performance.now();
+                                    }
+                                }
+                            }
+                        } else {
+                            if (leftTime > gap) {
+                                addNote("slide-a", marked);
+                                this.lastLeft = performance.now();
+                            }
                         }
                     } else if (slide === "slide-b") {
                         if (rightTime > gap) {
@@ -194,35 +210,6 @@ class NoteWriter {
 
                         }
                     }
-                    // if (thisToneVal < 2) {
-                    //     if (leftTime > gap) {
-
-                    //         addNote("slide-left");
-                    //         this.lastLeft = performance.now();
-                    //     }
-                        
-                    // } else if (thisToneVal < 3) {
-                    //     if (leftTime > gap) {
-
-                    //         addNote("slide-a");
-                    //         this.lastLeft = performance.now();
-
-                    //     }
-                    // } else if (thisToneVal < 4) {
-                    //     if (rightTime > gap) {
-
-                    //         addNote("slide-b");
-                    //         this.lastRight = performance.now();
-
-                    //     }
-                    // } else {
-                    //     if (rightTime > gap) {
-
-                    //         addNote("slide-right");
-                    //         this.lastRight = performance.now();
-
-                    //     }
-                    // }
 
                 } else {
                 

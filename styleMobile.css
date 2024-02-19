@@ -77,7 +77,7 @@
     width: 28vw;
     position: absolute;
     left: 100%;
-    top: 12vw;
+    top: 3vw;
     padding: 1vw;
     text-align: center;
     transform: translate(-102%, 0px);
@@ -238,11 +238,3 @@
     100%    {opacity: 0.5; top: 100vw; left: -200vw}
 }
 
-#full-screen {
-    top: 1vw;
-    left: 100%;
-    font-size: 6vw;
-    color: gray;
-    transform: translate(-108%, 0);
-    z-index: 1;
-}
