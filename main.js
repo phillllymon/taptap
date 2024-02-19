@@ -125,7 +125,10 @@ showPlayButton();
 
 document.addEventListener("touchend", () => {
 // document.addEventListener("mouseup", () => {
-    deactivateTappers();
+    deactivateTapper("tapper-left");
+    deactivateTapper("tapper-a");
+    deactivateTapper("tapper-b");
+    deactivateTapper("tapper-right");
 });
 
 let waitingForKey = false;
