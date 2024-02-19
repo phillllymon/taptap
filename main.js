@@ -10,6 +10,7 @@ const targetBounds = {
     bottom: 420
 }
 
+let streak = 0;
 let notesHit = 0;
 let notesMissed = 0;
 
@@ -36,7 +37,7 @@ const tapperKeys = [
     "KeyN",
     "KeyK"
 ];
-let algorithm = "old";
+let algorithm = "new";
 
 let numSlides = 2;
 
@@ -174,7 +175,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
     document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
     const tapperTargets = targets[slideId];
     if (tapperTargets.size === 0) {
-        notesMissed += 1;
+        triggerMissedNote();
     }
     for (const target of tapperTargets) {
         notes.delete(target);
@@ -230,7 +231,8 @@ document.getElementById("file-input").addEventListener("change", (e) => {
         const str = btoa(readerE.target.result);
         const newSongData = `data:audio/x-wav;base64,${str}`;
         selectUploadedSong(newSongData);
-        document.getElementById("song-label").innerText = e.target.files[0].name;
+        currentSong = e.target.files[0].name;
+        document.getElementById("song-label").innerText = currentSong;
     };
     reader.readAsBinaryString(file);
 });
@@ -402,15 +404,69 @@ function addNote(slideId, marked = false) {
     document.getElementById(slideId).appendChild(newNote);
 }
 
+let streakWait = false;
+let hit10 = false;
+let hit25 = false;
+let hit50 = false;
+let hit100 = false;
+
 function triggerHitNote() {
     player.setVolume(1);
     notesHit += 1;
+
+    streak += 1;
+    const songLabel = document.getElementById("song-label");
+    if (hit10) {
+        songLabel.innerText = `STREAK: ${streak}`;
+    }
+    if (!hit10 && streak > 10) {
+        songLabel.innerText = "STREAK!";
+        streakWait = setTimeout(() => {
+            songLabel.innerText = `STREAK: ${streak}`;
+        }, 1000);
+        hit10 = true;
+    }
+    if (!hit25 && streak > 25) {
+        songLabel.classList.add("font-bigA");
+        songLabel.innerText = "25 NOTE STREAK!";
+        streakWait = setTimeout(() => {
+            songLabel.innerText = `STREAK: ${streak}`;
+        }, 1000);
+        hit25 = true;
+    }
+    if (!hit50 && streak > 50) {
+        songLabel.classList.add("font-bigB");
+        songLabel.innerText = "50 NOTE STREAK!";
+        streakWait = setTimeout(() => {
+            songLabel.innerText = `STREAK: ${streak}`;
+        }, 1000);
+        hit50 = true;
+    }
+    if (!hit100 && streak > 100) {
+        songLabel.classList.add("font-bigC");
+        songLabel.innerText = "100 NOTE STREAK!!!";
+        streakWait = setTimeout(() => {
+            songLabel.innerText = `STREAK: ${streak}`;
+        }, 1000);
+        hit100 = true;
+    }
 }
 
 function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
     player.setVolume(0.3);
     notesMissed += 1;
+    streak = 0;
+    hit10 = false;
+    hit25 = false;
+    hit50 = false;
+    hit100 = false;
+    clearTimeout(streakWait);
+    const songLabel = document.getElementById("song-label");
+    songLabel.classList.remove("font-bigA");
+    songLabel.classList.remove("font-bigB");
+    songLabel.classList.remove("font-bigC");
+    songLabel.innerText = currentSong;
 }
 
 function killAllNotes() {

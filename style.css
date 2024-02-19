@@ -148,7 +148,7 @@
     cursor: pointer;
 }
 
-#song-label {
+.song-label {
     position: absolute;
     left: 50%;
     top: 20px;
@@ -157,6 +157,16 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: gray;
     text-shadow: 0px 0px 5px gray;
+}
+
+.font-bigA {
+    font-size: 40px;
+}
+.font-bigB {
+    font-size: 60px;
+}
+.font-bigC {
+    font-size: 80px;
 }
 
 #menu-right {
