@@ -419,40 +419,41 @@ function triggerHitNote() {
 
     streak += 1;
     const songLabel = document.getElementById("song-label");
-    if (hit10) {
-        songLabel.innerText = `STREAK: ${streak}`;
-    }
-    if (!hit10 && streak > 10) {
-        songLabel.innerText = "STREAK!";
-        streakWait = setTimeout(() => {
-            songLabel.innerText = `STREAK: ${streak}`;
-        }, 1000);
-        hit10 = true;
-    }
-    if (!hit25 && streak > 25) {
-        songLabel.classList.add("font-bigA");
-        songLabel.innerText = "25 NOTE STREAK!";
-        streakWait = setTimeout(() => {
-            songLabel.innerText = `STREAK: ${streak}`;
-        }, 1000);
-        hit25 = true;
-    }
-    if (!hit50 && streak > 50) {
-        songLabel.classList.add("font-bigB");
-        songLabel.innerText = "50 NOTE STREAK!";
-        streakWait = setTimeout(() => {
-            songLabel.innerText = `STREAK: ${streak}`;
-        }, 1000);
-        hit50 = true;
-    }
-    if (!hit100 && streak > 100) {
-        songLabel.classList.add("font-bigC");
-        songLabel.innerText = "100 NOTES!!!";
-        streakWait = setTimeout(() => {
-            songLabel.innerText = `STREAK: ${streak}`;
-        }, 1000);
-        hit100 = true;
-    }
+    songLabel.innerText = player.song2.currentTime - player.song1.currentTime;
+    // if (hit10) {
+    //     songLabel.innerText = `STREAK: ${streak}`;
+    // }
+    // if (!hit10 && streak > 10) {
+    //     songLabel.innerText = "STREAK!";
+    //     streakWait = setTimeout(() => {
+    //         songLabel.innerText = `STREAK: ${streak}`;
+    //     }, 1000);
+    //     hit10 = true;
+    // }
+    // if (!hit25 && streak > 25) {
+    //     songLabel.classList.add("font-bigA");
+    //     songLabel.innerText = "25 NOTE STREAK!";
+    //     streakWait = setTimeout(() => {
+    //         songLabel.innerText = `STREAK: ${streak}`;
+    //     }, 1000);
+    //     hit25 = true;
+    // }
+    // if (!hit50 && streak > 50) {
+    //     songLabel.classList.add("font-bigB");
+    //     songLabel.innerText = "50 NOTE STREAK!";
+    //     streakWait = setTimeout(() => {
+    //         songLabel.innerText = `STREAK: ${streak}`;
+    //     }, 1000);
+    //     hit50 = true;
+    // }
+    // if (!hit100 && streak > 100) {
+    //     songLabel.classList.add("font-bigC");
+    //     songLabel.innerText = "100 NOTES!!!";
+    //     streakWait = setTimeout(() => {
+    //         songLabel.innerText = `STREAK: ${streak}`;
+    //     }, 1000);
+    //     hit100 = true;
+    // }
 }
 
 function triggerMissedNote() {
