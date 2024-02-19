@@ -220,16 +220,6 @@ function moveNotes(dt) {
 
 // note in form of [<ele>, posTop, slideId, target], where target is boolean
 function addNote(slideId, marked = false) {
-    if (numSlides === 2) {
-        if (slideId === "slide-a" || slideId === "slide-b") {
-            return;
-        }
-    }
-    if (numSlides === 3) {
-        if (slideId === "slide-b") {
-            return;
-        }
-    }
     const newNote = document.createElement("div");
     newNote.classList.add("note");
     if (marked) {

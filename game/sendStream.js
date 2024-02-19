@@ -248,13 +248,11 @@ navigator.mediaDevices.getUserMedia({ audio: {
     function switchRecorder() {
         if (currentRecorder === "A") {
             mediaRecorderB.start();
-            console.log("chunk time: " + (performance.now() - startTime));
             startTime = performance.now();
             mediaRecorderA.stop();
             currentRecorder = "B";
         } else {
             mediaRecorderA.start();
-            console.log("chunk time: " + (performance.now() - startTime));
             startTime = performance.now();
             mediaRecorderB.stop();
             currentRecorder = "A";

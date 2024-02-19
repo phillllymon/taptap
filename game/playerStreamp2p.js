@@ -33,6 +33,22 @@ class PlayerStream {
             }, overlapDelay);
         };
 
+        // getFromDatabase("streamData").then((val) => {
+        //     console.log("back from database");
+        //     const retrievedObj = JSON.parse(val);
+        //     const strToUse = retrievedObj.str;
+        //     this.audioA.src = `data:audio/x-wav;base64,${strToUse}`;
+        //     this.notesA = retrievedObj.data;
+
+        //     // temp
+        //     // this.audioB.src = `data:audio/x-wav;base64,${strToUse}`;
+        //     // this.notesB = retrievedObj.data;
+        //     // end temp
+
+        //     console.log("A ready");
+        //     this.dataStarted = true;
+        // });
+
         this.connector = new Connector(this.handleIncomingData, () => {console.log("p2p connected")});
         document.getElementById("modal-background").classList.remove("hidden");
         document.getElementById("id-modal").classList.remove("hidden");
@@ -68,6 +84,22 @@ class PlayerStream {
                 this.switchTo(this.current === "A" ? "B" : "A");
             }, this.switchTime);
         }
+        // this.poll = setInterval(() => {
+        //     getFromDatabase("streamData").then((res) => {
+        //         const obj = JSON.parse(res);
+
+        //         const overlapDelay = this.overlap ? this.delay : 0;
+        //         setTimeout(() => {
+        //             (this.current === "A" ? this.audioB : this.audioA).src = `data:audio/x-wav;base64,${obj.str}`;
+        //             if (this.current === "A") {
+        //                 this.notesB = obj.data;
+        //             } else {
+        //                 this.notesA = obj.data;
+        //             }
+        //         }, overlapDelay);
+
+        //     });
+        // }, this.dt);
     }
 
     pause() {

@@ -57,17 +57,16 @@ if (detectMobile()) {
     }, 500);
 }
 
-const array1 = [0];
-const times1 = [0];
+const array1 = [];
+const times1 = [];
+const array2 = [];
+const times2 = [];
+const array3 = [];
+const times3 = [];
+const array4 = [];
+const times4 = [];
 
-const array2 = [0];
-const times2 = [0];
-
-const array3 = [0];
-const times3 = [0];
-
-const array4 = [0];
-const times4 = [0];
+let masterData;
 
 let currentSong = "anthem";
 document.getElementById("song-label").innerText = currentSong;
@@ -178,8 +177,7 @@ restartButton.addEventListener("click", () => {
     player.restart();
     stopAnimation();
     showPlayButton();
-    resetSliders();
-
+    killAllNotes();
 });
 
 songSelector.addEventListener("change", () => {
@@ -206,6 +204,7 @@ function selectUploadedSong(songData) {
     player.setSource(songData);
     showPlayButton();
     hideModal();
+    killAllNotes();
 }
 
 function selectSong(songName) {
@@ -216,6 +215,7 @@ function selectSong(songName) {
     showPlayButton();
     document.getElementById("song-label").innerText = currentSong;
     hideModal();
+    killAllNotes();
 }
 
 function disablePlayControls() {
@@ -263,30 +263,11 @@ function animate() {
     times2.push(time);
     times3.push(time);
     times4.push(time);
-    
-    // for (let i = 0; i < 4; i++) {
-    //     const a = dataArray[i * 4];
-    //     const b = dataArray[i * 4 + 1];
-    //     const c = dataArray[i * 4 + 2];
-    //     const d = dataArray[i * 4 + 3];
-            
-    //     if (i === 0) {
-    //         array1.push(a);
-    //         times1.push(time);
-    //     }
-    //     if (i === 1) {
-    //         array2.push(b);
-    //         times2.push(time);
-    //     }
-    //     if (i === 2) {
-    //         array3.push(c);
-    //         times3.push(time);
-    //     }
-    //     if (i === 3) {
-    //         array4.push(d);
-    //         times4.push(time);
-    //     }
-    // }
+
+    masterData = [
+        [array1, array2, array3, array4],
+        times1
+    ]
 
     // get arrays down to data for songDelay time
     while (times1[0] < time - songDelay) {
@@ -325,7 +306,8 @@ function animate() {
         slideIds,
         notesPerSecond,
         addNote,
-        true
+        true,
+        masterData
     );
 
     // add notes
@@ -357,7 +339,7 @@ function animate() {
     if (animating) {
         requestAnimationFrame(animate);
     } else {
-        killAllNotes();
+        // killAllNotes();
     }
 }
 
@@ -416,7 +398,10 @@ function triggerMissedNote() {
 }
 
 function killAllNotes() {
-    console.log("kill notes"); // TODO!!
+    notes.forEach((note) => {
+        note[0].remove();
+        notes.delete(note);
+    });
 }
 
 function showPlayButton() {

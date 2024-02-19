@@ -38,7 +38,7 @@
     z-index: 3;
 }
 
-#full-screen-modal {
+#start-modal {
     position: fixed;
     top: 30%;
     left: 50%;
@@ -327,14 +327,4 @@
 
 .hidden {
     display: none;
-}
-
-.noter {
-    position: fixed;
-    left: 70%;
-    top: 10px;
-    height: 40px;
-    width: 40px;
-    background-color: green;
-    z-index: 3;
 }
