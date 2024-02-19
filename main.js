@@ -444,7 +444,7 @@ function triggerHitNote() {
     }
     if (!hit100 && streak > 100) {
         songLabel.classList.add("font-bigC");
-        songLabel.innerText = "100 NOTE STREAK!!!";
+        songLabel.innerText = "100 NOTES!!!";
         streakWait = setTimeout(() => {
             songLabel.innerText = `STREAK: ${streak}`;
         }, 1000);

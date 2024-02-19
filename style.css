@@ -164,9 +164,20 @@
 }
 .font-bigB {
     font-size: 60px;
+    opacity: 0.8;
 }
 .font-bigC {
     font-size: 80px;
+    opacity: 0.6;
+    animation-name: bigC;
+    animation-duration: 1500ms;
+}
+
+@keyframes bigC {
+    100%    {font-size: 80px}
+    20%      {font-size: 100px}
+    40%      {font-size: 100px}
+    100%    {font-size: 80px}
 }
 
 #menu-right {
