@@ -199,7 +199,8 @@
 
 .tapper {
     position: absolute;
-    top: 150vw;
+    top: 149vw;
+    /* ^subtracted 1vw to account for border */
     left: 50%;
     transform: translate(-50%, 0);
     width: 85%;

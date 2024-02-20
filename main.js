@@ -5,8 +5,9 @@ const twangs = [
     new Audio("./effects/twang9.m4a"),
 ];
 
+let travelLength = 400;
 const targetBounds = {
-    top: 385,
+    top: 382,
     bottom: 420
 }
 
@@ -16,9 +17,15 @@ let notesMissed = 0;
 
 // let songDelay = 3000;
 let songDelay = 4000;
-let noteSpeed = Math.floor(400 / ( (songDelay / 1000.0) / 2 ));
+let noteSpeed = 1.0 * (travelLength / ( (songDelay / 1000.0) / 2 ));
 
-console.log(noteSpeed);
+let adjustment = 0; // ms to add to songDelay according to player's timing preference
+let calibrating = false;
+const adjustmentsNeeded = [];
+
+let autoCalibrating = true;
+let autoAdjustments = [];
+let autoAdjustment = 0;
 
 let slideLength = 500;
 // const noteSpeed = 400; // px/s
@@ -66,7 +73,7 @@ if (detectMobile()) {
 
         songDelay = 4000;
         const viewWidth = document.getElementById("game-container").clientWidth;
-        const travelLength = 1.5 * viewWidth;
+        travelLength = 1.49 * viewWidth;
         noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
         targetBounds.top = 0.93 * travelLength;
         targetBounds.bottom = 1.05 * travelLength;
@@ -94,6 +101,7 @@ document.getElementById("song-label").innerText = currentSong;
 const player = new Player(`./songs/${currentSong}.m4a`, songDelay, 32, () => {
     stopAnimation();
     showRestartButton();
+    autoAdjustment = 0;
 });
 
 const noteWriter = new NoteWriter();
@@ -109,6 +117,7 @@ const restartButton = document.getElementById("button-restart");
 activateSettings();
 activateLevelSelector();
 activateSlidesSelector();
+activateCalibration();
 showPlayButton();
 
 [
@@ -175,6 +184,31 @@ function deactivateTapper(tapperId) {
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
+    if (autoCalibrating) {
+        let closest = 500;
+        let numNotes = 0;
+        notes.forEach((note) => {
+            if (slideId === note[2]) {
+                const thisOffset = note[1] - travelLength;
+                if (Math.abs(thisOffset) < closest) {
+                    closest = thisOffset;
+                    if (thisOffset < 80) {
+                        numNotes += 1;
+                    }
+                }
+            }
+        });
+        
+        if (numNotes < 2) {
+            if (Math.abs(closest) < 50) {
+
+                autoAdjustment += 1.0 * (closest / (10 * notes.size));
+                autoAdjustment = Math.max(autoAdjustment, -35);
+                autoAdjustment = Math.min(autoAdjustment, 20);
+            }
+        }
+    }
+
     document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
     const tapperTargets = targets[slideId];
     if (tapperTargets.size === 0) {
@@ -247,6 +281,7 @@ function selectUploadedSong(songData) {
     showPlayButton();
     hideModal("choose");
     killAllNotes();
+    autoAdjustment = 0;
 }
 
 function selectSong(songName) {
@@ -258,6 +293,7 @@ function selectSong(songName) {
     document.getElementById("song-label").innerText = currentSong;
     hideModal("choose");
     killAllNotes();
+    autoAdjustment = 0;
 }
 
 function disablePlayControls() {
@@ -291,9 +327,14 @@ function averageOf(arr) {
 }
 
 function animate() {
-    // calibrate lag
-    if (player.song1.currentTime > 4.0) {
-        player.song1.currentTime = player.song2.currentTime + 4.0;
+    // calibrate actual lag
+    const desiredDelay = 1.0 * ((songDelay + adjustment) / 1000); // convert to seconds
+    if (player.song1.currentTime > desiredDelay) {
+        player.song1.currentTime = player.song2.currentTime + desiredDelay;
+    }
+
+    if (calibrating) {
+        document.getElementById("current-adjustment").innerText = adjustment;
     }
 
     const newTime = performance.now();
@@ -407,16 +448,12 @@ function addNote(slideId, marked = false) {
         newNote.classList.add("note-marked");
     }
     // newNote.style.top = "200px";
-    newNote.style.top = "0px";
-    notes.add([newNote, 0, slideId, false]);
+    const startPos = -1.0 * autoAdjustment;
+    newNote.style.top = `${startPos}px`;
+    // first startPos gets changed to keep track of position; second is to remember where it started
+    notes.add([newNote, startPos, slideId, false, startPos]);
     document.getElementById(slideId).appendChild(newNote);
 }
-
-let streakWait = false;
-let hit10 = false;
-let hit25 = false;
-let hit50 = false;
-let hit100 = false;
 
 function triggerHitNote() {
     player.setVolume(1);
@@ -424,41 +461,25 @@ function triggerHitNote() {
 
     streak += 1;
     const songLabel = document.getElementById("song-label");
-    songLabel.innerText = player.song2.currentTime - player.song1.currentTime;
-    // if (hit10) {
-    //     songLabel.innerText = `STREAK: ${streak}`;
-    // }
-    // if (!hit10 && streak > 10) {
-    //     songLabel.innerText = "STREAK!";
-    //     streakWait = setTimeout(() => {
-    //         songLabel.innerText = `STREAK: ${streak}`;
-    //     }, 1000);
-    //     hit10 = true;
-    // }
-    // if (!hit25 && streak > 25) {
-    //     songLabel.classList.add("font-bigA");
-    //     songLabel.innerText = "25 NOTE STREAK!";
-    //     streakWait = setTimeout(() => {
-    //         songLabel.innerText = `STREAK: ${streak}`;
-    //     }, 1000);
-    //     hit25 = true;
-    // }
-    // if (!hit50 && streak > 50) {
-    //     songLabel.classList.add("font-bigB");
-    //     songLabel.innerText = "50 NOTE STREAK!";
-    //     streakWait = setTimeout(() => {
-    //         songLabel.innerText = `STREAK: ${streak}`;
-    //     }, 1000);
-    //     hit50 = true;
-    // }
-    // if (!hit100 && streak > 100) {
-    //     songLabel.classList.add("font-bigC");
-    //     songLabel.innerText = "100 NOTES!!!";
-    //     streakWait = setTimeout(() => {
-    //         songLabel.innerText = `STREAK: ${streak}`;
-    //     }, 1000);
-    //     hit100 = true;
-    // }
+
+    if (streak > 9) {
+        songLabel.innerText = `STREAK: ${streak}`;
+    }
+    
+    if (streak === 25) {
+        songLabel.classList.add("font-bigA");
+    }
+
+    if (streak === 50) {
+        songLabel.classList.add("font-bigB");
+    }
+    
+    if (streak > 99) {
+        songLabel.classList.remove("pulse");
+        setTimeout(() => {
+            songLabel.classList.add("pulse");
+        }, 0);
+    }
 }
 
 function triggerMissedNote() {
@@ -466,15 +487,11 @@ function triggerMissedNote() {
     player.setVolume(0.3);
     notesMissed += 1;
     streak = 0;
-    hit10 = false;
-    hit25 = false;
-    hit50 = false;
-    hit100 = false;
-    clearTimeout(streakWait);
+    
     const songLabel = document.getElementById("song-label");
     songLabel.classList.remove("font-bigA");
     songLabel.classList.remove("font-bigB");
-    songLabel.classList.remove("font-bigC");
+    songLabel.classList.remove("pulse");
     songLabel.innerText = currentSong;
 }
 
@@ -651,6 +668,23 @@ function addMobileStyle() {
     link.href = "./styleMobile.css";
 
     document.head.appendChild(link);
+}
+
+function activateCalibration() {
+    const calibrateButton = document.getElementById("auto-calibrate");
+    calibrateButton.addEventListener("click", () => {
+        if (autoCalibrating) {
+            autoCalibrating = false;
+            autoAdjustment = 0;
+            document.getElementById("autocalibration").innerText = "Autocalibration is off";
+            calibrateButton.innerText = "Start autocalibration";
+        } else {
+            autoCalibrating = true;
+            autoAdjustment = 0;
+            document.getElementById("autocalibration").innerText = "Autocalibration is on";
+            calibrateButton.innerText = "Stop autocalibration";
+        }
+    });
 }
 
 function detectMobile() {

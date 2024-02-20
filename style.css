@@ -46,6 +46,19 @@
     z-index: 3;
 }
 
+#settings-modal {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    width: 250px;
+    padding: 15px;
+    transform: translate(-50%, -50%);
+    background-color: rgb(214, 0, 118);
+    box-shadow: 0px 5px 10px gray;
+    border-radius: 5px;
+    z-index: 3;
+}
+
 #change-tappers {
     display: flex;
     flex-direction: row;
@@ -62,6 +75,18 @@
     box-shadow: 0px 5px 10px gray;
     border-radius: 5px;
     z-index: 3;
+}
+
+#calibration-dashboard {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 200px;
+    padding: 15px;
+    background-color: rgb(214, 0, 118);
+    box-shadow: 0px 5px 10px gray;
+    border-bottom-right-radius: 5px;
+    z-index: 5;
 }
 
 .game-container {
@@ -161,31 +186,30 @@
 }
 
 .font-bigA {
-    font-size: 40px;
+    font-size: 35px;
 }
 .font-bigB {
-    font-size: 60px;
+    font-size: 50px;
     opacity: 0.8;
     animation-name: bigB;
-    animation-duration: 1500ms;
+    animation-duration: 1000ms;
 }
 @keyframes bigB {
-    100%    {font-size: 60px}
-    20%      {font-size: 70px}
-    40%      {font-size: 70px}
-    100%    {font-size: 60px}
+    100%    {font-size: 50px}
+    20%      {font-size: 65px}
+    25%      {font-size: 65px}
+    100%    {font-size: 50px}
 }
-.font-bigC {
-    font-size: 80px;
-    opacity: 0.6;
-    animation-name: bigC;
-    animation-duration: 1500ms;
+.pulse {
+    font-size: 50px;
+    animation-name: pulse;
+    animation-duration: 450ms;
 }
-@keyframes bigC {
-    100%    {font-size: 80px}
-    20%      {font-size: 100px}
-    40%      {font-size: 100px}
-    100%    {font-size: 80px}
+@keyframes pulse {
+    100%    {font-size: 50px}
+    20%      {font-size: 55px}
+    25%      {font-size: 55px}
+    100%    {font-size: 50px}
 }
 
 #menu-right {
@@ -265,6 +289,7 @@
 }
 
 .slides {
+    position: relative;
     display: flex;
     flex-direction: row;
     width: 250px;
@@ -318,13 +343,18 @@
     box-shadow: 0px 3px 10px orange;
 }
 
+#test-note2 {
+    top: 365px;
+}
+
 .note-marked {
     background-color: green;
 }
 
 .tapper {
     position: absolute;
-    top: 400px;
+    top: 397px;
+    /* ^subtracted 3px to account for border */
     left: 50%;
     transform: translate(-50%, 0);
     width: 90px;

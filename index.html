@@ -20,8 +20,9 @@
                 <button id="small-screen">Little wimpy screen</button>
             </div>
             <div id="settings-modal" class="hidden">
-                Tapper keys:
                 <br>
+                <br>
+                Tapper keys:
                 <br>
                 <div id="change-tappers">
                     <div>
@@ -47,15 +48,25 @@
                 </div>
                 <br>
                 <br>
-                    <button id="switch-algorithm">Switch algorithm</button>
-                    <br>
-                    <center id="algorithm">using algorithm A</center>
-                    <br>
-                    <p>
-                        Algorithm A is more dynamic. With algorithm B you will
-                        get more repetitive notes.
-                    </p>
-                
+                <button id="switch-algorithm">Switch algorithm</button>
+                <br>
+                <center id="algorithm">using algorithm A</center>
+                <br>
+                <p>
+                    Algorithm A is more dynamic. With algorithm B you will
+                    get more repetitive notes.
+                </p>
+                <br>
+                <br>
+                <button id="auto-calibrate">Stop autocalibration</button>
+                <br>
+                <center id="autocalibration">Autocalibration is on</center>
+                <br>
+                <p>
+                    Autocalibration will continually adjust timing while you play to account
+                    for differences in song notes and when it makes sense to tap for you. The
+                    adjustment is reset to 0 when you start a new song;
+                </p>
                 <br>
                 <br>
                 <button id="save-settings">Save</button>
@@ -99,7 +110,21 @@
             </div>
             
             <div id="play-area" class="play-area">
-                <!-- <div id="noter" class="noter"></div> -->
+                <div id="calibration-dashboard" class="hidden">
+                    Play a song on stupid or easy and tap when you think the notes
+                    should be, even if they're a little before or after the target area.
+                    Timing will be adjusted as you play so it should get more in sync.
+                    <br>
+                    <br>
+                    Current adjustment: <span id="current-adjustment">0</span>ms
+                    <br>
+                    <br>
+                    <button id="apply-offset">Appy offset</button>
+                    <br>
+                    <br>
+                    <button id="reset-calibration">Reset to 0</button>
+                    <button id="end-calibration">Save</button>
+                </div>
                 
                 <div id="menu-right">
                     <div id="settings" class="level">Settings</div>

@@ -6,9 +6,11 @@ class Player {
         this.playing1 = false;
         this.playing2 = false;
         this.timeStarted = false;
-        this.timeToStart2 = delay; // set to smaller value if we pause before song2 has started
+        this.adjustment = 0; // adjustment for player timing calibration
+        this.timeToStart2 = delay + this.adjustment; // set to smaller value if we pause before song2 has started
         this.song2Timeout = false;
         this.delay = delay;
+        this.calibrating = false;
 
         this.song1.addEventListener("ended", () => {
             this.playing1 = false;
@@ -17,7 +19,6 @@ class Player {
             this.playing2 = false;
             this.timeToStart2 = delay;
             onEnd();
-            console.log("ending at " + performance.now());
         });
         this.waiting = false;
 
@@ -33,8 +34,8 @@ class Player {
 
     }
 
-    start() {
-        console.log("starting at " + performance.now());
+    start(calibrating = false) {
+        this.calibrating = calibrating;
         this.song1.play();
         this.playing1 = true;
         this.timeStarted = performance.now();
@@ -50,18 +51,6 @@ class Player {
             this.song2.play();
             this.playing2 = true;
         }
-
-        // setTimeout(() => {
-        //     if (this.sourceWaiting) {
-        //         this.song1.setAttribute("src", this.sourceWaiting);
-        //     }
-        // }, 2500);
-
-        // setTimeout(() => {
-        //     if (this.sourceWaiting) {
-        //         this.song2.setAttribute("src", this.sourceWaiting);
-        //     }
-        // }, 5500);
 
     }
 
@@ -90,7 +79,7 @@ class Player {
             clearTimeout(this.song2Timeout);
             this.waiting = false;
         }
-        this.timeToStart2 = this.delay;
+        this.timeToStart2 = this.delay + this.adjustment;
         this.song1.currentTime = 0;
         this.song2.currentTime = 0;
     }
@@ -108,6 +97,10 @@ class Player {
 
     setVolume(val) {
         this.song2.volume = val;
+    }
+
+    setAdjustment(val) {
+        this.adjustment = val;
     }
 
     // methods for streaming mode
