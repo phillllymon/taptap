@@ -474,10 +474,10 @@ function triggerHitNote() {
         songLabel.classList.add("font-bigB");
     }
     
-    if (streak > 99) {
-        songLabel.classList.remove("pulse");
+    if (streak > 50 && streak % 50 === 0) {
+        songLabel.classList.remove("font-bigB");
         setTimeout(() => {
-            songLabel.classList.add("pulse");
+            songLabel.classList.add("font-bigB");
         }, 0);
     }
 }
@@ -491,7 +491,6 @@ function triggerMissedNote() {
     const songLabel = document.getElementById("song-label");
     songLabel.classList.remove("font-bigA");
     songLabel.classList.remove("font-bigB");
-    songLabel.classList.remove("pulse");
     songLabel.innerText = currentSong;
 }
 

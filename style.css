@@ -200,17 +200,6 @@
     25%      {font-size: 65px}
     100%    {font-size: 50px}
 }
-.pulse {
-    font-size: 50px;
-    animation-name: pulse;
-    animation-duration: 450ms;
-}
-@keyframes pulse {
-    100%    {font-size: 50px}
-    20%      {font-size: 55px}
-    25%      {font-size: 55px}
-    100%    {font-size: 50px}
-}
 
 #menu-right {
     width: 130px;
