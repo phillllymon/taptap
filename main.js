@@ -9,7 +9,7 @@ const {
     songDelay,
     targetBounds,
     allSlides,
-    minNoteGap,
+    minNoteGap
 } = gameDataConst; // from data.js
 
 let {
@@ -329,12 +329,11 @@ function setupMobile() {
         const viewWidth = document.getElementById("game-container").clientWidth;
         travelLength = gameDataConst.mobile.travelLength * viewWidth;
         noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
-        targetBounds.top = gameDataConst.mobile.top * travelLength;
-        targetBounds.bottom = gameDataConst.mobile.bottom * travelLength;
+        animator.updateTargetBounds({
+            top: gameDataConst.mobile.targetBounds.top * travelLength,
+            bottom: gameDataConst.mobile.targetBounds.bottom * travelLength
+        });
         slideLength = travelLength * 1.3;
-
-        
-
     }, 500); // without small delay this was getting missed
 
     [
@@ -349,9 +348,17 @@ function setupMobile() {
     });
     
     document.addEventListener("touchend", (e) => {
-        deactivateTapper("tapper-left");
-        deactivateTapper("tapper-a");
-        deactivateTapper("tapper-b");
-        deactivateTapper("tapper-right");
+        if (e.target.id === "slide-left") {
+            deactivateTapper("tapper-left");
+        }
+        if (e.target.id === "slide-a") {
+            deactivateTapper("tapper-a");
+        }
+        if (e.target.id === "slide-b") {
+            deactivateTapper("tapper-b");
+        }
+        if (e.target.id === "slide-right") {
+            deactivateTapper("tapper-right");
+        }
     });
 }

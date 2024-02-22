@@ -35,6 +35,10 @@ class Animator {
         this.notesMissed = 0;
     }
 
+    updateTargetBounds(bounds) {
+        this.targetBounds = bounds;
+    }
+
     setNotesPerSecond(val) {
         this.notesPerSecond = val;
     }
@@ -177,7 +181,7 @@ class Animator {
         // FAITHFUL ABOVE
             
         
-        moveNotes(notes, this.noteSpeed, targetBounds, this.triggerMissedNote, dt);
+        moveNotes(notes, this.noteSpeed, this.targets, this.targetBounds, this.triggerMissedNote, dt);
         updateMeter(this.notesHit, this.notesMissed);
 
         if (this.animating) {
@@ -191,20 +195,20 @@ function updateMeter(notesHit, notesMissed) {
     document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
 }
 
-function moveNotes(notes, noteSpeed, targetBounds, triggerMissedNote, dt) {
+function moveNotes(notes, noteSpeed, theTargets, theTargetBounds, triggerMissedNote, dt) {
     const movement = 1.0 * noteSpeed * (dt / 1000);
     for (const note of notes) {
         const newTop = note.position + movement;
         note.note.style.top = `${newTop}px`;
         note.position = newTop;
 
-        if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
-            targets[note.slideId].add(note);
+        if (newTop > theTargetBounds.top && newTop < theTargetBounds.bottom) {
+            theTargets[note.slideId].add(note);
             note.target = true;
         }
-        if (newTop > targetBounds.bottom && note.target === true) {
+        if (newTop > theTargetBounds.bottom && note.target === true) {
             note.target = false;
-            targets[note.slideId].delete(note);
+            theTargets[note.slideId].delete(note);
             triggerMissedNote();
         }
         if (newTop > slideLength) {

@@ -186,30 +186,35 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 85%;
-    height: 8vw;
+    width: 75%;
+    height: 7vw;
     background-color: orange;
     margin: auto;
     box-sizing: border-box;
-    border-bottom: 2vw solid darkorange;
-    border-right: 5vw solid darkorange;
-    border-left: 5vw solid darkorange;
+    border-top: 0.5vw solid darkorange;
+    border-bottom: 2.3vw solid darkorange;
+    border-right: 6vw solid darkorange;
+    border-left: 6vw solid darkorange;
     box-shadow: 0px 1vw 2vw orange;
+}
+
+#test-note {
+    top: 605px;
 }
 
 .tapper {
     position: absolute;
-    top: 149vw;
+    top: 147vw;
     /* ^subtracted 1vw to account for border */
     left: 50%;
     transform: translate(-50%, 0);
-    width: 85%;
-    height: 8vw;
+    width: 75%;
+    height: 7vw;
     background-color: rgba(168,0,93,0.2);
     margin: auto;
-    border: 1vw solid rgb(168, 0, 93);
-    border-left: 16px solid rgb(168, 0, 93);
-    border-right: 16px solid rgb(168, 0, 93);
+    border: 2vw solid rgb(168, 0, 93);
+    border-left: 25px solid rgb(168, 0, 93);
+    border-right: 25px solid rgb(168, 0, 93);
     z-index: 1;
 }
 
