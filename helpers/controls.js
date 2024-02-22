@@ -24,11 +24,11 @@ function activateSongSelection(
     resetAutoAdjustment,
     setCurrentSong
 ) {
+    const songSelector = document.getElementById("select-song");
     setButtonClick("choose-button", () => {
         showModal("choose");
     });
     
-    const songSelector = document.getElementById("select-song");
     songSelector.addEventListener("change", () => {
         const newValue = songSelector.value;
         setCurrentSong(newValue);
