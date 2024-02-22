@@ -1,4 +1,4 @@
-// console.log("initiating");
+console.log("initiating");
 
 const twangs = [
     new Audio("./effects/twang6.m4a"),
