@@ -43,7 +43,7 @@
     background-color: rgb(214, 0, 118);
     box-shadow: 0px 5px 10px gray;
     border-radius: 5px;
-    z-index: 3;
+    z-index: 5;
 }
 
 #settings-modal {
@@ -75,18 +75,6 @@
     box-shadow: 0px 5px 10px gray;
     border-radius: 5px;
     z-index: 3;
-}
-
-#calibration-dashboard {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 200px;
-    padding: 15px;
-    background-color: rgb(214, 0, 118);
-    box-shadow: 0px 5px 10px gray;
-    border-bottom-right-radius: 5px;
-    z-index: 5;
 }
 
 .game-container {
@@ -332,6 +320,24 @@
     box-shadow: 0px 3px 10px orange;
 }
 
+.note-tail {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 30px;
+    height: 80px;
+    top: 285px;
+    background-color: lightgray;
+    margin: auto;
+    box-sizing: border-box;
+    border-right: 5px solid darkorange;
+    border-left: 5px solid darkorange;
+    box-shadow: 0px 3px 10px orange;
+}
+
+#test-note {
+    top: 325px;
+}
 #test-note2 {
     top: 365px;
 }

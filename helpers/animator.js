@@ -2,6 +2,7 @@ class Animator {
     constructor(
         noteWriter,
         notes,
+        recents,
         targets,
         targetBounds,
         allSlides,
@@ -11,6 +12,7 @@ class Animator {
         numArrays = 4
     ) {
         this.notes = notes;
+        this.recents = recents;
         this.allSlides = allSlides;
         this.slides = [allSlides[0], allSlides[3]];
         this.notesPerSecond = 6;
@@ -163,6 +165,7 @@ class Animator {
         
         const masterData = [this.arrays, this.times, this.slides.length, algorithm];
         
+        this.noteWriter.writeTails(this.recents, this.arrays);
         this.noteWriter.writeNotes(
             this.slides,
             this.notesPerSecond,
@@ -191,22 +194,42 @@ function updateMeter(notesHit, notesMissed) {
 function moveNotes(notes, noteSpeed, targetBounds, triggerMissedNote, dt) {
     const movement = 1.0 * noteSpeed * (dt / 1000);
     for (const note of notes) {
-        const newTop = note[1] + movement;
-        note[0].style.top = `${newTop}px`;
-        note[1] = newTop;
+        const newTop = note.position + movement;
+        note.note.style.top = `${newTop}px`;
+        note.position = newTop;
 
         if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
-            targets[note[2]].add(note);
-            note[3] = true;
+            targets[note.slideId].add(note);
+            note.target = true;
         }
-        if (newTop > targetBounds.bottom && note[3] === true) {
-            note[3] = false;
-            targets[note[2]].delete(note);
+        if (newTop > targetBounds.bottom && note.target === true) {
+            note.target = false;
+            targets[note.slideId].delete(note);
             triggerMissedNote();
         }
         if (newTop > slideLength) {
-            note[0].remove();
+            note.note.remove();
             notes.delete(note);
         }
     }
+
+    // for (const note of notes) {
+    //     const newTop = note[1] + movement;
+    //     note[0].style.top = `${newTop}px`;
+    //     note[1] = newTop;
+
+    //     if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
+    //         targets[note[2]].add(note);
+    //         note[3] = true;
+    //     }
+    //     if (newTop > targetBounds.bottom && note[3] === true) {
+    //         note[3] = false;
+    //         targets[note[2]].delete(note);
+    //         triggerMissedNote();
+    //     }
+    //     if (newTop > slideLength) {
+    //         note[0].remove();
+    //         notes.delete(note);
+    //     }
+    // }
 }
