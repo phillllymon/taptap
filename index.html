@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styleReset.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/styleReset.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <center>
@@ -14,10 +14,10 @@
         <div id="game-container" class="game-container">
             <div id="modal-background" class="hidden"></div>
             <div id="full-screen-modal" class="hidden">
-                <button id="full-screen">Use full screen</button>
+                <button id="full-screen-button">Use full screen</button>
                 <br>
                 <br>
-                <button id="small-screen">Little wimpy screen</button>
+                <button id="small-screen-button">Little wimpy screen</button>
             </div>
             <div id="settings-modal" class="hidden">
                 <br>
@@ -186,8 +186,12 @@
         </div>
     </center>
 
-    <script type="text/javascript" src="./player.js"></script>
-    <script type="text/javascript" src="./noteWriter.js"></script>
+    <script type="text/javascript" src="./helpers/util.js"></script>
+    <script type="text/javascript" src="./helpers/controls.js"></script>
+    <script type="text/javascript" src="./helpers/player.js"></script>
+    <script type="text/javascript" src="./helpers/noteWriter.js"></script>
+    <script type="text/javascript" src="./helpers/animator.js"></script>
+    <script type="text/javascript" src="./data.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </body>
 </html>
