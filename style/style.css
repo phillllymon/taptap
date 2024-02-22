@@ -43,7 +43,7 @@
     background-color: rgb(214, 0, 118);
     box-shadow: 0px 5px 10px gray;
     border-radius: 5px;
-    z-index: 3;
+    z-index: 5;
 }
 
 #settings-modal {
@@ -75,18 +75,6 @@
     box-shadow: 0px 5px 10px gray;
     border-radius: 5px;
     z-index: 3;
-}
-
-#calibration-dashboard {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 200px;
-    padding: 15px;
-    background-color: rgb(214, 0, 118);
-    box-shadow: 0px 5px 10px gray;
-    border-bottom-right-radius: 5px;
-    z-index: 5;
 }
 
 .game-container {
