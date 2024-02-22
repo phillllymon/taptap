@@ -43,7 +43,7 @@ let autoAdjustment = 0;
 
 let streak = 0;
 
-let currentSong = "anthem";
+let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
 
 // ----------------------------------------- HELPERS
