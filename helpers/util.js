@@ -7,9 +7,10 @@ function averageOf(arr) {
 }
 
 function setButtonClick(buttonId, callback) {
-    document.getElementById(buttonId).addEventListener("click", callback);
     if (detectMobile()) {
         document.getElementById(buttonId).addEventListener("touchstart", callback);
+    } else {
+        document.getElementById(buttonId).addEventListener("click", callback);
     }
 }
 
