@@ -310,14 +310,19 @@ function setupMobile() {
     document.head.appendChild(link);
     
     showModal("full-screen");
-    document.getElementById("full-screen-button").addEventListener("touchstart", () => {
-    // setButtonClick("full-screen-button", () => {
-        console.log("FULL SCREEN REQUESTED");
-        document.getElementById("game-container").requestFullscreen();
-        hideModal("full-screen");
-    });
-    document.getElementById("small-screen-button").addEventListener("touchstart", () => {
-        hideModal("full-screen");
+
+    setButtonClick("enter-game", () => {
+        document.getElementById("enter-game").classList.add("hidden");
+        document.getElementById("full-screen-question").classList.remove("hidden");
+        setButtonClick("full-screen-button", () => {
+            console.log("FULL SCREEN REQUESTED");
+            document.getElementById("game-container").requestFullscreen();
+            hideModal("full-screen");
+        });
+        setButtonClick("small-screen-button", () => {
+            console.log("FULL SCREEN REQUESTED");
+            hideModal("full-screen");
+        });
     });
     
     setTimeout(() => {
