@@ -208,13 +208,6 @@ function resetAutoAdjustment() {
     autoAdjustment = 0;
 }
 
-// note in form of [<ele>, posTop, slideId, target, val, isTail]
-//  - <ele> is the element
-//  - posTop is position of the note
-//  - id of the slide the note is on
-//  - target is boolean whether or not the note is currently a target
-//  - val is the frequency val that triggered the note (for making tails)
-//  - isTail is whether this note is a tail or just regular note
 function addNote(slideId, val, marked = false) {
     const newNote = document.createElement("div");
     newNote.classList.add("note");
@@ -333,6 +326,7 @@ function setupMobile() {
             top: gameDataConst.mobile.targetBounds.top * travelLength,
             bottom: gameDataConst.mobile.targetBounds.bottom * travelLength
         });
+        animator.updateNoteSpeed(noteSpeed);
         slideLength = travelLength * 1.3;
     }, 500); // without small delay this was getting missed
 

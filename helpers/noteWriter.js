@@ -29,7 +29,6 @@ class NoteWriter {
     // mobile only allows 2 notes at once
     writeNotes(slideIds, notesPerSecond, addNote, mobile, masterData) {
         
-        // console.log(masterData);
         const vals = [];
 
         let amt = 0;

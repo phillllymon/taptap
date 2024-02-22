@@ -35,6 +35,10 @@ class Animator {
         this.notesMissed = 0;
     }
 
+    updateNoteSpeed(newSpeed) {
+        this.noteSpeed = newSpeed;
+    }
+
     updateTargetBounds(bounds) {
         this.targetBounds = bounds;
     }
@@ -216,24 +220,4 @@ function moveNotes(notes, noteSpeed, theTargets, theTargetBounds, triggerMissedN
             notes.delete(note);
         }
     }
-
-    // for (const note of notes) {
-    //     const newTop = note[1] + movement;
-    //     note[0].style.top = `${newTop}px`;
-    //     note[1] = newTop;
-
-    //     if (newTop > targetBounds.top && newTop < targetBounds.bottom) {
-    //         targets[note[2]].add(note);
-    //         note[3] = true;
-    //     }
-    //     if (newTop > targetBounds.bottom && note[3] === true) {
-    //         note[3] = false;
-    //         targets[note[2]].delete(note);
-    //         triggerMissedNote();
-    //     }
-    //     if (newTop > slideLength) {
-    //         note[0].remove();
-    //         notes.delete(note);
-    //     }
-    // }
 }
