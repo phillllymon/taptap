@@ -16,36 +16,19 @@ class NoteWriter {
         };
         this.recentToneVals = [0, 0, 0];
 
-        // TEST ONLY
-        this.lastSongTime = 0;
-        this.arrays = [[], [], [], []];
-        this.times = [];
-        // END TEST
     }
 
-    // TEST ONlY
-    writeNotesNormalized(player, addNote) {
-        const timesToCheck = [];
-        const thisSongTime = player.song1.currentTime;
-        const gapToCheck = 3;
-        let checkTime = this.lastSongTime + gapToCheck;
-        while (checkTime < thisSongTime) {
-            player.song1.currentTime = checkTime;
-            const dataArray = player.getDataArray();
-            this.arrays[0].push(averageOf(dataArray.slice(0, 4)));
-            this.arrays[1].push(averageOf(dataArray.slice(4, 8)));
-            this.arrays[2].push(averageOf(dataArray.slice(8, 12)));
-            this.arrays[3].push(averageOf(dataArray.slice(12, 16)));
-            this.times.push(checkTime);
-            checkTime += gapToCheck;
-        }
+    writeTails(recents) {
+        // recents.forEach((slideId, ele) => {
+        //     console.log(slideId + " " + ele.style.top);
+        // });
     }
-    // END TEST
 
     // data is array of arrays same length as slideIds
     // addNote takes a slideId
     // mobile only allows 2 notes at once
     writeNotes(slideIds, notesPerSecond, addNote, mobile, masterData) {
+        
         // console.log(masterData);
         const vals = [];
 
@@ -92,7 +75,8 @@ class NoteWriter {
 
         for (let i = 0; i < arrays.length; i++) {
             const arr = arrays[i];
-            const midVal = arr[midIdx] - arr[midIdx - 1];
+            const noteVal = arr[midIdx];
+            const midVal = noteVal - arr[midIdx - 1];
 
             const beforeIdx = midIdx - leg;
             const afterIdx = midIdx + leg;
@@ -176,19 +160,19 @@ class NoteWriter {
                                 const rightTime = now - this.lastRight;
                                 if (slideToUse === this.rightId) {
                                     if (leftTime > gap || midTime > gap) {
-                                        addNote(slideToUse, marked);
+                                        addNote(slideToUse, noteVal, marked);
                                         this.lastRight = now;
                                         this.lastAll[slideToUse] = now;
                                     }
                                 } else if (slideToUse === this.leftId) {
                                     if (midTime > gap || rightTime > gap) {
-                                        addNote(slideToUse, marked);
+                                        addNote(slideToUse, noteVal, marked);
                                         this.lastLeft = now;
                                         this.lastAll[slideToUse] = now;
                                     }
                                 } else {
                                     if (leftTime > gap || rightTime > gap) {
-                                        addNote(slideToUse, marked);
+                                        addNote(slideToUse, noteVal, marked);
                                         this.lastMid = now;
                                         this.lastAll[slideToUse] = now;
                                     }
@@ -198,20 +182,20 @@ class NoteWriter {
                                 const rightTime = now - this.lastRight;
                                 if (this.leftSlides.includes(slideToUse)) {
                                     if (leftTime > gap) {
-                                        addNote(slideToUse, marked);
+                                        addNote(slideToUse, noteVal, marked);
                                         this.lastLeft = now;
                                         this.lastAll[slideToUse] = now;
                                     }
                                 } else { // we're on the right side
                                     if (rightTime > gap) {
-                                        addNote(slideToUse, marked);
+                                        addNote(slideToUse, noteVal, marked);
                                         this.lastRight = now;
                                         this.lastAll[slideToUse] = now;
                                     }
                                 }
                             }
                         } else {
-                            addNote(slideToUse, marked);
+                            addNote(slideToUse, noteVal, marked);
                             this.lastAll[slideToUse] = now;
                         }
                     }

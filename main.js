@@ -21,6 +21,13 @@ let noteSpeed = 1.0 * (travelLength / ( (songDelay / 1000.0) / 2 ));
 handleMobile();
 
 const notes = new Set();
+const mostRecentNotesOrTails = {
+    "slide-right": null,
+    "slide-left": null,
+    "slide-a": null,
+    "slide-b": null
+};
+
 const targets = {
     "slide-right": new Set(),
     "slide-left": new Set(),
@@ -51,6 +58,7 @@ const noteWriter = new NoteWriter(minNoteGap);
 const animator = new Animator(
     noteWriter,
     notes,
+    mostRecentNotesOrTails,
     targets,
     targetBounds,
     allSlides,
@@ -160,8 +168,8 @@ function activateTapper(tapperId, slideId, leavingClass) {
         let closest = 500;
         let numNotes = 0;
         notes.forEach((note) => {
-            if (slideId === note[2]) {
-                const thisOffset = note[1] - travelLength;
+            if (slideId === note.slideId) {
+                const thisOffset = note.position - travelLength;
                 if (Math.abs(thisOffset) < closest) {
                     closest = thisOffset;
                     if (thisOffset < 80) {
@@ -187,9 +195,9 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
     for (const target of tapperTargets) {
         notes.delete(target);
-        target[0].classList.add(leavingClass);
+        target.note.classList.add(leavingClass);
         setTimeout(() => {
-            target[0].remove();
+            target.note.remove();
         }, 500);
         targets[slideId].delete(target);
         triggerHitNote();
@@ -200,8 +208,14 @@ function resetAutoAdjustment() {
     autoAdjustment = 0;
 }
 
-// note in form of [<ele>, posTop, slideId, target], where target is boolean
-function addNote(slideId, marked = false) {
+// note in form of [<ele>, posTop, slideId, target, val, isTail]
+//  - <ele> is the element
+//  - posTop is position of the note
+//  - id of the slide the note is on
+//  - target is boolean whether or not the note is currently a target
+//  - val is the frequency val that triggered the note (for making tails)
+//  - isTail is whether this note is a tail or just regular note
+function addNote(slideId, val, marked = false) {
     const newNote = document.createElement("div");
     newNote.classList.add("note");
     if (marked) {
@@ -209,12 +223,24 @@ function addNote(slideId, marked = false) {
     }
     const startPos = -1.0 * autoAdjustment; // should be zero initially
     newNote.style.top = `${startPos}px`;
-    notes.add([newNote, startPos, slideId, false]);
+    // const noteInfoArr = [newNote, startPos, slideId, false, val];
+    // notes.add(noteInfoArr);
+    const noteInfo = {
+        note: newNote,
+        position: startPos,
+        slideId: slideId,
+        target: false,
+        val: val,
+        isTail: false
+    };
+    notes.add(noteInfo);
     document.getElementById(slideId).appendChild(newNote);
+
+    mostRecentNotesOrTails[slideId] = noteInfo;
 }
 function killAllNotes() {
     notes.forEach((note) => {
-        note[0].remove();
+        note.note.remove();
         notes.delete(note);
     });
 }
@@ -284,11 +310,13 @@ function setupMobile() {
     document.head.appendChild(link);
     
     showModal("full-screen");
-    setButtonClick("full-screen-button", () => {
+    document.getElementById("full-screen-button").addEventListener("touchstart", () => {
+    // setButtonClick("full-screen-button", () => {
+        console.log("FULL SCREEN REQUESTED");
         document.getElementById("game-container").requestFullscreen();
         hideModal("full-screen");
     });
-    setButtonClick("small-screen-button", () => {
+    document.getElementById("small-screen-button").addEventListener("touchstart", () => {
         hideModal("full-screen");
     });
     
@@ -299,6 +327,9 @@ function setupMobile() {
         targetBounds.top = gameDataConst.mobile.top * travelLength;
         targetBounds.bottom = gameDataConst.mobile.bottom * travelLength;
         slideLength = travelLength * 1.3;
+
+        
+
     }, 500); // without small delay this was getting missed
 
     [
