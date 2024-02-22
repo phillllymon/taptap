@@ -344,13 +344,11 @@ function setupMobile() {
         ["tapper-b", "slide-b", "note-leaving-right"]
     ].forEach((idSet) => {
         document.getElementById(idSet[1]).addEventListener("touchstart", (e) => {
-            e.preventDefault();
             activateTapper(...idSet);
         });
     });
     
     document.addEventListener("touchend", (e) => {
-        e.preventDefault();
         deactivateTapper("tapper-left");
         deactivateTapper("tapper-a");
         deactivateTapper("tapper-b");
