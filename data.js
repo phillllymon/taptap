@@ -13,7 +13,7 @@ const gameDataConst = {
             bottom: 1.05    // fraction of travelLength
         }
     },
-    minNoteGap: 120,    // ms between notes on the same slide
+    minNoteGap: 200,    // ms between notes on the same slide
     allSlides: [
         "slide-left",
         "slide-a",

@@ -12,7 +12,7 @@ class Animator {
         this.notes = masterInfo.notes;
         this.allSlides = masterInfo.allSlides;
         this.slides = [allSlides[0], allSlides[3]];
-        this.notesPerSecond = 6;
+        this.notesPerSecond = 4; // starting level note per second
         this.targetTails = masterInfo.targetTails;
         this.targets = masterInfo.targets;
         this.targetBounds = masterInfo.targetBounds;

@@ -54,7 +54,7 @@ const tapperKeys = [
 
 let algorithm = "A";
 let autoCalibrating = true;
-let sustainedNotes = false;
+let sustainedNotes = true;
 
 let autoAdjustments = [];
 let autoAdjustment = 0;
@@ -215,21 +215,24 @@ function deactivateTapper(tapperId) {
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
-    if (autoCalibrating) {
-        let closest = 500;
-        let numNotes = 0;
-        notes.forEach((note) => {
-            if (slideId === note.slideId) {
-                const thisOffset = note.position - masterInfo.travelLength;
-                if (Math.abs(thisOffset) < closest) {
-                    closest = thisOffset;
-                    if (thisOffset < 80) {
-                        numNotes += 1;
-                    }
+    
+    let closest = 500;
+    let numNotes = 0;
+    let target = null;
+    notes.forEach((note) => {
+        if (slideId === note.slideId) {
+            const thisOffset = note.position - masterInfo.travelLength;
+            if (Math.abs(thisOffset) < closest) {
+                target = note;
+                closest = thisOffset;
+                if (thisOffset < 80) {
+                    numNotes += 1;
                 }
             }
-        });
-        
+        }
+    });
+    
+    if (autoCalibrating) {    
         if (numNotes < 2) {
             if (Math.abs(closest) < 50) {
                 autoAdjustment += 1.0 * (closest / (10 * notes.size));
@@ -244,7 +247,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
     if (tapperTargets.size === 0) {
         triggerMissedNote();
     }
-    for (const target of tapperTargets) {
+    if (tapperTargets.has(target)) {
         notes.delete(target);
         target.note.classList.add(leavingClass);
         setTimeout(() => {
@@ -301,6 +304,7 @@ function makeTail(slideId, parentNote) {
             val: parentNote.val,
             isTail: true,
             cloud: newTailCloud,
+            parentNote: parentNote,
             tail: null
         }
         
@@ -338,6 +342,9 @@ function addNote(slideId, val, marked = false) {
 }
 function killAllNotes() {
     notes.forEach((note) => {
+        if (note.tail) {
+            note.tail.note.remove();
+        }
         note.note.remove();
         notes.delete(note);
     });

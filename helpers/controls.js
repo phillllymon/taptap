@@ -65,6 +65,10 @@ function activateSongSelection(
         };
         reader.readAsBinaryString(file);
     });
+
+    setButtonClick("cancel-choose", () => {
+        hideModal("choose");
+    });
 }
 
 function activateSongControls(thePlayer, runTheAnimation, stopTheAnimation, killNotes) {
@@ -143,8 +147,8 @@ function activateSlidesSelector(setNumSlides) {
             slidesButton.classList.add("level-selected");
         })
     });
-    document.getElementById("slides-2").classList.add("level-selected");
-    selectSlides(2, setNumSlides);
+    document.getElementById("slides-3").classList.add("level-selected");
+    selectSlides(3, setNumSlides);
 }
 
 function deselectSlides() {
@@ -169,7 +173,7 @@ function activateLevelSelector(theAnimator) {
             addElementClass(levelSet[0], "level-selected");
         });
     });
-    addElementClass("level-3", "level-selected");
+    addElementClass("level-2", "level-selected");
 }
 
 function activateSettings(tapperKeyCodes, setNewKeyCode) {
@@ -206,9 +210,11 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
         if (masterInfo.sustainedNotes) {
             masterInfo.sustainedNotes = false;
             setElementText("sustained", "sustained notes OFF");
+            setElementText("sustained-toggle", "Turn on sustained notes");
         } else {
             masterInfo.sustainedNotes = true;
             setElementText("sustained", "sustained notes ON");
+            setElementText("sustained-toggle", "Turn off sustained notes");
         }
     });
 }

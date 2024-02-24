@@ -17,6 +17,8 @@ class NoteWriter {
         };
         this.mostRecentNotes = masterInfo.mostRecentNotesOrTails;
         this.recentToneVals = [0, 0, 0];
+
+        this.sideWithNotes = null // remember which side can have new notes when sustained note in middle of 3 slides
     }
 
     writeTails(noteVals, slideIds, makeTail) {
@@ -41,6 +43,7 @@ class NoteWriter {
 
                 const lastNote = this.mostRecentNotes[slideId];
                 if (lastNote) {
+                    // check for tail too long - end it here
                     if (lastNote.isTail && lastNote.totalHeight > this.masterInfo.maxTailLength) {
                         this.mostRecentNotes[slideId] = null;
                         return;
@@ -53,12 +56,14 @@ class NoteWriter {
                     const ratioThreshold = {
                         "slide-left": 0.9,
                         "slide-a": 0.8,
+                        // "slide-a": 0.2,
                         "slide-b": 0.7,
                         "slide-right": 0.6
                     }[slideId];
                     const valThreshold = {
                         "slide-left": 2.5,
                         "slide-a": 2.25,
+                        // "slide-a": 0.5,
                         "slide-b": 1.75,
                         "slide-right": 1.5
                     }[slideId];
@@ -89,6 +94,12 @@ class NoteWriter {
                             this.lastAll[slideId] = now;
                         }
                     } else {
+                        // check for tail too short - delete tail entirely
+                        if (lastNote.isTail && lastNote.totalHeight < 0.05 * this.masterInfo.maxTailLength) {
+                            lastNote.cloud.remove();
+                            lastNote.note.remove();
+                            lastNote.parentNote.tail = null;
+                        }
                         this.mostRecentNotes[slideId] = null;
                     }
                 }
@@ -271,18 +282,26 @@ class NoteWriter {
                         if (mobile && slideIds.length > 2) {
                             const gap = (1.0 / notesPerSecond) * 1000;
                             if (slideIds.length === 3) {
+                                // check if note is on wrong side of middle sustained note
+                                if (this.mostRecentNotes["slide-a"] && this.mostRecentNotes["slide-a"].isTail) {
+                                    if (slideToUse !== this.sideWithNotes) {
+                                        return;
+                                    }
+                                }
                                 const leftTime = now - this.lastLeft;
                                 const midTime = now - this.lastMid;
                                 const rightTime = now - this.lastRight;
                                 if (slideToUse === this.rightId) {
                                     if (leftTime > gap || midTime > gap) {
                                         addNote(slideToUse, noteVal, marked);
+                                        this.sideWithNotes = slideToUse;
                                         this.lastRight = now;
                                         this.lastAll[slideToUse] = now;
                                     }
                                 } else if (slideToUse === this.leftId) {
                                     if (midTime > gap || rightTime > gap) {
                                         addNote(slideToUse, noteVal, marked);
+                                        this.sideWithNotes = slideToUse;
                                         this.lastLeft = now;
                                         this.lastAll[slideToUse] = now;
                                     }
