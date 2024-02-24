@@ -115,7 +115,18 @@ class Animator {
         // FAITHFUL ABOVE
             
         
-        moveNotes(notes, this.masterInfo.noteSpeed, this.slides, this.targetTails, this.targets, this.targetBounds, this.triggerMissedNote, this.recents, dt);
+        moveNotes(
+            notes,
+            this.masterInfo.noteSpeed,
+            this.slides,
+            this.targetTails,
+            this.targets,
+            this.masterInfo.targetBounds,
+            this.triggerMissedNote,
+            this.recents,
+            this.masterInfo.slideLength,
+            dt
+        );
         updateMeter(this.notesHit, this.notesMissed);
 
         if (this.animating) {
@@ -129,7 +140,18 @@ function updateMeter(notesHit, notesMissed) {
     document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
 }
 
-function moveNotes(notes, noteSpeed, theSlides, theTargetTails, theTargets, theTargetBounds, triggerMissedNote, theRecents, dt) {
+function moveNotes(
+    notes,
+    noteSpeed,
+    theSlides,
+    theTargetTails,
+    theTargets,
+    theTargetBounds,
+    triggerMissedNote,
+    theRecents,
+    theSlideLength,
+    dt
+) {
 
     const movement = 1.0 * noteSpeed * (dt / 1000);
     
@@ -179,7 +201,7 @@ function moveNotes(notes, noteSpeed, theSlides, theTargetTails, theTargets, theT
                 theRecents[note.tail.slideId] = null;
             }
         }
-        if (newTop > slideLength) {   
+        if (newTop > theSlideLength) {   
             note.note.remove();
             notes.delete(note);
         }
