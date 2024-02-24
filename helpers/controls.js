@@ -3,13 +3,13 @@ function activateCalibration() {
         if (autoCalibrating) {
             autoCalibrating = false;
             autoAdjustment = 0;
-            document.getElementById("autocalibration").innerText = "Autocalibration is off";
-            calibrateButton.innerText = "Start autocalibration";
+            document.getElementById("autocalibration").innerText = "autocalibration OFF";
+            calibrateButton.innerText = "Turn on autocalibration";
         } else {
             autoCalibrating = true;
             autoAdjustment = 0;
-            document.getElementById("autocalibration").innerText = "Autocalibration is on";
-            calibrateButton.innerText = "Stop autocalibration";
+            document.getElementById("autocalibration").innerText = "autocalibration ON";
+            calibrateButton.innerText = "Turn off autocalibration";
         }
     });
 }
@@ -200,6 +200,15 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
         } else {
             algorithm = "A";
             setElementText("algorithm", "using algorithm A");
+        }
+    });
+    setButtonClick("sustained-toggle", () => {
+        if (masterInfo.sustainedNotes) {
+            masterInfo.sustainedNotes = false;
+            setElementText("sustained", "sustained notes OFF");
+        } else {
+            masterInfo.sustainedNotes = true;
+            setElementText("sustained", "sustained notes ON");
         }
     });
 }

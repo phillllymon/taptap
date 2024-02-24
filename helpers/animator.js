@@ -1,26 +1,23 @@
 class Animator {
     constructor(
+        masterInfo,
         noteWriter,
-        notes,
-        recents,
-        targets,
-        targetBounds,
-        allSlides,
-        triggerMissedNote,
         addNote,
-        noteParams,
+        makeTail,
+        triggerMissedNote,
         numArrays = 4
     ) {
-        this.notes = notes;
-        this.recents = recents;
-        this.allSlides = allSlides;
+        this.masterInfo = masterInfo;
+        this.recents = masterInfo.mostRecentNotesOrTails;
+        this.notes = masterInfo.notes;
+        this.allSlides = masterInfo.allSlides;
         this.slides = [allSlides[0], allSlides[3]];
         this.notesPerSecond = 6;
-        this.noteSpeed = noteParams.noteSpeed;
-        this.songDelay = noteParams.songDelay;
-        this.targets = targets;
-        this.targetBounds = targetBounds;
+        this.targetTails = masterInfo.targetTails;
+        this.targets = masterInfo.targets;
+        this.targetBounds = masterInfo.targetBounds;
         this.addNote = addNote;
+        this.makeTail = makeTail;
         this.triggerMissedNote = triggerMissedNote;
         this.noteWriter = noteWriter;
         this.time = 0;
@@ -33,14 +30,6 @@ class Animator {
 
         this.notesHit = 0;
         this.notesMissed = 0;
-    }
-
-    updateNoteSpeed(newSpeed) {
-        this.noteSpeed = newSpeed;
-    }
-
-    updateTargetBounds(bounds) {
-        this.targetBounds = bounds;
     }
 
     setNotesPerSecond(val) {
@@ -61,7 +50,7 @@ class Animator {
         this.notesHit += 1;
         if (this.notesHit > 30) {
             this.notesHit = Math.floor(this.notesHit / 2);
-            this.notesMissed = Math.floor(this.notesHit / 2);
+            this.notesMissed = Math.floor(this.notesMissed / 2);
         }
     }
 
@@ -89,72 +78,6 @@ class Animator {
         const dt = newTime - this.time;
         this.time = newTime;
         
-        // TEST ONLY
-        // // console.log(dt);
-        // const gapToCheck = 5;
-        // // const currentSongTime = 1000.0 * player.song1.currentTime;
-        // const currentSongTime = (1000.0 * player.song2.currentTime) + 4000;
-        
-        // const returnTime = player.song1.currentTime;
-        // let mustReturn = false;
-        // if (player.playing2) {
-        //     player.song1.currentTime = 1.0 * (currentSongTime / 1000);
-        // } else {
-        //     mustReturn = true;
-        // }
-
-        // const songStartTime = this.time - currentSongTime;
-        
-    
-        // let lastSongTimeChecked;
-        // if (this.times.length === 0) {
-        //     lastSongTimeChecked = 0;
-
-        //     // analyse time 0
-        //     player.song1.currentTime = 0;
-        //     const dataArray = player.getDataArray();
-        //     this.arrays[0].push(averageOf(dataArray.slice(0, 4)));
-        //     this.arrays[1].push(averageOf(dataArray.slice(4, 8)));
-        //     this.arrays[2].push(averageOf(dataArray.slice(8, 12)));
-        //     this.arrays[3].push(averageOf(dataArray.slice(12, 16)));
-        //     this.times.push(songStartTime);
-
-        // } else {
-        //     lastSongTimeChecked = this.times[this.times.length - 1] - songStartTime;
-        // }
-
-        // let songTimeToCheck = lastSongTimeChecked + gapToCheck;
-        
-        // let i = 0;
-        // while (songTimeToCheck < currentSongTime) {
-        //     player.song1.currentTime = 1.0 * (songTimeToCheck / 1000);
-        //     const dataArray = player.getDataArray();
-        //     this.arrays[0].push(averageOf(dataArray.slice(0, 4)));
-        //     this.arrays[1].push(averageOf(dataArray.slice(4, 8)));
-        //     this.arrays[2].push(averageOf(dataArray.slice(8, 12)));
-        //     this.arrays[3].push(averageOf(dataArray.slice(12, 16)));
-        //     this.times.push(songStartTime + songTimeToCheck);
-        //     songTimeToCheck += gapToCheck;
-        //     i += 1;
-        //     if (1 > 100) {
-        //         console.log("BREAK");
-        //         break;
-        //     }
-        // }
-
-        // if (mustReturn) {
-        //     player.song1.currentTime = returnTime;
-        // }
-
-        // if (player.song1.currentTime < 2.0) {
-        //     if (this.animating) {
-        //         requestAnimationFrame(() => this.animate(params));
-        //     }
-        //     return;
-        // }
-
-        // (FAITHFUL BELOW) END TEST
-        
         player.calibrateLag();
 
         // faithful
@@ -164,7 +87,7 @@ class Animator {
         this.arrays[2].push(averageOf(dataArray.slice(8, 12)));
         this.arrays[3].push(averageOf(dataArray.slice(12, 16)));
         this.times.push(this.time);
-        while (this.times[0] < this.time - this.songDelay) {
+        while (this.times[0] < this.time - this.masterInfo.songDelay) {
             this.arrays.forEach((arr) => {
                 arr.shift();
             });
@@ -173,8 +96,7 @@ class Animator {
         
         const masterData = [this.arrays, this.times, this.slides.length, algorithm];
         
-        this.noteWriter.writeTails(this.recents, this.arrays);
-        this.noteWriter.writeNotes(
+        const noteVals = this.noteWriter.writeNotes(
             this.slides,
             this.notesPerSecond,
             this.addNote,
@@ -182,10 +104,18 @@ class Animator {
             masterData
         );
 
+        if (this.masterInfo.sustainedNotes) {
+            this.noteWriter.writeTails(
+                noteVals,
+                this.slides,
+                this.makeTail
+            );
+        }
+
         // FAITHFUL ABOVE
             
         
-        moveNotes(notes, this.noteSpeed, this.targets, this.targetBounds, this.triggerMissedNote, dt);
+        moveNotes(notes, this.masterInfo.noteSpeed, this.slides, this.targetTails, this.targets, this.targetBounds, this.triggerMissedNote, this.recents, dt);
         updateMeter(this.notesHit, this.notesMissed);
 
         if (this.animating) {
@@ -199,12 +129,40 @@ function updateMeter(notesHit, notesMissed) {
     document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
 }
 
-function moveNotes(notes, noteSpeed, theTargets, theTargetBounds, triggerMissedNote, dt) {
+function moveNotes(notes, noteSpeed, theSlides, theTargetTails, theTargets, theTargetBounds, triggerMissedNote, theRecents, dt) {
+
     const movement = 1.0 * noteSpeed * (dt / 1000);
+    
+    // shorten targetTails
+    theSlides.forEach((slideId) => {
+        const tail = theTargetTails[slideId];
+        if (tail) {
+            const newPosition = tail.position + movement;
+            tail.note.style.top = `${newPosition}px`;
+            tail.position = newPosition;
+            
+            const newHeight = tail.height - movement;
+            if (newHeight < 0) {
+                tail.note.remove();
+                theTargetTails[slideId] = null;
+            }
+            tail.note.style.height = `${newHeight}px`;
+            tail.height = newHeight;
+        }
+    });
+
+    // move notes
     for (const note of notes) {
         const newTop = note.position + movement;
         note.note.style.top = `${newTop}px`;
         note.position = newTop;
+
+        // move tail
+        if (note.tail) {
+            const newTailTop = note.tail.position + movement;
+            note.tail.note.style.top = `${newTailTop}px`;
+            note.tail.position = newTailTop;
+        }
 
         if (newTop > theTargetBounds.top && newTop < theTargetBounds.bottom) {
             theTargets[note.slideId].add(note);
@@ -214,8 +172,14 @@ function moveNotes(notes, noteSpeed, theTargets, theTargetBounds, triggerMissedN
             note.target = false;
             theTargets[note.slideId].delete(note);
             triggerMissedNote();
+            
+            // delete tail once target is missed
+            if (note.tail) {
+                note.tail.note.remove();
+                theRecents[note.tail.slideId] = null;
+            }
         }
-        if (newTop > slideLength) {
+        if (newTop > slideLength) {   
             note.note.remove();
             notes.delete(note);
         }

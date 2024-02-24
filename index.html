@@ -63,6 +63,16 @@
                 </p>
                 <br>
                 <br>
+                <button id="sustained-toggle">Turn on sustained notes</button>
+                <br>
+                <center id="sustained">sustained notes OFF</center>
+                <br>
+                <p>
+                    Sustained notes are notes with a tail. This is currently
+                    experimental. (even more than the rest of this game)
+                </p>
+                <br>
+                <br>
                 <button id="auto-calibrate">Stop autocalibration</button>
                 <br>
                 <center id="autocalibration">Autocalibration is on</center>
@@ -83,12 +93,14 @@
                     <option value="boondock">boondock</option>
                     <option value="brownEyed">brownEyed</option>
                     <option value="danger">danger</option>
+                    <option value="devil">devil</option>
                     <option value="dueling">dueling</option>
                     <option value="evenRats">evenRats</option>
                     <option value="everyTime">everyTime</option>
                     <option value="farewell">farewell</option>
                     <option value="fatLip">fatLip</option>
                     <option value="feeling">feeling</option>
+                    <option value="fortunateSon">fortunateSon</option>
                     <option value="girlfriend">girlfriend</option>
                     <option value="jamesBond">jamesBond</option>
                     <option value="mountainKing">mountainKing</option>
@@ -116,21 +128,6 @@
             </div>
             
             <div id="play-area" class="play-area">
-                <div id="calibration-dashboard" class="hidden">
-                    Play a song on stupid or easy and tap when you think the notes
-                    should be, even if they're a little before or after the target area.
-                    Timing will be adjusted as you play so it should get more in sync.
-                    <br>
-                    <br>
-                    Current adjustment: <span id="current-adjustment">0</span>ms
-                    <br>
-                    <br>
-                    <button id="apply-offset">Appy offset</button>
-                    <br>
-                    <br>
-                    <button id="reset-calibration">Reset to 0</button>
-                    <button id="end-calibration">Save</button>
-                </div>
                 
                 <div id="menu-right">
                     <div id="settings" class="level">Settings</div>
@@ -140,22 +137,29 @@
                 <div id="slides-container">
                     <div id="slides" class="slides">
                         <div id="slide-left" class="slide">
-                            <!-- <div id="test-note2-tail" class="note-tail"></div>
-                            <div id="test-note2" class="note"></div> -->
+                            <!-- <div id="test-note2-tail" class="note-tail">
+                                <div class="cloud-tail"></div>
+                            </div> -->
+                            <!-- <div id="test-note2" class="note"></div> -->
+                            <!-- <div id="test-cloud2" class="cloud-tail"></div> -->
                             
+                            <div id="cloud-left" class="hidden"></div>
                             <div id="tapper-left" class="tapper"></div>
                         </div>
                         <div id="slide-a" class="slide">
                             
+                            <div id="cloud-a" class="hidden"></div>
                             <div id="tapper-a" class="tapper"></div>
                         </div>
                         <div id="slide-b" class="slide">
                             
+                            <div id="cloud-b" class="hidden"></div>
                             <div id="tapper-b" class="tapper"></div>
                         </div>
                         <div id="slide-right" class="slide">
-                            
                             <!-- <div id="test-note" class="note"></div> -->
+
+                            <div id="cloud-right" class="hidden"></div>
                             <div id="tapper-right" class="tapper"></div>
                         </div>
                     </div>

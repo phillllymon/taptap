@@ -9,7 +9,8 @@ const {
     songDelay,
     targetBounds,
     allSlides,
-    minNoteGap
+    minNoteGap,
+    maxTailLength
 } = gameDataConst; // from data.js
 
 let {
@@ -18,9 +19,11 @@ let {
 } = gameDataLet; // from data.js
 
 let noteSpeed = 1.0 * (travelLength / ( (songDelay / 1000.0) / 2 ));
+
 handleMobile();
 
 const notes = new Set();
+
 const mostRecentNotesOrTails = {
     "slide-right": null,
     "slide-left": null,
@@ -35,6 +38,13 @@ const targets = {
     "slide-b": new Set()
 };
 
+const targetTails = {
+    "slide-right": null,
+    "slide-left": null,
+    "slide-a": null,
+    "slide-b": null
+};
+
 const tapperKeys = [
     "KeyD",
     "KeyV",
@@ -44,6 +54,7 @@ const tapperKeys = [
 
 let algorithm = "A";
 let autoCalibrating = true;
+let sustainedNotes = false;
 
 let autoAdjustments = [];
 let autoAdjustment = 0;
@@ -53,27 +64,43 @@ let streak = 0;
 let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
 
-// ----------------------------------------- HELPERS
-const noteWriter = new NoteWriter(minNoteGap);
-const animator = new Animator(
-    noteWriter,
+const masterInfo = {
+    songDelay,
+    targetBounds,
+    allSlides,
+    minNoteGap,
+    maxTailLength,
+    travelLength,
+    slideLength,
+    noteSpeed,
     notes,
     mostRecentNotesOrTails,
     targets,
-    targetBounds,
-    allSlides,
-    triggerMissedNote,
+    targetTails,
+    sustainedNotes
+};
+
+// ----------------------------------------- HELPERS
+const noteWriter = new NoteWriter(
+    masterInfo
+);
+const animator = new Animator(
+    masterInfo,
+    noteWriter,
     addNote,
-    {
-        noteSpeed: noteSpeed,
-        songDelay: songDelay
+    makeTail,
+    triggerMissedNote
+);
+const player = new Player(
+    masterInfo,
+    `./songs/${currentSong}.m4a`,
+    32,
+    () => {
+        animator.stopAnimation();
+        showSongControlButton("button-restart");
+        autoAdjustment = 0;
     }
 );
-const player = new Player(`./songs/${currentSong}.m4a`, songDelay, 32, () => {
-    animator.stopAnimation();
-    showSongControlButton("button-restart");
-    autoAdjustment = 0;
-});
 
 // ------------------------------------------ ACTIVATORS
 activateSettings(tapperKeys, (newCode) => {
@@ -128,19 +155,27 @@ document.addEventListener("keypress", (e) => {
 document.addEventListener("keydown", (e) => {
     if(e.code === tapperKeys[0]) {
         e.preventDefault();
-        activateTapper("tapper-left", "slide-left", "note-leaving-left");
+        if (!targetTails["slide-left"]) {
+            activateTapper("tapper-left", "slide-left", "note-leaving-left");
+        }
     }
     if(e.code === tapperKeys[1]) {
         e.preventDefault();
-        activateTapper("tapper-a", "slide-a", "note-leaving-left");
+        if (!targetTails["slide-a"]) {
+            activateTapper("tapper-a", "slide-a", "note-leaving-left");
+        }
     }
     if(e.code === tapperKeys[2]) {
         e.preventDefault();
-        activateTapper("tapper-b", "slide-b", "note-leaving-right");
+        if (!targetTails["slide-b"]) {
+            activateTapper("tapper-b", "slide-b", "note-leaving-right");
+        }
     }
     if(e.code === tapperKeys[3]) {
         e.preventDefault();
-        activateTapper("tapper-right", "slide-right", "note-leaving-right");
+        if (!targetTails["slide-right"]) {
+            activateTapper("tapper-right", "slide-right", "note-leaving-right");
+        }
     }
 });
 
@@ -161,6 +196,22 @@ document.addEventListener("keyup", (e) => {
 
 function deactivateTapper(tapperId) {
     document.getElementById(tapperId).style.backgroundColor = "rgba(168,0,93,0.2)";
+    const slideIds = {
+        "tapper-left": "slide-left",
+        "tapper-a": "slide-a",
+        "tapper-b": "slide-b",
+        "tapper-right": "slide-right"
+    };
+    const tail = targetTails[slideIds[tapperId]];
+    if (tail) {
+        targetTails[slideIds[tapperId]] = null;
+        if (tail.height > 0.1 * maxTailLength) {
+            player.setVolume(0.3);
+        }
+        // tail.note.classList.add("hidden");
+        tail.note.remove();
+        mostRecentNotesOrTails[slideIds[tapperId]] = null;
+    }
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
@@ -169,7 +220,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
         let numNotes = 0;
         notes.forEach((note) => {
             if (slideId === note.slideId) {
-                const thisOffset = note.position - travelLength;
+                const thisOffset = note.position - masterInfo.travelLength;
                 if (Math.abs(thisOffset) < closest) {
                     closest = thisOffset;
                     if (thisOffset < 80) {
@@ -200,7 +251,19 @@ function activateTapper(tapperId, slideId, leavingClass) {
             target.note.remove();
         }, 500);
         targets[slideId].delete(target);
-        triggerHitNote();
+        triggerHitNote(slideId);
+
+        if (target.tail) {
+            targetTails[slideId] = target.tail;
+            target.tail.note.classList.add("tail-active");
+
+            target.tail.cloud.classList.remove("hidden");
+
+            // make it look like you got the note spot on
+            const perfectHeight = masterInfo.travelLength - target.tail.position;
+            target.tail.note.style.height = `${perfectHeight}px`;
+            target.tail.height = perfectHeight;
+        }
     }
 }
 
@@ -208,6 +271,49 @@ function resetAutoAdjustment() {
     autoAdjustment = 0;
 }
 
+function makeTail(slideId, parentNote) {
+    if (parentNote.isTail) { // stretch instead of making new
+        const startPos = -1.0 * autoAdjustment;
+        const additionalHeight = parentNote.position - startPos;
+        parentNote.totalHeight = parentNote.totalHeight + additionalHeight;
+        const newHeight = parentNote.height + additionalHeight;
+        parentNote.note.style.height = `${newHeight}px`;
+        parentNote.note.style.top = `${startPos}px`;
+        parentNote.height = newHeight;
+        parentNote.position = startPos;
+    } else {
+        const newTail = document.createElement("div");
+        newTail.classList.add("note-tail");
+        const startPos = -1.0 * autoAdjustment;
+        // const startPos = -1.0 * autoAdjustment - 300;
+        newTail.style.top = `${startPos}px`;
+        const heightNeeded = parentNote.position - startPos;
+        newTail.style.height = `${heightNeeded}px`;
+        // newTail.style.height = `${300}px`;
+        const newTailCloud = document.createElement("div");
+        const tailInfo = {
+            note: newTail,
+            position: startPos,
+            height: heightNeeded,
+            totalHeight: heightNeeded, // running total of all height it's ever had
+            slideId: slideId,
+            target: false,
+            val: parentNote.val,
+            isTail: true,
+            cloud: newTailCloud,
+            tail: null
+        }
+        
+        parentNote.tail = tailInfo;
+        newTailCloud.classList.add("cloud-tail");
+        newTailCloud.classList.add("hidden");
+        newTail.appendChild(newTailCloud);
+        document.getElementById(slideId).appendChild(newTail);
+    
+        mostRecentNotesOrTails[slideId] = tailInfo;
+    }
+
+}
 function addNote(slideId, val, marked = false) {
     const newNote = document.createElement("div");
     newNote.classList.add("note");
@@ -216,15 +322,14 @@ function addNote(slideId, val, marked = false) {
     }
     const startPos = -1.0 * autoAdjustment; // should be zero initially
     newNote.style.top = `${startPos}px`;
-    // const noteInfoArr = [newNote, startPos, slideId, false, val];
-    // notes.add(noteInfoArr);
     const noteInfo = {
         note: newNote,
         position: startPos,
         slideId: slideId,
         target: false,
-        val: val,
-        isTail: false
+        val: val,   // val in the array that triggered the note to be created
+        isTail: false,
+        tail: null
     };
     notes.add(noteInfo);
     document.getElementById(slideId).appendChild(newNote);
@@ -238,8 +343,22 @@ function killAllNotes() {
     });
 }
 
-function triggerHitNote() {
+function triggerHitNote(slideId) {
     player.setVolume(1);
+    const cloudId = {
+        "slide-left": "cloud-left",
+        "slide-a": "cloud-a",
+        "slide-b": "cloud-b",
+        "slide-right": "cloud-right"
+    }[slideId];
+    const cloud = document.getElementById(cloudId);
+    cloud.classList.remove("hidden");
+    cloud.classList.add("cloud");
+    setTimeout(() => {
+        cloud.classList.remove("cloud");
+        cloud.classList.add("hidden");
+    }, 300);
+
     animator.recordNoteHit();
     streak += 1;
     const songLabel = document.getElementById("song-label");
@@ -320,14 +439,15 @@ function setupMobile() {
     
     setTimeout(() => {
         const viewWidth = document.getElementById("game-container").clientWidth;
-        travelLength = gameDataConst.mobile.travelLength * viewWidth;
-        noteSpeed = Math.floor(travelLength / ( (songDelay / 1000) / 2 ));
-        animator.updateTargetBounds({
-            top: gameDataConst.mobile.targetBounds.top * travelLength,
-            bottom: gameDataConst.mobile.targetBounds.bottom * travelLength
-        });
-        animator.updateNoteSpeed(noteSpeed);
-        slideLength = travelLength * 1.3;
+        masterInfo.travelLength = gameDataConst.mobile.travelLength * viewWidth;
+        const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
+        masterInfo.targetBounds = {
+            top: gameDataConst.mobile.targetBounds.top * masterInfo.travelLength,
+            bottom: gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength
+        };
+        masterInfo.noteSpeed = newNoteSpeed;
+        masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
+        masterInfo.slideLength = masterInfo.travelLength * 1.3;
     }, 500); // without small delay this was getting missed
 
     [

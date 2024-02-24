@@ -1,10 +1,12 @@
 const gameDataConst = {
     songDelay: 4000, // ms
+    maxTailLength: 500,
     targetBounds: {
         top: 382,   //px
         bottom: 420 //px
     },
     mobile: {
+        maxTailLength: 1.2,
         travelLength: 1.49, // fraction of viewWidth
         targetBounds: {
             top: 0.93,      // fraction of travelLength

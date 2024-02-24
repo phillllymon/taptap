@@ -1,22 +1,21 @@
 class Player {
     // delay in ms
-    constructor(source, delay, fftSize, onEnd) {
+    constructor(masterInfo, source, fftSize, onEnd) {
         this.song1 = new Audio(source);
         this.song2 = new Audio(source);
         this.playing1 = false;
         this.playing2 = false;
         this.timeStarted = false;
-        this.timeToStart2 = delay;
         this.song2Timeout = false;
-        this.delay = delay;
-        this.calibrating = false;
+        this.delay = masterInfo.songDelay;
+        this.timeToStart2 = this.delay;
 
         this.song1.addEventListener("ended", () => {
             this.playing1 = false;
         });
         this.song2.addEventListener("ended", () => {
             this.playing2 = false;
-            this.timeToStart2 = delay;
+            this.timeToStart2 = this.delay;
             onEnd();
         });
         this.waiting = false;
@@ -33,8 +32,7 @@ class Player {
 
     }
 
-    start(calibrating = false) {
-        this.calibrating = calibrating;
+    start() {
         this.song1.play();
         this.playing1 = true;
         this.timeStarted = performance.now();
