@@ -196,6 +196,9 @@
     border-right: 6vw solid darkorange;
     border-left: 6vw solid darkorange;
     box-shadow: 0px 1vw 2vw orange;
+    box-shadow:
+        -1vw 0px 2vw rgb(255, 231, 188),
+        1vw 0px 2vw rgb(255, 231, 188);
 }
 
 .note-tail {
