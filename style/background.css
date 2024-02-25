@@ -1,0 +1,67 @@
+#background-left {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0px;
+}
+#background-right {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0px;
+}
+
+#fog-top-left {
+    position: absolute;
+    height: 70px;
+    width: 50%;
+    top: 0px;
+    -webkit-mask-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.95));
+    mask-image: linear-gradient (rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.95));
+}
+#fog-top-right {
+    position: absolute;
+    height: 70px;
+    width: 50%;
+    top: 0px;
+    -webkit-mask-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.95));
+    mask-image: linear-gradient (rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.95));
+}
+
+#fog-gradient-left {
+    position: absolute;
+    height: 250px;
+    width: 50%;
+    top: 70px;
+    -webkit-mask-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.0));
+    mask-image: linear-gradient (rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.0));
+}
+#fog-gradient-right {
+    position: absolute;
+    height: 250px;
+    width: 50%;
+    top: 70px;
+    -webkit-mask-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.0));
+    mask-image: linear-gradient (rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.0));
+}
+
+.left {
+    left: 0px;
+    background: linear-gradient(
+        to left,
+        rgba(173,66,245,0.95) 20%,
+        rgba(245,66,93,0.95) 30% 45%,
+        rgba(245,185,66,0.95) 55% 70%,
+        rgba(6, 151, 6, 0.95) 80%
+    );
+}
+.right {
+    left: 50%;
+    background: linear-gradient(
+        to right,
+        rgba(173,66,245,0.95) 20%,
+        rgba(245,66,93,0.95) 30% 45%,
+        rgba(245,185,66,0.95) 55% 70%,
+        rgba(6, 151, 6, 0.95) 80%
+    );
+}

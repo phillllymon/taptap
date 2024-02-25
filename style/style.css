@@ -103,7 +103,7 @@
     width: 900px;
 }
 
-#rock-meter {
+.rock-meter {
     position: absolute;
     left: 20px;
     top: 50px;
@@ -164,29 +164,49 @@
 .song-label {
     position: absolute;
     left: 50%;
-    top: 20px;
+    top: 5px;
     transform: translate(-50%, 0px);
     font-size: 25px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: gray;
-    text-shadow: 0px 0px 5px gray;
+    text-shadow: 0px 0px 10px lightgray;
     z-index: 4;
+    padding: 15px;
+    border-radius: 20%;
+    border: 5px solid rgba(180, 180, 180, 0.4);
+    background-color: rgba(180, 180, 180, 0.6);
+}
+
+.rock-label {
+    position: absolute;
+    left: 50%;
+    top: 150px;
+    transform: translate(-50%, 0px);
+    font-size: 80px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: orange;
+    z-index: 4;
+    padding: 15px;
+    opacity: 0.3;
+    animation-name: youRock;
+    animation-duration: 500ms;
+}
+@keyframes youRock {
+    0%    {font-size: 0px}
+    100%    {font-size: 80px}
+}
+.rock-shrink {
+    font-size: 0px;
+    animation-name: rockShrink;
+    animation-duration: 500ms;
+}
+@keyframes rockShrink {
+    0%    {font-size: 80px}
+    100%    {font-size: 0px}
 }
 
 .font-bigA {
     font-size: 35px;
-}
-.font-bigB {
-    font-size: 50px;
-    opacity: 0.8;
-    animation-name: bigB;
-    animation-duration: 1000ms;
-}
-@keyframes bigB {
-    100%    {font-size: 50px}
-    20%      {font-size: 65px}
-    25%      {font-size: 65px}
-    100%    {font-size: 50px}
 }
 
 #menu-right {
@@ -251,13 +271,21 @@
     z-index: 1;
 }
 
+/* NOW IN background.css
+/* #fog-top {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 70px;
+    background-image: linear-gradient(to top, rgba(230,230,230,0.95), rgba(230,230,230,1));
+}
 #fog-gradient {
     position: absolute;
-    top: 58px;
+    top: 70px;
     width: 100%;
-    height: 200px;
-    background-image: linear-gradient(to top, rgba(230,230,230,0), rgba(230,230,230,1));
-}
+    height: 250px;
+    background-image: linear-gradient(to top, rgba(230,230,230,0), rgba(230,230,230,0.95));
+} */
 
 #slides-container {
     width: 600px;
@@ -277,6 +305,15 @@
     transform: rotateX(20deg);
     box-shadow: 0px 10px 10px rgb(168, 0, 93);
     border: 3px solid rgb(168, 0, 93);
+
+}
+
+.on-fire {
+    box-shadow:
+        30px 0px 40px orange,
+        30px 0px 40px orange,
+        -30px 0px 40px orange,
+        -30px 0px 40px orange;
 }
 
 .three-wide-slides {

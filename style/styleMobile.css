@@ -22,7 +22,7 @@
     z-index: 1;
 }
 
-#rock-meter {
+.rock-meter {
     position: absolute;
     left: 2vw;
     top: 15vw;
@@ -161,7 +161,7 @@
     background-color: rgb(214, 0, 118);
     transform-style: preserve-3d;
     transform: rotateX(20deg);
-    box-shadow: 0px 10px 10px rgb(168, 0, 93);
+    /* box-shadow: 0px 10px 10px rgb(168, 0, 93); */
     border: 3px solid rgb(168, 0, 93);
 }
 
@@ -328,5 +328,49 @@
 @keyframes note-leave-left {
     0%      {opacity: 1; top: 150vw; left: 50%}
     100%    {opacity: 0.5; top: 100vw; left: -200vw}
+}
+
+#song-label {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    transform: translate(-50%, 0px);
+    font-size: 5vw;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: gray;
+    text-shadow: 0px 0px 10px lightgray;
+    z-index: 4;
+    padding: 15px;
+    border-radius: 20%;
+    border: 5px solid rgba(180, 180, 180, 0.4);
+    background-color: rgba(180, 180, 180, 0.6);
+}
+
+.rock-label {
+    position: absolute;
+    left: 50%;
+    top: 50vw;
+    transform: translate(-50%, 0px);
+    font-size: 15vw;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: orange;
+    z-index: 4;
+    padding: 15px;
+    opacity: 0.4;
+    animation-name: youRock;
+    animation-duration: 500ms;
+}
+@keyframes youRock {
+    0%    {font-size: 0px}
+    100%    {font-size: 15vw}
+}
+.rock-shrink {
+    font-size: 0px;
+    animation-name: rockShrink;
+    animation-duration: 500ms;
+}
+@keyframes rockShrink {
+    0%    {font-size: 15vw}
+    100%    {font-size: 0px}
 }
 

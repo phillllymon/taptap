@@ -7,6 +7,7 @@
     <title>TapTap</title>
     <link rel="stylesheet" href="style/styleReset.css">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/background.css">
 </head>
 <body>
     <center>
@@ -131,7 +132,8 @@
             </div>
             
             <div id="play-area" class="play-area">
-                
+                <div id="background-left" class="left"></div>
+                <div id="background-right" class="right"></div>
                 <div id="menu-right">
                     <div id="settings" class="level">Settings</div>
                     <br>
@@ -144,7 +146,7 @@
                                 <div class="cloud-tail"></div>
                             </div> -->
                             <!-- <div id="test-note2" class="note"></div> -->
-                            <div id="test-cloud2" class="cloud"></div>
+                            <!-- <div id="test-cloud2" class="cloud"></div> -->
                             
                             <div id="cloud-left" class="hidden"></div>
                             <div id="tapper-left" class="tapper"></div>
@@ -165,11 +167,16 @@
                             <div id="cloud-right" class="hidden"></div>
                             <div id="tapper-right" class="tapper"></div>
                         </div>
+                        <!-- <div id="fog-gradient"></div> -->
                     </div>
                 </div>
-                <div id="fog-gradient"></div>
+                <div id="fog-top-left" class="left"></div>
+                <div id="fog-top-right" class="right"></div>
+                <div id="fog-gradient-left" class="left"></div>
+                <div id="fog-gradient-right" class="right"></div>
+                <div id="rock-label"></div>
                 <div id="song-label" class="song-label"></div>
-                <div id="rock-meter">
+                <div id="rock-meter" class="rock-meter">
                     <div id="meter-green" class="meter-color"></div>
                     <div id="meter-yellow" class="meter-color"></div>
                     <div id="meter-red" class="meter-color"></div>

@@ -57,7 +57,7 @@ let autoCalibrating = true;
 let sustainedNotes = true;
 
 let autoAdjustments = [];
-let autoAdjustment = 0;
+let autoAdjustment = -10;
 
 let streak = 0;
 
@@ -98,7 +98,7 @@ const player = new Player(
     () => {
         animator.stopAnimation();
         showSongControlButton("button-restart");
-        autoAdjustment = 0;
+        autoAdjustment = autoCalibrating ? 10 : 0;
     }
 );
 
@@ -236,7 +236,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
         if (numNotes < 2) {
             if (Math.abs(closest) < 50) {
                 autoAdjustment += 1.0 * (closest / (10 * notes.size));
-                autoAdjustment = Math.max(autoAdjustment, -35);
+                autoAdjustment = Math.max(autoAdjustment, -45);
                 autoAdjustment = Math.min(autoAdjustment, 20);
             }
         }
@@ -350,6 +350,7 @@ function killAllNotes() {
     });
 }
 
+let labelInUse = false;
 function triggerHitNote(slideId) {
     player.setVolume(1);
     const cloudId = {
@@ -372,17 +373,32 @@ function triggerHitNote(slideId) {
     if (streak > 9) {
         songLabel.innerText = `STREAK: ${streak}`;
     }
-    if (streak === 25) {
+    if (streak === 50) {
         songLabel.classList.add("font-bigA");
     }
-    if (streak === 50) {
-        songLabel.classList.add("font-bigB");
-    }
-    if (streak > 50 && streak % 50 === 0) {
-        songLabel.classList.remove("font-bigB");
+    const rockLabel = document.getElementById("rock-label");
+    if (streak === 100) {
+        rockLabel.innerHTML = "100 NOTE <br> STREAK!";
+        rockLabel.classList.add("rock-label");
+        labelInUse = true;
         setTimeout(() => {
-            songLabel.classList.add("font-bigB");
-        }, 0);
+            rockLabel.classList.remove("rock-label");
+            rockLabel.innerHTML = "";
+            labelInUse = false;
+        }, 1300);
+    }
+    if (streak === 200) {
+        document.getElementById("slides").classList.add("on-fire");
+        document.getElementById("song-label").classList.add("on-fire");
+        rockLabel.innerHTML = "ON FIRE!";
+        rockLabel.classList.add("rock-label");
+        
+        labelInUse = true;
+        setTimeout(() => {
+            rockLabel.classList.remove("rock-label");
+            rockLabel.innerHTML = "";
+            labelInUse = false;
+        }, 1300);
     }
 }
 
@@ -390,10 +406,38 @@ function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
     player.setVolume(0.3);
     animator.recordNoteMissed();
-    streak = 0;
     removeElementClass("song-label", "font-bigA");
-    removeElementClass("song-label", "font-bigB");
     setElementText("song-label", currentSong);
+    document.getElementById("slides").classList.remove("on-fire");
+    document.getElementById("song-label").classList.remove("on-fire");
+    
+    const rockLabel = document.getElementById("rock-label");
+    if (!labelInUse) {
+        rockLabel.classList.remove("on-fire");
+        rockLabel.classList.remove("rock-label");
+    }
+    
+    const theStreak = streak;
+    if (theStreak > 25) {
+        labelInUse = true;
+        rockLabel.innerHTML = `${theStreak} NOTE <br> STREAK!`;
+        rockLabel.classList.add("rock-label");
+        setTimeout(() => {
+            rockLabel.classList.remove("rock-label");
+            if (theStreak > 50) {
+                rockLabel.innerHTML = "YOU ROCK!";
+                rockLabel.classList.add("rock-label");
+                setTimeout(() => {
+                    rockLabel.classList.remove("rock-label");
+                    rockLabel.innerHTML = "";
+                    labelInUse = false;
+                }, 1300);
+            } else {
+                labelInUse = false;
+            }
+        }, 1300);
+    }
+    streak = 0;
 }
 
 function showSongControlButton(buttonId) {

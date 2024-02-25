@@ -29,7 +29,6 @@ class Player {
         this.analyser.connect(audioCtx.destination);
         this.analyser.fftSize = fftSize;
         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-
     }
 
     start() {

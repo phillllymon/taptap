@@ -30,6 +30,15 @@ class Animator {
 
         this.notesHit = 0;
         this.notesMissed = 0;
+
+        // for animated background
+        this.arrayNow = [100, 100, 100, 100];
+        this.colors = [
+            [[150, 1], [150, -1], [150, 1]],
+            [[150, -1], [150, 1], [150, -1]],
+            [[150, 1], [150, -1], [150, 1]],
+            [[150, -1], [150, 1], [150,-1]]
+        ];
     }
 
     setNotesPerSecond(val) {
@@ -74,6 +83,66 @@ class Animator {
             algorithm,
         } = params;
 
+        // animated background
+        const arr = this.arrayNow;
+        let total = 0;
+        arr.forEach((val) => {
+            total += val;
+        });
+        const fractions = arr.map((val) => {
+            return (1.0 * val) / total;
+        });
+
+        const a = fractions[0] * 60;
+        const b = a + 10;
+        const c = b + (fractions[1] * 60);
+        const d = c + 10;
+        const e = d + (fractions[2] * 60);
+        const f = e + 10;
+
+        this.colors.forEach((row) => {
+            return row.map((col) => {
+                if (Math.random() > 0.8) {
+                    col[1] = col[1] === 1 ? -1 : 1
+                }
+                if (col[0] > 250 && col[1] === 1) {
+                    col[1] = -1;
+                }
+                if (col[0] < 5 && col[1] === -1) {
+                    col[1] = 1;
+                }
+                if (Math.random() > 0.9) {
+                    col[0] += col[1] * Math.floor(5 * Math.random());
+                }
+            });
+        });
+
+        const colsToUse = this.colors.map((row) => {
+            return row.map((col) => {
+                return col[0];
+            }).join(",");
+        });
+        
+        ["background-left", "fog-top-left", "fog-gradient-left"].forEach((eleId) => {
+            document.getElementById(eleId).style.background = `linear-gradient(
+                to right,
+                rgba(${colsToUse[0]},0.95) ${a}%,
+                rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
+                rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
+                rgba(${colsToUse[3]},0.95) ${f}%
+            )`
+        });
+        ["background-right", "fog-top-right", "fog-gradient-right"].forEach((eleId) => {
+            document.getElementById(eleId).style.background = `linear-gradient(
+                to left,
+                rgba(${colsToUse[0]},0.95) ${a}%,
+                rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
+                rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
+                rgba(${colsToUse[3]},0.95) ${f}%
+            )`;
+        });
+        // end animated background
+
         const newTime = performance.now();
         const dt = newTime - this.time;
         this.time = newTime;
@@ -82,10 +151,31 @@ class Animator {
 
         // faithful
         const dataArray = player.getDataArray();
-        this.arrays[0].push(averageOf(dataArray.slice(0, 4)));
-        this.arrays[1].push(averageOf(dataArray.slice(4, 8)));
-        this.arrays[2].push(averageOf(dataArray.slice(8, 12)));
-        this.arrays[3].push(averageOf(dataArray.slice(12, 16)));
+        const val0 = averageOf(dataArray.slice(0, 4));
+        this.arrays[0].push(val0);
+        const val1 = averageOf(dataArray.slice(4, 8))
+        this.arrays[1].push(val1);
+        const val2 = averageOf(dataArray.slice(8, 12));
+        this.arrays[2].push(val2);
+        const val3 = averageOf(dataArray.slice(12, 16));
+        this.arrays[3].push(val3);
+
+        // for animated background
+        const upper = 1.05;
+        const lower = 0.95;
+        setTimeout(() => {
+            this.arrayNow = [
+                val0 - this.arrayNow[0] > 0 ? this.arrayNow[0] * upper : this.arrayNow[0] * lower,
+                val1 - this.arrayNow[1] > 0 ? this.arrayNow[1] * upper : this.arrayNow[1] * lower,
+                val2 - this.arrayNow[2] > 0 ? this.arrayNow[2] * upper : this.arrayNow[2] * lower,
+                val3 - this.arrayNow[3] > 0 ? this.arrayNow[3] * upper : this.arrayNow[3] * lower
+                // val0 - this.arrayNow[0] > 0 ? val0 - this.arrayNow[0]: this.arrayNow[0],
+                // val1 - this.arrayNow[1] > 0 ? val1 - this.arrayNow[1]: this.arrayNow[1],
+                // val2 - this.arrayNow[2] > 0 ? val2 - this.arrayNow[2]: this.arrayNow[2],
+                // val3 - this.arrayNow[3] > 0 ? val3 - this.arrayNow[3]: this.arrayNow[3]
+            ];
+        }, this.masterInfo.songDelay);
+
         this.times.push(this.time);
         while (this.times[0] < this.time - this.masterInfo.songDelay) {
             this.arrays.forEach((arr) => {
