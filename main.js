@@ -465,6 +465,7 @@ function handleMobile() {
     }
 }
 function setupMobile() {
+    document.mobile = true;
     // add mobile style
     const link = document.createElement("link");
     link.type = "text/css";
