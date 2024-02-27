@@ -70,3 +70,7 @@
     height: 7vw;
     border-left: 0.75vw solid gray;
 }
+
+#song-label {
+    font-size: 5vw;
+}

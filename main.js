@@ -533,6 +533,17 @@ function setupMobile() {
     link.rel = "stylesheet";
     link.href = "./style/styleMobile.css";
     document.head.appendChild(link);
+
+    [
+        "background-left",
+        "background-right",
+        "fog-top-left",
+        "fog-top-right",
+        "fog-gradient-left",
+        "fog-gradient-right"
+    ].forEach((eleId) => {
+        document.getElementById(eleId).classList.add("hidden");
+    });
     
     // showModal("full-screen");
 
