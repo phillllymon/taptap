@@ -245,20 +245,34 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
 
         setTimeout(() => {
 
-            const viewH = document.getElementById("game-container").clientHeight;
-            const viewW = document.getElementById("game-container").clientWidth;
-            let min = Math.min(viewW, viewH);
+            if (detectMobile()) {
+                const viewHeight = document.getElementById("game-container").clientHeight;
+                masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
 
-            masterInfo.vMin = min;
+                const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
+                masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
+                masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
+                masterInfo.noteSpeed = newNoteSpeed;
+                masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
+                masterInfo.slideLength = masterInfo.travelLength * 1.3;
+            } else {
 
-            masterInfo.slideLength = 1.5 * min;
-            masterInfo.travelLength = 1.365 * min * 1.003; // correction factor based on experimentation
-            const newNoteSpeed = 1.0 * masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 );
-            masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
-            masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
-            masterInfo.noteSpeed = newNoteSpeed;
-            masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
-            masterInfo.slideLength = masterInfo.travelLength * 1.3;
+                const viewH = document.getElementById("game-container").clientHeight;
+                const viewW = document.getElementById("game-container").clientWidth;
+                let min = Math.min(viewW, viewH);
+    
+                masterInfo.vMin = min;
+    
+                masterInfo.slideLength = 1.5 * min;
+                masterInfo.travelLength = 1.365 * min * 1.003; // correction factor based on experimentation
+                const newNoteSpeed = 1.0 * masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 );
+                masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
+                masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
+                masterInfo.noteSpeed = newNoteSpeed;
+                masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
+                masterInfo.slideLength = masterInfo.travelLength * 1.3;
+            }
+
         }, 500);
 
     });
