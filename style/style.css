@@ -95,49 +95,7 @@
     overflow: hidden;
 }
 
-.rock-meter {
-    position: absolute;
-    left: 20px;
-    top: 50px;
-    width: 200px;
-    height: 200px;
-    border: 2px solid gray;
-    transform: rotate(45deg);
-    border-radius: 0% 100% 0% 10%;
-    box-shadow: 5px 5px 10px gray;
-    overflow: hidden;
-}
 
-.meter-color {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-}
-
-#meter-green {
-    background-color: green;
-}
-#meter-yellow {
-    background-color: yellow;
-    transform: translate(20px, 55px) rotate(-60deg);
-}
-#meter-red {
-    background-color: red;
-    transform: translate(30px, 120px) rotate(-30deg);
-}
-#meter-needle {
-    position: absolute;
-    height: 16px;
-    width: 380px;
-    top: 186px;
-    left: -184px;
-    background-color: rgb(168, 0, 93);
-    border-radius: 90%;
-    transform: rotate(-45deg);
-    box-shadow: 5px 5px 10px orange;
-    box-sizing: border-box;
-    border: 2px solid darkorange;
-}
 
 #play-controls {
     position: absolute;
@@ -403,36 +361,36 @@
     left: 50%;
     transform: translate(-50%, -40%);
     width: 100%;
-    height: 0.5vmin;
+    height: 0.5vh;
     border-radius: 50%;
     /* background-color: green; */
     box-shadow: 
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188),
-        0px 0px 4vmin rgb(255, 231, 188);
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188),
+        0px 0px 4vh rgb(255, 231, 188);
           
     margin: auto;
     z-index: 2;
@@ -457,6 +415,50 @@
         30px 0px 40px orange,
         /* -30px 0px 40px orange, */
         -30px 0px 40px orange;
+}
+
+.rock-meter {
+    position: absolute;
+    left: 20px;
+    top: 50px;
+    width: 200px;
+    height: 200px;
+    border: 2px solid gray;
+    transform: rotate(45deg);
+    border-radius: 0% 100% 0% 10%;
+    box-shadow: 5px 5px 10px gray;
+    overflow: hidden;
+}
+
+.meter-color {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+}
+
+#meter-green {
+    background-color: green;
+}
+#meter-yellow {
+    background-color: yellow;
+    transform: translate(20px, 55px) rotate(-60deg);
+}
+#meter-red {
+    background-color: red;
+    transform: translate(30px, 120px) rotate(-30deg);
+}
+#meter-needle {
+    position: absolute;
+    height: 16px;
+    width: 380px;
+    top: 186px;
+    left: -184px;
+    background-color: rgb(168, 0, 93);
+    border-radius: 90%;
+    transform: rotate(-45deg);
+    box-shadow: 5px 5px 10px orange;
+    box-sizing: border-box;
+    border: 2px solid darkorange;
 }
 
 .hidden {

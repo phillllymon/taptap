@@ -542,8 +542,9 @@ function setupMobile() {
     
     
     setTimeout(() => {
-        const viewWidth = document.getElementById("game-container").clientWidth;
-        masterInfo.travelLength = gameDataConst.mobile.travelLength * viewWidth;
+        const viewHeight = document.getElementById("game-container").clientHeight;
+        masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
+
         const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
         masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
         masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;

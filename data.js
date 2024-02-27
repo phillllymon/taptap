@@ -7,7 +7,7 @@ const gameDataConst = {
     },
     mobile: {
         maxTailLength: 1.2,
-        travelLength: 1.49, // fraction of viewWidth
+        travelLength: 1.285, // fraction of viewWidth
         targetBounds: {
             top: 0.93,      // fraction of travelLength
             bottom: 1.05    // fraction of travelLength

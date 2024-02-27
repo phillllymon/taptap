@@ -16,6 +16,7 @@
     background-color: rgba(200, 200, 200);
     opacity: 0.85;
     box-sizing: border-box;
+    z-index: 4;
 }
 
 #show-menu {
