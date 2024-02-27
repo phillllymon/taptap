@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style/styleReset.css">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/background.css">
+    <link rel="stylesheet" href="style/menu.css">
 </head>
 <body>
     <center>
@@ -134,12 +135,8 @@
             <div id="play-area" class="play-area">
                 <div id="background-left" class="left"></div>
                 <div id="background-right" class="right"></div>
-                <div id="menu-right">
-                    <div id="settings" class="level">Settings</div>
-                    <br>
-                    <div id="choose-button" class="level">Choose song</div>
-                </div>
-                <div id="slides-container">
+                <!-- <div id="background-mobile"></div> -->
+                <div id="slides-container" class="slides-container">
                     <div id="slides" class="slides">
                         <div id="slide-left" class="slide">
                             <!-- <div id="test-note2-tail" class="note-tail">
@@ -167,7 +164,6 @@
                             <div id="cloud-right" class="hidden"></div>
                             <div id="tapper-right" class="tapper"></div>
                         </div>
-                        <!-- <div id="fog-gradient"></div> -->
                     </div>
                 </div>
                 <div id="fog-top-left" class="left"></div>
@@ -176,30 +172,41 @@
                 <div id="fog-gradient-right" class="right"></div>
                 <div id="rock-label"></div>
                 <div id="song-label" class="song-label"></div>
-                <div id="rock-meter" class="rock-meter">
-                    <div id="meter-green" class="meter-color"></div>
-                    <div id="meter-yellow" class="meter-color"></div>
-                    <div id="meter-red" class="meter-color"></div>
-                    <div id="meter-needle"></div>
-                </div>
-                <div id="play-controls">
-                    <div id="button-play" class="control-button">&#9654;&#65039;</div>
-                    <div id="button-pause" class="control-button">&#x23F8;</div>
-                    <div id="button-restart" class="control-button">&#9198;&#65039;</div>
-                </div>
-                <div id="level-selector">
-                    Difficulty:
+                <div id="main-menu" class="menu">
+                    <div id="hide-menu" class="menu-button">Hide &#8680;</div>
+                    <br>
+                    <div id="set-full-screen" class="menu-button">Full screen</div>
+                    <br>
+                    <div id="settings" class="menu-button">Settings</div>
+                    <br>
+                    <div id="choose-button" class="menu-button">Choose song</div>
+                    <br>
+                    <div class="menu-title">Difficulty</div>
                     <div id="level-1" class="level">stupid</div>
                     <div id="level-2" class="level">easy</div>
                     <div id="level-3" class="level">medium</div>
                     <div id="level-4" class="level">hard</div>
                     <div id="level-5" class="level">crazy</div>
-                </div>
-                <div id="slides-selector">
-                    Slides:
+                    <br>
+                    <div class="menu-title">Slides</div>
                     <div id="slides-2" class="level">2</div>
                     <div id="slides-3" class="level">3</div>
                     <div id="slides-4" class="level">4</div>
+                    <div id="show-menu"><center>☰&nbsp; </center></div>
+                </div>
+                <!-- <div id="rock-meter" class="rock-meter">
+                    <div id="meter-green" class="meter-color"></div>
+                    <div id="meter-yellow" class="meter-color"></div>
+                    <div id="meter-red" class="meter-color"></div>
+                    <div id="meter-needle"></div>
+                </div> -->
+                <div id="play-controls">
+                    <!-- <div id="button-play" class="control-button">&#9654;&#65039;</div> -->
+                    <div id="button-play" class="control-button">&#9658;</div>
+                    <!-- <div id="button-pause" class="control-button">&#x23F8;</div> -->
+                    <div id="button-pause" class="control-button">&#10073;&#10073;</div>
+                    <!-- <div id="button-restart" class="control-button">&#9198;&#65039;</div> -->
+                    <div id="button-restart" class="control-button"><div id="vertical">&#9664;</div></div>
                 </div>
             </div>
         </div>
@@ -210,6 +217,7 @@
     <script type="text/javascript" src="./helpers/player.js"></script>
     <script type="text/javascript" src="./helpers/noteWriter.js"></script>
     <script type="text/javascript" src="./helpers/animator.js"></script>
+    <script type="text/javascript" src="./helpers/backgroundAnimator.js"></script>
     <script type="text/javascript" src="./data.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </body>

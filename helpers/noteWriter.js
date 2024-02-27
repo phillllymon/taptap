@@ -58,14 +58,14 @@ class NoteWriter {
                         "slide-a": 0.8,
                         // "slide-a": 0.2,
                         "slide-b": 0.7,
-                        "slide-right": 0.6
+                        "slide-right": 0.4
                     }[slideId];
                     const valThreshold = {
-                        "slide-left": 2.5,
+                        "slide-left": 2.75,
                         "slide-a": 2.25,
                         // "slide-a": 0.5,
                         "slide-b": 1.75,
-                        "slide-right": 1.5
+                        "slide-right": 0.9
                     }[slideId];
                     
                     if (relevantAfterRatio > ratioThreshold && relevantNoteVal > valThreshold * lastNote.val) {
@@ -196,10 +196,11 @@ class NoteWriter {
                 // }
 
                 // only include values starting 300 ms out
-                if (val < overallAfterMin && times[n] > 2300) {
+                // if (val < overallAfterMin && times[n] > 2300) {
+                if (val < overallAfterMin && times[n] > 2100 && times[n] < 2400) {
                     overallAfterMin = val;
                 }
-                if (val > overallAfterMax && times[n] > 2300) {
+                if (val > overallAfterMax && times[n] > 2100 && times[n] < 2400) {
                     overallAfterMax = val;
                 }
 
@@ -219,10 +220,10 @@ class NoteWriter {
             // if (midVal > beforeMax && midVal > afterMax && amt > 300) {
             if (midVal > beforeMax && midVal > afterMax) {
                 let marked = false;
-                if (amt < 160) {
-                    marked = true;
-                    return noteVals;
-                }    
+                // if (amt < 160) {
+                //     marked = true;
+                //     return noteVals;
+                // }    
 
                 let slideToUse;
                 if (algorithm === "A") {

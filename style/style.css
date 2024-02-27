@@ -82,25 +82,17 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 600px;
-    height: 850px;
+    width: 99vw;
+    height: 99vh;
     border: 2px solid gray;
 }
 
 .play-area {
     position: relative;
-    width: 600px;
-    height: 850px;
+    width: 100vw;
+    height: 100vh;
     background-color: rgb(230, 230, 230);
     overflow: hidden;
-}
-
-.three-wide-area {
-    width: 800px;
-}
-
-.four-wide-area {
-    width: 900px;
 }
 
 .rock-meter {
@@ -149,16 +141,32 @@
 
 #play-controls {
     position: absolute;
-    top: 350px;
+    top: 50%;
     left: 10px;
     z-index: 1;
 }
 
 .control-button {
-    text-shadow: 0px 10px 10px gray;
-    font-size: 60px;
+    text-shadow: 0px 0px 10px lightgray;
+    height: 5vmin;
     user-select: none;
     cursor: pointer;
+    font-size: 5vmin;
+    color: gray;
+    text-shadow: 0px 0px 10px lightgray;
+    z-index: 4;
+    padding: 0.5vmin;
+    padding-bottom: 0vmin;
+    border-radius: 10%;
+    border: 5px solid rgba(180, 180, 180, 0.4);
+    background-color: rgba(180, 180, 180, 0.8);
+}
+#vertical {
+    height: 4.5vmin;
+    border-left: 0.5vmin solid gray;
+}
+.disabled-button {
+    opacity: 0.5;
 }
 
 .song-label {
@@ -223,157 +231,144 @@
     z-index: 1;
 }
 
-#level-selector {
-    font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 100px;
+.slides-container {
     position: absolute;
-    left: 100%;
-    top: 110px;
-    padding: 5px;
-    text-align: center;
-    transform: translate(-103%, 0px);
-    background-color: rgb(214, 0, 118);
-    box-shadow: 0px 10px 10px gray;
-    border-radius: 5px;
-    z-index: 1;
-}
-
-.level {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 16;
-    color: lightgray;
-    margin: 5px;
-    cursor: pointer;
-    user-select: none;
-    box-sizing: border-box;
-}
-
-.level-selected {
-    background-color: rgb(168, 0, 93);
-    border: 2px solid lightgray;
-    cursor: default;
-}
-
-#slides-selector {
-    font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 70px;
-    position: absolute;
-    left: 100%;
-    top: 285px;
-    padding: 5px;
-    text-align: center;
-    transform: translate(-103%, 0px);
-    background-color: rgb(214, 0, 118);
-    box-shadow: 0px 10px 10px gray;
-    border-radius: 5px;
-    z-index: 1;
-}
-
-/* NOW IN background.css
-/* #fog-top {
-    position: absolute;
-    top: 0px;
-    width: 100%;
-    height: 70px;
-    background-image: linear-gradient(to top, rgba(230,230,230,0.95), rgba(230,230,230,1));
-}
-#fog-gradient {
-    position: absolute;
-    top: 70px;
-    width: 100%;
-    height: 250px;
-    background-image: linear-gradient(to top, rgba(230,230,230,0), rgba(230,230,230,0.95));
-} */
-
-#slides-container {
-    width: 600px;
-    height: 200px;
-    perspective: 100px;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 50vmin;
+    height: 150vmin;
+    perspective: 20vmin;
 }
 
 .slides {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    width: 250px;
-    /* width: 375px; */
-    height: 600px;
-    background-color: rgb(214, 0, 118);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 200%;
+    background-color: rgb(124, 0, 68);
     transform-style: preserve-3d;
     transform: rotateX(20deg);
     box-shadow: 0px 10px 10px rgb(168, 0, 93);
-    border: 3px solid rgb(168, 0, 93);
-
+    border-left: 3px solid rgb(168, 0, 93);
+    border-right: 3px solid rgb(168, 0, 93);
+    box-sizing: border-box;
+    opacity: 0.9;
+    display: flex;
+    flex-direction: row;
 }
 
-.on-fire {
-    box-shadow:
-        30px 0px 40px orange,
-        30px 0px 40px orange,
-        -30px 0px 40px orange,
-        -30px 0px 40px orange;
+.three-wide-slides-container {
+    width: 75vmin;
 }
 
-.three-wide-slides {
-    width: 375px;
-}
-
-.four-wide-slides {
-    width: 500px;
+.four-wide-slides-container {
+    width: 100vmin;
 }
 
 .slide {
     position: relative;
-    width: 125px;
-    height: 600px;
+    width: 25vmin;
+    height: 50%;
     box-sizing: border-box;
-    border: 2px solid rgb(168, 0, 93);
+    border-left: 0.5vmin solid rgb(168, 0, 93);
+    border-right: 0.5vmin solid rgb(168, 0, 93);
     text-align: center;
 }
 
-.slider {
+/* note: slide is 150vmin long */
+.tapper {
     position: absolute;
-    top: 0px;
-    width: 100%;
-    height: 600px;
-    background-color: green;
-    text-align: center;
+    top: 135vmin;
+    /* travelLength is 136.5vmin to account for top border */
+    left: 50%;
+    transform: translate(-50%, 0px);
+    width: 80%;
+    height: 4%;
+    background-color: rgba(168,0,93,0.2);
+    margin: auto;
+    border: 1.5vmin solid rgb(168, 0, 93);
+    border-left: 3vmin solid rgb(168, 0, 93);
+    border-right: 3vmin solid rgb(168, 0, 93);
+    z-index: 1;
 }
 
 .note {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 90px;
-    height: 20px;
+    width: 80%;
+    height: 4%;
     background-color: orange;
     margin: auto;
     box-sizing: border-box;
-    border-bottom: 6px solid darkorange;
-    border-right: 18px solid darkorange;
-    border-left: 18px solid darkorange;
+    border-top: 0.5vmin solid rgb(241, 133, 0);
+    border-bottom: 2vmin solid rgb(219, 121, 0);
+    border-right: 4vmin solid darkorange;
+    border-left: 4vmin solid darkorange;
     /* box-shadow: 0px 3px 10px orange; */
     /* box-shadow: 0px 0px 15px orange; */
     box-shadow:
-        -4px 0px 6px rgb(255, 231, 188),
-        4px 0px 6px rgb(255, 231, 188);
+        -0.8vmin 0.35vmin 0.8vmin rgb(255, 231, 188),
+        0.8vmin 0.35vmin 0.8vmin rgb(255, 231, 188);
+    opacity: 1;
+    border-radius: 5%;
+}
+
+#test-note {
+    /* top: 125vmin; */
+    /* top: 1255.8px; */
+    top: 1263px;
+}
+#test-note2 {
+    top: 120vmin;
+}
+
+.note-leaving-right {
+    top: 135.6vmin;
+    animation-name: note-leave-right;
+    animation-duration: 0.6s;
+    left: 30vmin;
+    z-index: 2;
+    background-color: rgb(255, 231, 188);
+    opacity: 0;
+}
+
+@keyframes note-leave-right {
+    0%      {opacity: 1; top: 135.6vmin; left: 50%}
+    /* 100%    {opacity: 0.5; top: 200px; left: 500px} */
+    100%    {opacity: 0; top: 0px; left: 350vmin}
+}
+
+.note-leaving-left {
+    top: 135.6vmin;
+    animation-name: note-leave-left;
+    animation-duration: 0.6s;
+    left: -500px;
+    z-index: 2;
+    background-color: rgb(255, 231, 188);
+    opacity: 0;
+}
+
+@keyframes note-leave-left {
+    0%      {opacity: 1; top: 135.6vmin; left: 50%}
+    100%    {opacity: 0; top: 0px; left: -350vmin}
 }
 
 .note-tail {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 30px;
-    height: 80px;
-    top: 285px;
+    width: 20%;
+    height: 10vmin;
+    top: 110vmin;
     background-color: orange;
     margin: auto;
     box-sizing: border-box;
     border-right: 5px solid darkorange;
     border-left: 5px solid darkorange;
-    box-shadow: -4px 3px 15px orange, 4px 3px 15px orange;
+    /* box-shadow: -4px 3px 15px orange, 4px 3px 15px orange; */
 }
 .tail-active {
     background-color: rgb(255, 231, 188);
@@ -382,13 +377,13 @@
 
 .cloud {
     position: absolute;
-    top: 400px;
+    top: 136.5vmin;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 90px;
-    height: 20px;
+    width: 80%;
+    height: 4%;
     /* background-color: green; */
-    box-shadow: 0px 0px 15px rgb(255, 231, 188);
+    box-shadow: 0px 0px 4vmin rgb(255, 231, 188);
     margin: auto;
     z-index: 2;
     animation-name: cloudFlash;
@@ -445,64 +440,23 @@
     opacity: 0; */
 }
 
-#test-note {
-    top: 325px;
-}
-#test-note2 {
-    top: 365px;
-}
-
 .note-marked {
     background-color: green;
 }
 
-.tapper {
-    position: absolute;
-    top: 397px;
-    /* ^subtracted 3px to account for border */
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 90px;
-    height: 20px;
-    background-color: rgba(168,0,93,0.2);
-    margin: auto;
-    border: 3px solid rgb(168, 0, 93);
-    border-left: 16px solid rgb(168, 0, 93);
-    border-right: 16px solid rgb(168, 0, 93);
-    z-index: 1;
-}
 
-.note-leaving-right {
-    top: 400px;
-    animation-name: note-leave-right;
-    animation-duration: 0.4s;
-    left: 500px;
-    z-index: 2;
-    background-color: rgb(255, 231, 188);
-}
-
-@keyframes note-leave-right {
-    0%      {opacity: 1; top: 400px; left: 50%}
-    100%    {opacity: 0.5; top: 200px; left: 500px}
-}
-
-.note-leaving-left {
-    top: 400px;
-    animation-name: note-leave-left;
-    animation-duration: 0.4s;
-    left: -500px;
-    z-index: 2;
-    background-color: rgb(255, 231, 188);
-}
-
-@keyframes note-leave-left {
-    0%      {opacity: 1; top: 400px; left: 50%}
-    100%    {opacity: 0.5; top: 200px; left: -500px}
-}
 /* @keyframes note-leave-left {
     0%      {opacity: 1; transform: translate(0px, 0px)}
     100%    {opacity: 0.5; transform: translate(-500px, -500px)}
 } */
+
+.on-fire {
+    box-shadow:
+        /* 30px 0px 40px orange, */
+        30px 0px 40px orange,
+        /* -30px 0px 40px orange, */
+        -30px 0px 40px orange;
+}
 
 .hidden {
     display: none;

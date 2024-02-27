@@ -2,6 +2,7 @@ class Animator {
     constructor(
         masterInfo,
         noteWriter,
+        backgroundAnimator,
         addNote,
         makeTail,
         triggerMissedNote,
@@ -20,6 +21,7 @@ class Animator {
         this.makeTail = makeTail;
         this.triggerMissedNote = triggerMissedNote;
         this.noteWriter = noteWriter;
+        this.backgroundAnimator = backgroundAnimator;
         this.time = 0;
         this.animating = false;
         this.arrays = [];
@@ -30,15 +32,7 @@ class Animator {
 
         this.notesHit = 0;
         this.notesMissed = 0;
-
-        // for animated background
-        this.arrayNow = [100, 100, 100, 100];
-        this.colors = [
-            [[150, 1], [150, -1], [150, 1]],
-            [[150, -1], [150, 1], [150, -1]],
-            [[150, 1], [150, -1], [150, 1]],
-            [[150, -1], [150, 1], [150,-1]]
-        ];
+        this.arrayNow = [1, 1, 1, 1];
     }
 
     setNotesPerSecond(val) {
@@ -83,69 +77,6 @@ class Animator {
             algorithm,
         } = params;
 
-        // animated background
-        if (!document.mobile) {
-            const arr = this.arrayNow;
-            let total = 0;
-            arr.forEach((val) => {
-                total += val;
-            });
-            const fractions = arr.map((val) => {
-                return (1.0 * val) / total;
-            });
-
-            const a = fractions[0] * 60;
-            const b = a + 10;
-            const c = b + (fractions[1] * 60);
-            const d = c + 10;
-            const e = d + (fractions[2] * 60);
-            const f = e + 10;
-
-            this.colors.forEach((row) => {
-                return row.map((col) => {
-                    if (Math.random() > 0.8) {
-                        col[1] = col[1] === 1 ? -1 : 1
-                    }
-                    if (col[0] > 250 && col[1] === 1) {
-                        col[1] = -1;
-                    }
-                    if (col[0] < 5 && col[1] === -1) {
-                        col[1] = 1;
-                    }
-                    if (Math.random() > 0.9) {
-                        col[0] += col[1] * Math.floor(5 * Math.random());
-                    }
-                });
-            });
-        
-
-            const colsToUse = this.colors.map((row) => {
-                return row.map((col) => {
-                    return col[0];
-                }).join(",");
-            });
-            
-            ["background-left", "fog-top-left", "fog-gradient-left"].forEach((eleId) => {
-                document.getElementById(eleId).style.background = `linear-gradient(
-                    to right,
-                    rgba(${colsToUse[0]},0.95) ${a}%,
-                    rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
-                    rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
-                    rgba(${colsToUse[3]},0.95) ${f}%
-                )`
-            });
-            ["background-right", "fog-top-right", "fog-gradient-right"].forEach((eleId) => {
-                document.getElementById(eleId).style.background = `linear-gradient(
-                    to left,
-                    rgba(${colsToUse[0]},0.95) ${a}%,
-                    rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
-                    rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
-                    rgba(${colsToUse[3]},0.95) ${f}%
-                )`;
-            });
-        }
-        // end animated background
-
         const newTime = performance.now();
         const dt = newTime - this.time;
         this.time = newTime;
@@ -164,23 +95,25 @@ class Animator {
         this.arrays[3].push(val3);
 
         // for animated background
-        if (!document.mobile) {
-
-            const upper = 1.05;
-            const lower = 0.95;
-            setTimeout(() => {
-                this.arrayNow = [
-                    val0 - this.arrayNow[0] > 0 ? this.arrayNow[0] * upper : this.arrayNow[0] * lower,
-                    val1 - this.arrayNow[1] > 0 ? this.arrayNow[1] * upper : this.arrayNow[1] * lower,
-                    val2 - this.arrayNow[2] > 0 ? this.arrayNow[2] * upper : this.arrayNow[2] * lower,
-                    val3 - this.arrayNow[3] > 0 ? this.arrayNow[3] * upper : this.arrayNow[3] * lower
-                    // val0 - this.arrayNow[0] > 0 ? val0 - this.arrayNow[0]: this.arrayNow[0],
-                    // val1 - this.arrayNow[1] > 0 ? val1 - this.arrayNow[1]: this.arrayNow[1],
-                    // val2 - this.arrayNow[2] > 0 ? val2 - this.arrayNow[2]: this.arrayNow[2],
-                    // val3 - this.arrayNow[3] > 0 ? val3 - this.arrayNow[3]: this.arrayNow[3]
-                ];
-            }, this.masterInfo.songDelay);
-        }
+        const upper = 1.5;
+        const lower = 0.5;
+        const valsForBackground = [
+            val0,
+            val1,
+            val2,
+            val3
+            // val0 - this.arrayNow[0] > 0 ? this.arrayNow[0] * upper : this.arrayNow[0] * lower,
+            // val1 - this.arrayNow[1] > 0 ? this.arrayNow[1] * upper : this.arrayNow[1] * lower,
+            // val2 - this.arrayNow[2] > 0 ? this.arrayNow[2] * upper : this.arrayNow[2] * lower,
+            // val3 - this.arrayNow[3] > 0 ? this.arrayNow[3] * upper : this.arrayNow[3] * lower
+            // val0 - this.arrayNow[0] > 0 ? val0 - this.arrayNow[0]: this.arrayNow[0],
+            // val1 - this.arrayNow[1] > 0 ? val1 - this.arrayNow[1]: this.arrayNow[1],
+            // val2 - this.arrayNow[2] > 0 ? val2 - this.arrayNow[2]: this.arrayNow[2],
+            // val3 - this.arrayNow[3] > 0 ? val3 - this.arrayNow[3]: this.arrayNow[3]
+        ];
+        this.backgroundAnimator.animateBackground(valsForBackground);
+        
+        
 
         this.times.push(this.time);
         while (this.times[0] < this.time - this.masterInfo.songDelay) {
@@ -232,8 +165,8 @@ class Animator {
 }
 
 function updateMeter(notesHit, notesMissed) {
-    const rotation = Math.floor(90 * (notesHit / (notesHit + notesMissed)));
-    document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
+    // const rotation = Math.floor(90 * (notesHit / (notesHit + notesMissed)));
+    // document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
 }
 
 function moveNotes(
@@ -275,6 +208,10 @@ function moveNotes(
         note.note.style.top = `${newTop}px`;
         note.position = newTop;
 
+        // if (newTop > masterInfo.travelLength) {
+        //     animator.stopAnimation();
+        // }
+
         // move tail
         if (note.tail) {
             const newTailTop = note.tail.position + movement;
@@ -282,9 +219,10 @@ function moveNotes(
             note.tail.position = newTailTop;
         }
 
-        if (newTop > theTargetBounds.top && newTop < theTargetBounds.bottom) {
+        if (!note.target && newTop > theTargetBounds.top && newTop < theTargetBounds.bottom) {
             theTargets[note.slideId].add(note);
             note.target = true;
+            
         }
         if (newTop > theTargetBounds.bottom && note.target === true) {
             note.target = false;

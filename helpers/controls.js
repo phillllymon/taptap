@@ -26,8 +26,23 @@ function activateSongSelection(
 ) {
     const songSelector = document.getElementById("select-song");
     setButtonClick("choose-button", () => {
-        showModal("choose");
+        if (document.isFullscreen) {
+            try {
+                document.exitFullscreen().then(() => {
+                    document.wantFullscreenReturn = true;
+                    showModal("choose");
+                });
+            } catch (err) {
+                showModal("choose");
+            }
+        } else {
+            showModal("choose");
+        }
     });
+    
+    // setButtonClick("choose-button", () => {
+    //     showModal("choose");
+    // });
     
     songSelector.addEventListener("change", () => {
         const newValue = songSelector.value;
@@ -40,6 +55,11 @@ function activateSongSelection(
         hideModal("choose");
         killAllNotes();
         resetAutoAdjustment();
+        if (document.wantFullscreenReturn) {
+            document.getElementById("game-container").requestFullscreen().then(() => {
+                document.wantFullscreenReturn = false;
+            });
+        }
     });
     
     document.getElementById("file-input").addEventListener("change", (e) => {
@@ -62,6 +82,11 @@ function activateSongSelection(
             
             setCurrentSong(e.target.files[0].name);
             document.getElementById("song-label").innerText = currentSong;
+            if (document.wantFullscreenReturn) {
+                document.getElementById("game-container").requestFullscreen().then(() => {
+                    document.wantFullScreenReturn = false;
+                });
+            }
         };
         reader.readAsBinaryString(file);
     });
@@ -93,44 +118,33 @@ function activateSongControls(thePlayer, runTheAnimation, stopTheAnimation, kill
 function selectSlides(n, setNumSlides) {
     const slideA = document.getElementById("slide-a");
     const slideB = document.getElementById("slide-b");
-    const playArea = document.getElementById("play-area");
-    const gameArea = document.getElementById("game-container");
-    const slides = document.getElementById("slides");
+    const slidesContainer = document.getElementById("slides-container");
+    
     if (n === 2) {
+        
         setNumSlides(2);
         slideA.classList.add("hidden");
         slideB.classList.add("hidden");
 
-        playArea.classList.remove("three-wide-area");
-        playArea.classList.remove("four-wide-area");
-        gameArea.classList.remove("three-wide-area");
-        gameArea.classList.remove("four-wide-area");
-        slides.classList.remove("three-wide-slides");
-        slides.classList.remove("four-wide-slides");
+        slidesContainer.classList.remove("three-wide-slides-container");
+        slidesContainer.classList.remove("four-wide-slides-container");
     }
     if (n === 3) {
         setNumSlides(3);
+        document.getElementById("slides-container").classList.add("three-wide-slides-container");
         slideA.classList.remove("hidden");
         slideB.classList.add("hidden");
 
-        playArea.classList.add("three-wide-area");
-        playArea.classList.remove("four-wide-area");
-        gameArea.classList.add("three-wide-area");
-        gameArea.classList.remove("four-wide-area");
-        slides.classList.add("three-wide-slides");
-        slides.classList.remove("four-wide-slides");
+        slidesContainer.classList.add("three-wide-slides-container");
+        slidesContainer.classList.remove("four-wide-slides-container");
     }
     if (n === 4) {
         setNumSlides(4);
         slideA.classList.remove("hidden");
         slideB.classList.remove("hidden");
 
-        playArea.classList.remove("three-wide-area");
-        playArea.classList.add("four-wide-area");
-        gameArea.classList.remove("three-wide-area");
-        gameArea.classList.add("four-wide-area");
-        slides.classList.remove("three-wide-slides");
-        slides.classList.add("four-wide-slides");
+        slidesContainer.classList.remove("three-wide-slides-container");
+        slidesContainer.classList.add("four-wide-slides-container");
     }
 }
 
@@ -176,7 +190,57 @@ function activateLevelSelector(theAnimator) {
     addElementClass("level-2", "level-selected");
 }
 
+function activateMenu() {
+    const showButton = document.getElementById("show-menu");
+    const theMenu = document.getElementById("main-menu");
+    setButtonClick("show-menu", () => {
+        theMenu.classList.add("slide-left");
+        theMenu.classList.remove("slide-right");
+        showButton.classList.add("hidden");
+    });
+    setButtonClick("hide-menu", () => {
+        theMenu.classList.add("slide-right");
+        theMenu.classList.remove("slide-left");
+        showButton.classList.remove("hidden");
+    });
+}
+
 function activateSettings(tapperKeyCodes, setNewKeyCode) {
+    setButtonClick("set-full-screen", () => {
+        document.getElementById("game-container").classList.add("full-screen");
+        document.getElementById("play-area").classList.add("full-screen");
+        document.getElementById("game-container").requestFullscreen();
+        
+        document.getElementById("tapper-left").classList.add("tapper-full-screen");
+        document.getElementById("tapper-a").classList.add("tapper-full-screen");
+        document.getElementById("tapper-b").classList.add("tapper-full-screen");
+        document.getElementById("tapper-right").classList.add("tapper-full-screen");
+
+        document.getElementById("cloud-left").classList.add("cloud-full-screen");
+        document.getElementById("cloud-a").classList.add("cloud-full-screen");
+        document.getElementById("cloud-b").classList.add("cloud-full-screen");
+        document.getElementById("cloud-right").classList.add("cloud-full-screen");
+
+        setTimeout(() => {
+
+            const viewH = document.getElementById("game-container").clientHeight;
+            const viewW = document.getElementById("game-container").clientWidth;
+            console.log("height " + viewH);
+            let min = Math.min(viewW, viewH);
+
+            masterInfo.vMin = min;
+
+            masterInfo.slideLength = 1.5 * min;
+            masterInfo.travelLength = 1.365 * min * 1.003; // correction factor based on experimentation
+            const newNoteSpeed = 1.0 * masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 );
+            masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
+            masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
+            masterInfo.noteSpeed = newNoteSpeed;
+            masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
+            masterInfo.slideLength = masterInfo.travelLength * 1.3;
+        }, 500);
+
+    });
     setButtonClick("settings", () => {
         showModal("settings");
     });

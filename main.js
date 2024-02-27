@@ -7,18 +7,29 @@ const twangs = [
 
 const {
     songDelay,
-    targetBounds,
     allSlides,
+    targetBoundSizes,
     minNoteGap,
     maxTailLength
 } = gameDataConst; // from data.js
 
-let {
-    travelLength,
-    slideLength
-} = gameDataLet; // from data.js
+// let viewWidth = document.getElementById("game-container").clientWidth;
+// let viewHeight = document.getElementById("game-container").clientHeight;
+// console.log(viewWidth);
+// console.log(viewHeight);
+let viewWidth = document.body.clientWidth;
+let viewHeight = document.body.clientHeight;
+let vMin = Math.min(viewWidth, viewHeight);
+
+let slideLength = 1.5 * vMin;
+let travelLength = 1.365 * vMin;
+travelLength *= 1.006; // correction factor based on experimentation
 
 let noteSpeed = 1.0 * (travelLength / ( (songDelay / 1000.0) / 2 ));
+const targetBounds = {
+    top: travelLength - (targetBoundSizes.top * travelLength),
+    bottom: travelLength + (targetBoundSizes.bottom * travelLength)
+}
 
 handleMobile();
 
@@ -57,7 +68,7 @@ let autoCalibrating = true;
 let sustainedNotes = true;
 
 let autoAdjustments = [];
-let autoAdjustment = -10;
+let autoAdjustment = -0.05 * travelLength;
 
 let streak = 0;
 
@@ -65,6 +76,7 @@ let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
 
 const masterInfo = {
+    vMin,
     songDelay,
     targetBounds,
     allSlides,
@@ -77,16 +89,21 @@ const masterInfo = {
     mostRecentNotesOrTails,
     targets,
     targetTails,
-    sustainedNotes
+    sustainedNotes,
+    autoAdjustment
 };
 
 // ----------------------------------------- HELPERS
 const noteWriter = new NoteWriter(
     masterInfo
 );
+const backgroundAnimator = new BackgroundAnimator(
+    masterInfo
+);
 const animator = new Animator(
     masterInfo,
     noteWriter,
+    backgroundAnimator,
     addNote,
     makeTail,
     triggerMissedNote
@@ -98,7 +115,8 @@ const player = new Player(
     () => {
         animator.stopAnimation();
         showSongControlButton("button-restart");
-        autoAdjustment = autoCalibrating ? 10 : 0;
+        autoAdjustment = autoCalibrating ? -0.05 * travelLength : 0;
+        masterInfo.autoAdjustment = autoAdjustment;
     }
 );
 
@@ -129,6 +147,19 @@ activateSongSelection(
         currentSong = newSong;
     }
 );
+activateMenu();
+
+
+// MISC - TODO: clean this up
+document.isFullscreen = false;
+document.wantFullscreenReturn = false;
+document.addEventListener("fullscreenchange", (e) => {
+    if (document.isFullscreen) {
+        document.isFullscreen = false;
+    } else {
+        document.isFullscreen = true;
+    }
+});
 
 
 
@@ -162,7 +193,11 @@ document.addEventListener("keydown", (e) => {
     if(e.code === tapperKeys[1]) {
         e.preventDefault();
         if (!targetTails["slide-a"]) {
-            activateTapper("tapper-a", "slide-a", "note-leaving-left");
+            if (animator.slides.length === 3) {
+                activateTapper("tapper-a", "slide-a", Math.random() > 0.5 ? "note-leaving-right" : "note-leaving-left");
+            } else {
+                activateTapper("tapper-a", "slide-a", "note-leaving-left");
+            }
         }
     }
     if(e.code === tapperKeys[2]) {
@@ -232,12 +267,14 @@ function activateTapper(tapperId, slideId, leavingClass) {
         }
     });
     
-    if (autoCalibrating) {    
-        if (numNotes < 2) {
-            if (Math.abs(closest) < 50) {
+    if (autoCalibrating) {
+        const proximity = 0.1 * masterInfo.travelLength;
+        if (numNotes === 1) {
+            if (Math.abs(closest) < proximity) {
                 autoAdjustment += 1.0 * (closest / (10 * notes.size));
-                autoAdjustment = Math.max(autoAdjustment, -45);
-                autoAdjustment = Math.min(autoAdjustment, 20);
+                autoAdjustment = Math.max(autoAdjustment, -1 * proximity);
+                autoAdjustment = Math.min(autoAdjustment, 1.0 * proximity / 2);
+                masterInfo.autoAdjustment = autoAdjustment;
             }
         }
     }
@@ -271,7 +308,8 @@ function activateTapper(tapperId, slideId, leavingClass) {
 }
 
 function resetAutoAdjustment() {
-    autoAdjustment = 0;
+    autoAdjustment = 10;
+    masterInfo.autoAdjustment = autoAdjustment;
 }
 
 function makeTail(slideId, parentNote) {
@@ -442,9 +480,9 @@ function triggerMissedNote() {
 
 function showSongControlButton(buttonId) {
     ["button-play", "button-pause", "button-restart"].forEach((id) => {
-        addElementClass(id, "hidden");
+        addElementClass(id, "disabled-button");
     });
-    removeElementClass(buttonId, "hidden");
+    removeElementClass(buttonId, "disabled-button");
 }
 
 function showModal(modal) {
@@ -464,6 +502,7 @@ function handleMobile() {
         setupMobile();
     }
 }
+
 function setupMobile() {
     document.mobile = true;
     // add mobile style
@@ -473,21 +512,23 @@ function setupMobile() {
     link.href = "./style/styleMobile.css";
     document.head.appendChild(link);
     
-    showModal("full-screen");
+    // showModal("full-screen");
 
-    setButtonClick("enter-game", () => {
-        document.getElementById("enter-game").classList.add("hidden");
-        document.getElementById("full-screen-question").classList.remove("hidden");
-        setButtonClick("full-screen-button", () => {
-            console.log("FULL SCREEN REQUESTED");
-            document.getElementById("game-container").requestFullscreen();
-            hideModal("full-screen");
-        });
-        setButtonClick("small-screen-button", () => {
-            console.log("FULL SCREEN REQUESTED");
-            hideModal("full-screen");
-        });
-    });
+    // setButtonClick("enter-game", () => {
+    //     document.getElementById("enter-game").classList.add("hidden");
+    //     document.getElementById("full-screen-question").classList.remove("hidden");
+    //     setButtonClick("full-screen-button", () => {
+    //         console.log("FULL SCREEN REQUESTED");
+    //         document.getElementById("game-container").requestFullscreen();
+    //         hideModal("full-screen");
+    //     });
+    //     setButtonClick("small-screen-button", () => {
+    //         console.log("FULL SCREEN REQUESTED");
+    //         hideModal("full-screen");
+    //     });
+    // });
+
+    
     
     setTimeout(() => {
         const viewWidth = document.getElementById("game-container").clientWidth;
