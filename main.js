@@ -63,9 +63,17 @@ const tapperKeys = [
     "KeyK"
 ];
 
+const activeTappers = {
+    "tapper-left": false,
+    "tapper-a": false,
+    "tapper-b": false,
+    "tapper-right": false
+}
+
 let algorithm = "A";
 let autoCalibrating = true;
 let sustainedNotes = true;
+let animatedBackground = true;
 
 let autoAdjustments = [];
 let autoAdjustment = -0.05 * travelLength;
@@ -76,21 +84,23 @@ let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
 
 const masterInfo = {
-    vMin,
-    songDelay,
-    targetBounds,
+    algorithm,
     allSlides,
-    minNoteGap,
+    animatedBackground,
+    autoAdjustment,
     maxTailLength,
-    travelLength,
-    slideLength,
-    noteSpeed,
-    notes,
+    minNoteGap,
     mostRecentNotesOrTails,
-    targets,
-    targetTails,
+    notes,
+    noteSpeed,
+    slideLength,
+    songDelay,
     sustainedNotes,
-    autoAdjustment
+    targets,
+    targetBounds,
+    targetTails,
+    travelLength,
+    vMin
 };
 
 // ----------------------------------------- HELPERS
@@ -131,8 +141,7 @@ activateSlidesSelector((newVal) => {
 activateCalibration();
 activateSongControls(
     player,
-    () => animator.runAnimation({ player, algorithm }),
-    () => animator.stopAnimation(),
+    animator,
     killAllNotes
 );
 activateSongSelection(
@@ -149,8 +158,6 @@ activateSongSelection(
 );
 activateMenu();
 
-
-// MISC - TODO: clean this up
 document.isFullscreen = false;
 document.wantFullscreenReturn = false;
 document.addEventListener("fullscreenchange", (e) => {
@@ -181,18 +188,21 @@ document.addEventListener("keypress", (e) => {
         document.getElementById("save-settings").disabled = false;
         waitingForKey = false;
     }
+    if (e.code === "Space") {
+        masterInfo.spaceFunction();
+    }
 });
 
 document.addEventListener("keydown", (e) => {
     if(e.code === tapperKeys[0]) {
         e.preventDefault();
-        if (!targetTails["slide-left"]) {
+        if (!targetTails["slide-left"] && !activeTappers["tapper-left"]) {
             activateTapper("tapper-left", "slide-left", "note-leaving-left");
         }
     }
     if(e.code === tapperKeys[1]) {
         e.preventDefault();
-        if (!targetTails["slide-a"]) {
+        if (!targetTails["slide-a"] && !activeTappers["tapper-a"]) {
             if (animator.slides.length === 3) {
                 activateTapper("tapper-a", "slide-a", Math.random() > 0.5 ? "note-leaving-right" : "note-leaving-left");
             } else {
@@ -202,13 +212,13 @@ document.addEventListener("keydown", (e) => {
     }
     if(e.code === tapperKeys[2]) {
         e.preventDefault();
-        if (!targetTails["slide-b"]) {
+        if (!targetTails["slide-b"] && !activeTappers["tapper-b"]) {
             activateTapper("tapper-b", "slide-b", "note-leaving-right");
         }
     }
     if(e.code === tapperKeys[3]) {
         e.preventDefault();
-        if (!targetTails["slide-right"]) {
+        if (!targetTails["slide-right"] && !activeTappers["tapper-right"]) {
             activateTapper("tapper-right", "slide-right", "note-leaving-right");
         }
     }
@@ -231,6 +241,7 @@ document.addEventListener("keyup", (e) => {
 
 function deactivateTapper(tapperId) {
     document.getElementById(tapperId).style.backgroundColor = "rgba(168,0,93,0.2)";
+    activeTappers[tapperId] = false;
     const slideIds = {
         "tapper-left": "slide-left",
         "tapper-a": "slide-a",
@@ -250,7 +261,7 @@ function deactivateTapper(tapperId) {
 }
 
 function activateTapper(tapperId, slideId, leavingClass) {
-    
+    activeTappers[tapperId] = true;
     let closest = 500;
     let numNotes = 0;
     let target = null;

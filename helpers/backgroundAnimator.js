@@ -12,6 +12,9 @@ class BackgroundAnimator {
 
     // newVals is CURRENT vals - we'll store it for later and use the older one
     animateBackground(newVals) {
+        if (!this.masterInfo.animatedBackground) {
+            return;
+        }
         this.addValsArrayToQueue(newVals);
         
         // const targetTime = performance.now() - this.masterInfo.songDelay + masterInfo.autoAdjustment;

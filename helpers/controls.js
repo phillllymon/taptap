@@ -96,23 +96,45 @@ function activateSongSelection(
     });
 }
 
-function activateSongControls(thePlayer, runTheAnimation, stopTheAnimation, killNotes) {
+function activateSongControls(thePlayer, theAnimator, killNotes) {
     setButtonClick("button-play", () => {
-        thePlayer.start();
-        runTheAnimation();
-        showSongControlButton("button-pause");
+        playFunction(thePlayer, theAnimator);
     });
     setButtonClick("button-pause", () => {
-        thePlayer.pause();
-        stopTheAnimation();
-        showSongControlButton("button-play");
+        pauseFunction(thePlayer, theAnimator);
     });
     setButtonClick("button-restart", () => {
-        thePlayer.restart();
-        stopTheAnimation();
-        showSongControlButton("button-play");
-        killNotes();
+        restartFunction(thePlayer, theAnimator, killNotes)
     });
+    masterInfo.spaceFunction = () => {
+        playFunction(thePlayer, theAnimator);
+    };
+}
+
+function playFunction(thePlayer, theAnimator) {
+    thePlayer.start();
+    theAnimator.runAnimation({ player: thePlayer, algorithm: masterInfo.algorithm });
+    showSongControlButton("button-pause");
+    masterInfo.spaceFunction = () => {
+        pauseFunction(thePlayer, theAnimator);
+    };
+}
+function pauseFunction(thePlayer, theAnimator) {
+    thePlayer.pause();
+    theAnimator.stopAnimation();
+    showSongControlButton("button-play");
+    masterInfo.spaceFunction = () => {
+        playFunction(thePlayer, theAnimator);
+    };
+}
+function restartFunction(thePlayer, theAnimator, killNotes) {
+    thePlayer.restart();
+    theAnimator.stopAnimation();
+    showSongControlButton("button-play");
+    killNotes();
+    masterInfo.spaceFunction = () => {
+        playFunction(thePlayer, theAnimator);
+    }
 }
 
 function selectSlides(n, setNumSlides) {
@@ -225,7 +247,6 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
 
             const viewH = document.getElementById("game-container").clientHeight;
             const viewW = document.getElementById("game-container").clientWidth;
-            console.log("height " + viewH);
             let min = Math.min(viewW, viewH);
 
             masterInfo.vMin = min;
@@ -279,6 +300,17 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
             masterInfo.sustainedNotes = true;
             setElementText("sustained", "sustained notes ON");
             setElementText("sustained-toggle", "Turn off sustained notes");
+        }
+    });
+    setButtonClick("toggle-animate", () => {
+        if (masterInfo.animatedBackground) {
+            masterInfo.animatedBackground = false;
+            setElementText("animated", "animated background OFF");
+            setElementText("toggle-animate", "Turn on animated background");
+        } else {
+            masterInfo.animatedBackground = true;
+            setElementText("animated", "animated background ON");
+            setElementText("toggle-animate", "Turn off animated background");
         }
     });
 }

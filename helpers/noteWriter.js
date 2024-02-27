@@ -156,6 +156,8 @@ class NoteWriter {
         const leg = Math.floor(twoSecondLeg / notesPerSecond);
 
         // returned from this function to be used for writeTails
+        const tailLeg = Math.floor(1.0 * twoSecondLeg / 5);
+
         const noteVals = [];
 
         for (let i = 0; i < arrays.length; i++) {
@@ -163,9 +165,11 @@ class NoteWriter {
 
             const noteVal = arr[midIdx];
             const midVal = noteVal - arr[midIdx - 1];
+
+            const legToUse = Math.max(leg, tailLeg);
             
-            const beforeIdx = midIdx - leg;
-            const afterIdx = midIdx + leg;
+            const beforeIdx = midIdx - legToUse;
+            const afterIdx = midIdx + legToUse;
 
             let overallBeforeMax = 0;
             let overallBeforeMin = 255;
@@ -176,14 +180,22 @@ class NoteWriter {
             const beforeArr = arr.slice(beforeIdx, midIdx);
             const beforeMax = Math.max(...beforeArr.map((val, n) => {
                 
-                if (val < overallBeforeMin) {
-                    overallBeforeMin = val;
-                }
-                if (val > overallBeforeMax) {
-                    overallBeforeMax = val;
+                // for tails only get values before 400ms
+                if (n <= tailLeg) {
+                    if (val < overallBeforeMin) {
+                        overallBeforeMin = val;
+                    }
+                    if (val > overallBeforeMax) {
+                        overallBeforeMax = val;
+                    }
                 }
 
-                return n === 0 ? 0 : val - beforeArr[n - 1];
+                // for notes only get values before leg
+                if (n <= leg) {
+                    return n === 0 ? 0 : val - beforeArr[n - 1];
+                } else {
+                    return 0;
+                }
             }));
             const afterArr = arr.slice(midIdx + 1, afterIdx);
             const afterMax = Math.max(...afterArr.map((val, n) => {
