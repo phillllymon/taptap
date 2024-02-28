@@ -67,7 +67,7 @@
 }
 
 #vertical {
-    height: 7vw;
+    height: 7.5vw;
     border-left: 0.75vw solid gray;
 }
 
@@ -93,11 +93,27 @@
 }
 #fog-mobile {
     position: absolute;
-    height: 30%;
+    height: 40%;
     width: 100%;
     top: 0px;
     left: 0px;
     /* background-color: red; */
+}
+#fog-mobile-top {
+    position: absolute;
+    height: 16%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: red;
+}
+#fog-mobile-gradient {
+    position: absolute;
+    height: 84%;
+    width: 100%;
+    top: 16%;
+    left: 0px;
+    background-color: green;
 }
 
 .rock-label {
@@ -114,5 +130,9 @@
 }
 
 .slides {
+    opacity: 1;
+}
+
+.solid {
     opacity: 1;
 }

@@ -53,7 +53,8 @@ class BackgroundAnimator {
                 to right,
                 rgba(${colsToUse[1]}, 0) 0%,
                 rgba(${colsToUse[1]}, 1) 100%)`;
-            document.getElementById("fog-mobile").style.background = `linear-gradient(
+            document.getElementById("fog-mobile-top").style.backgroundColor = `rgb(${colsToUse[0]})`;
+            document.getElementById("fog-mobile-gradient").style.background = `linear-gradient(
                 to top,
                 rgba(${colsToUse[0]}, 0) 0%,
                 rgba(${colsToUse[0]}, 1) 100%)`;
@@ -65,8 +66,8 @@ class BackgroundAnimator {
                 total += val;
             });
             const percent = 100.0 * valsToUse[3] / total;
-            left.style.width = `${percent}%`;
-            right.style.width = `${percent}%`;
+            left.style.width = `${10 + percent}%`;
+            right.style.width = `${10 + percent}%`;
 
         } else {
             if (valsToUse) {
@@ -205,9 +206,9 @@ class BackgroundAnimator {
             to right,
             rgba(${colsToUse[1]}, 0) 0%,
             rgba(${colsToUse[1]}, 1) 100%)`;
-        const fogMobile = document.getElementById("fog-mobile");
-        fogMobile.classList.remove("hidden");
-        fogMobile.style.background = `linear-gradient(
+        document.getElementById("fog-mobile").classList.remove("hidden");
+        document.getElementById("fog-mobile-top").style.backgroundColor = `rgb(${colsToUse[0]})`;
+        document.getElementById("fog-mobile-gradient").style.background = `linear-gradient(
             to top,
             rgba(${colsToUse[0]}, 0) 0%,
             rgba(${colsToUse[0]}, 1) 100%)`;

@@ -80,11 +80,6 @@ class Animator {
         const newTime = performance.now();
         const dt = newTime - this.time;
         this.time = newTime;
-
-        if (Math.random() > 0.9) {
-
-            document.getElementById("song-label").innerText = Math.floor(dt * 10) / 10;
-        }
         
         player.calibrateLag();
 
@@ -164,6 +159,15 @@ class Animator {
         updateMeter(this.notesHit, this.notesMissed);
 
         if (this.animating) {
+            // TEST ONLY
+            // const timeElapsed = performance.now() - newTime;
+            // const waitTime = 15 - timeElapsed;
+            // setTimeout(() => {
+            //     this.animate(params);
+            // }, waitTime);
+            // END TEST
+
+            // faithful below
             requestAnimationFrame(() => this.animate(params));
         }
     }
