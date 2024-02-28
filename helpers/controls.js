@@ -1,4 +1,5 @@
 function activateCalibration() {
+    const calibrateButton = document.getElementById("auto-calibrate");
     setButtonClick("auto-calibrate", () => {
         if (autoCalibrating) {
             autoCalibrating = false;
