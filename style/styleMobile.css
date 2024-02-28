@@ -102,9 +102,15 @@
 
 .rock-label {
     font-family: sans-serif;
-    font-size: 16vw;
+    font-size: 12vw;
     opacity: 0.5;
     font-weight: bold;
+    animation-name: youRock;
+    animation-duration: 500ms;
+}
+@keyframes youRock {
+    0%    {font-size: 0px}
+    100%    {font-size: 12vw}
 }
 
 .slides {
