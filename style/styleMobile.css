@@ -73,4 +73,36 @@
 
 #song-label {
     font-size: 5vw;
+    text-shadow: 0px 0px 3vw white;
+}
+
+#background-left {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    top: 0px;
+    left: 0px;
+}
+#background-right {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    top: 0px;
+    left: 100%;
+    transform: translate(-100%, 0px);
+}
+#fog-mobile {
+    position: absolute;
+    height: 30%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    /* background-color: red; */
+}
+
+.rock-label {
+    font-family: sans-serif;
+    font-size: 20vw;
+    opacity: 0.6;
+    font-weight: bold;
 }

@@ -209,7 +209,8 @@ function moveNotes(
         note.position = newTop;
 
         // if (newTop > masterInfo.travelLength) {
-        //     animator.stopAnimation();
+        //     notes.delete(note);
+
         // }
 
         // move tail

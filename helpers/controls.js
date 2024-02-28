@@ -264,7 +264,7 @@ function activateSettings(tapperKeyCodes, setNewKeyCode) {
                 masterInfo.vMin = min;
     
                 masterInfo.slideLength = 1.5 * min;
-                masterInfo.travelLength = 1.365 * min * 1.003; // correction factor based on experimentation
+                masterInfo.travelLength = 1.365 * min;
                 const newNoteSpeed = 1.0 * masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 );
                 masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
                 masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;

@@ -23,7 +23,6 @@ let vMin = Math.min(viewWidth, viewHeight);
 
 let slideLength = 1.5 * vMin;
 let travelLength = 1.365 * vMin;
-travelLength *= 1.006; // correction factor based on experimentation
 
 let noteSpeed = 1.0 * (travelLength / ( (songDelay / 1000.0) / 2 ));
 const targetBounds = {
@@ -535,35 +534,18 @@ function setupMobile() {
     document.head.appendChild(link);
 
     [
-        "background-left",
-        "background-right",
         "fog-top-left",
         "fog-top-right",
         "fog-gradient-left",
         "fog-gradient-right"
     ].forEach((eleId) => {
-        document.getElementById(eleId).classList.add("hidden");
+        document.getElementById(eleId).remove();
     });
     
-    // showModal("full-screen");
-
-    // setButtonClick("enter-game", () => {
-    //     document.getElementById("enter-game").classList.add("hidden");
-    //     document.getElementById("full-screen-question").classList.remove("hidden");
-    //     setButtonClick("full-screen-button", () => {
-    //         console.log("FULL SCREEN REQUESTED");
-    //         document.getElementById("game-container").requestFullscreen();
-    //         hideModal("full-screen");
-    //     });
-    //     setButtonClick("small-screen-button", () => {
-    //         console.log("FULL SCREEN REQUESTED");
-    //         hideModal("full-screen");
-    //     });
-    // });
-
-    
-    
     setTimeout(() => {
+        backgroundAnimator.initializeMobileBackground();
+        document.getElementById("background-css").remove();
+
         const viewHeight = document.getElementById("game-container").clientHeight;
         masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
 
