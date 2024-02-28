@@ -81,7 +81,10 @@ class Animator {
         const dt = newTime - this.time;
         this.time = newTime;
 
-        console.log(dt);
+        if (Math.random() > 0.9) {
+
+            document.getElementById("song-label").innerText = Math.floor(dt * 10) / 10;
+        }
         
         player.calibrateLag();
 
