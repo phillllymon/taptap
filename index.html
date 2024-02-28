@@ -187,10 +187,24 @@
                 </div>
                 <div id="rock-label"></div>
                 <div id="song-label" class="song-label"></div>
+                <!-- <div id="full-screen">&#8689;</div> -->
+                <!-- <div id="full-screen">&#8690;</div> -->
+                <div id="outer-menu">
+                    <div id="full-screen" class="outer-menu-item">
+                        <div>
+                            <div id="full-top-left" class="full-piece">&#8689;</div>
+                            <div id="full-top-right" class="full-piece">&#8689;</div>
+                        </div>
+                        <div>
+                            <div id="full-bottom-left" class="full-piece">&#8689;</div>
+                            <div id="full-bottom-right" class="full-piece">&#8689;</div>
+                        </div>
+                    </div>
+                    <div id="show-menu"  class="outer-menu-item">☰</div>
+                </div>
+                
                 <div id="main-menu" class="menu">
                     <div id="hide-menu" class="menu-button">Hide &#8680;</div>
-                    <br>
-                    <div id="set-full-screen" class="menu-button">Full screen</div>
                     <br>
                     <div id="settings" class="menu-button">Settings</div>
                     <br>
@@ -207,20 +221,10 @@
                     <div id="slides-2" class="level">2</div>
                     <div id="slides-3" class="level">3</div>
                     <div id="slides-4" class="level">4</div>
-                    <div id="show-menu"><center>☰&nbsp; </center></div>
                 </div>
-                <!-- <div id="rock-meter" class="rock-meter">
-                    <div id="meter-green" class="meter-color"></div>
-                    <div id="meter-yellow" class="meter-color"></div>
-                    <div id="meter-red" class="meter-color"></div>
-                    <div id="meter-needle"></div>
-                </div> -->
                 <div id="play-controls">
-                    <!-- <div id="button-play" class="control-button">&#9654;&#65039;</div> -->
                     <div id="button-play" class="control-button">&#9658;</div>
-                    <!-- <div id="button-pause" class="control-button">&#x23F8;</div> -->
                     <div id="button-pause" class="control-button">&#10073;&#10073;</div>
-                    <!-- <div id="button-restart" class="control-button">&#9198;&#65039;</div> -->
                     <div id="button-restart" class="control-button"><div id="vertical">&#9664;</div></div>
                 </div>
             </div>
@@ -233,6 +237,7 @@
     <script type="text/javascript" src="./helpers/noteWriter.js"></script>
     <script type="text/javascript" src="./helpers/animator.js"></script>
     <script type="text/javascript" src="./helpers/backgroundAnimator.js"></script>
+    <script type="text/javascript" src="./helpers/controlsManager.js"></script>
     <script type="text/javascript" src="./data.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </body>

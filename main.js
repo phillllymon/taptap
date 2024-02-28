@@ -128,7 +128,9 @@ const player = new Player(
         masterInfo.autoAdjustment = autoAdjustment;
     }
 );
-
+const controlsManager = new ControlsManager(
+    masterInfo
+);
 // ------------------------------------------ ACTIVATORS
 activateSettings(tapperKeys, (newCode) => {
     waitingForKey = newCode;
@@ -159,24 +161,24 @@ activateMenu();
 
 document.isFullscreen = false;
 document.wantFullscreenReturn = false;
-document.addEventListener("fullscreenchange", (e) => {
-    if (document.isFullscreen) {
-        document.isFullscreen = false;
-    } else {
-        document.isFullscreen = true;
-    }
-    if (detectMobile()) {
-        const viewHeight = document.getElementById("game-container").clientHeight;
-        masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
+// document.addEventListener("fullscreenchange", (e) => {
+//     if (document.isFullscreen) {
+//         document.isFullscreen = false;
+//     } else {
+//         document.isFullscreen = true;
+//     }
+//     if (detectMobile()) {
+//         const viewHeight = document.getElementById("game-container").clientHeight;
+//         masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
 
-        const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
-        masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
-        masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
-        masterInfo.noteSpeed = newNoteSpeed;
-        masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
-        masterInfo.slideLength = masterInfo.travelLength * 1.3;
-    }
-});
+//         const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
+//         masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
+//         masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
+//         masterInfo.noteSpeed = newNoteSpeed;
+//         masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
+//         masterInfo.slideLength = masterInfo.travelLength * 1.3;
+//     }
+// });
 
 
 

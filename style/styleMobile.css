@@ -54,8 +54,9 @@
 }
 
 #show-menu {
-    font-size: 10vw;
+    font-size: 12vw;
 }
+
 
 #play-controls {
     top: 25%;
@@ -133,6 +134,11 @@
     opacity: 1;
 }
 
-.solid {
-    opacity: 1;
+.outer-menu-item {
+    height: 10vmin;
+    width: 10vmin;
+}
+
+#show-menu {
+    font-size: 9vmin;
 }
