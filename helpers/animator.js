@@ -80,6 +80,8 @@ class Animator {
         const newTime = performance.now();
         const dt = newTime - this.time;
         this.time = newTime;
+
+        console.log(dt);
         
         player.calibrateLag();
 
