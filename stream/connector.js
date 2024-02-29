@@ -6,6 +6,8 @@ class Connector {
         this.channel.onopen = this.handleChannelStatusChange;
         this.channel.onclose = this.handleChannelStatusChange;
 
+        this.lastCandidateNum = -1;
+
         document.getElementById("connect-stream-button").addEventListener("click", () => {
             console.log("Trying to connect");
             setMessage("not connected");
@@ -35,13 +37,21 @@ class Connector {
                     setMessage("stream found");
                     clearInterval(offerInterval);
                     this.connection.setRemoteDescription(JSON.parse(offerStr));
-                    this.getCandidates(streamId).then(() => {
+                    this.getCandidates(streamId, this.lastCandidateNum + 1).then(() => {
                         this.connection.createAnswer().then((answer) => {
                             this.connection.setLocalDescription(answer);
                             setMessage("attempting connection");
                             console.log("sending answer");
                             saveToDatabase(`${streamId}answer`, JSON.stringify(answer)).then(() => {
                                 console.log("answer sent");
+                                console.log(answer);
+
+                                // wait a bit and try again
+                                // setTimeout(() => {
+                                //     if (this.channel.readyState !== "open") {
+                                //         this.getCandidates(streamId, this.las)
+                                //     }
+                                // }, 5000);
                             });
                         }).catch((err) => { 
                             console.log("ERROR creating answer");
@@ -71,6 +81,7 @@ class Connector {
                 const candidateKey = `${streamId}candidate${n}`;
                 getFromDatabase(candidateKey).then((can) => {
                     this.connection.addIceCandidate(JSON.parse(can)).then(() => {
+                        this.lastCandidateNum = i;
                         this.recursiveGetCandidates(streamId, n, i + 1).then(() => {
                             resolve();
                         });
@@ -80,11 +91,11 @@ class Connector {
         });
     }
 
-    getCandidates(streamId) {
+    getCandidates(streamId, i) {
         return new Promise((resolve) => {
             getFromDatabase(`${streamId}candidateNum`).then((num) => {
                 const n = JSON.parse(num);
-                this.recursiveGetCandidates(streamId, n, 0).then(() => {
+                this.recursiveGetCandidates(streamId, n, i).then(() => {
                     resolve();
                 });
             });
