@@ -1,12 +1,3 @@
-let streamId;
-let channel;
-const connection = new RTCPeerConnection();
-
-let candidateNum = 0;
-
-// unsure if this is necessary
-let receiveChannel;
-
 // recorder part
 const timing = 10000;
 
@@ -18,6 +9,8 @@ let notesArrB = [];
 
 let currentRecorder = "A";
 let wait;
+
+let channel;
 
 document.getElementById("start-listening").addEventListener("click", () => {
     navigator.mediaDevices.getUserMedia({ audio: {
@@ -115,90 +108,130 @@ function switchRecorder(recorderA, recorderB) {
 
 // connection stuff below
 
-document.getElementById("test-message").addEventListener("click", () => {
-    const message = "test";
-    console.log("attempting test message: " + message);
 
-    channel.send(message);
-});
+
+
+
 
 document.getElementById("start-connect").addEventListener("click", () => {
     console.log("offering connection");
+
+    
+    let streamId;
+    
+    const connection = new RTCPeerConnection();
+    
     streamId = Math.floor(1000000 * Math.random());
     document.getElementById("stream-id").innerText = streamId;
-
+    
     channel = connection.createDataChannel("channel");
     channel.onopen = handleChannelStatusChange;
     channel.onclose = handleChannelStatusChange;
-
+    
+    let receiveChannel;
+    
     connection.ondatachannel = receiveChannelCallback;
+    
+    let nextSendMessage = 0;
+    let nextReceiveMessage = 0;
 
     connection.onicecandidate = (e) => {
         if (e.candidate) {
-            console.log("sending new candidate");
-            const candidateKey = `${streamId}candidate${candidateNum}`;
-            saveToDatabase(candidateKey, JSON.stringify(e.candidate)).then((res) => {
-                console.log(res);
-            });
-            saveToDatabase(`${streamId}candidateNum`, JSON.stringify(candidateNum)).then((res) => {
-                console.log(res);
-            });
-            candidateNum += 1;
+            console.log("sending candidate");
+            const objToSend = {
+                type: "candidate",
+                candidate: e.candidate
+            };
+            sendMessage(JSON.stringify(objToSend));
         }
     }
 
-    connection.createOffer().then((offer) => {
-        connection.setLocalDescription(offer);
-        const offerStr = JSON.stringify(offer);
-        console.log("sending offer");
-        saveToDatabase(`${streamId}offer`, offerStr).then((res) => {
-            console.log(res);
-        });
-    }).catch((err) => {
-        console.log("ERROR with offer create");
-        console.log(err.message);
+    connection.addEventListener("icegatheringstatechange", (e) => {
+        console.log("ICE gathering state change: " + e.target.iceGatheringState);
     });
 
-    let lookForAnswerAttempts = 0;
-    const answerInterval = setInterval(() => {
-        console.log("checking for answer " + lookForAnswerAttempts);
-        getFromDatabase(`${streamId}answer`).then((answerStr) => {
-            if (answerStr) {
-                console.log("answer received");
-                connection.setRemoteDescription(JSON.parse(answerStr));
-                console.log(JSON.parse(answerStr));
-                clearInterval(answerInterval);
-            } else {
-                console.log("no answer yet");
-            }
+    // main
+    connection.createOffer().then((offer) => {
+        connection.setLocalDescription(offer).then(() => {
+            const objToSend = {
+                type: "offer",
+                offer: offer
+            };
+            sendMessage(JSON.stringify(objToSend));
         });
-        lookForAnswerAttempts += 1;
-        if (lookForAnswerAttempts > 30) {
-            console.log("Took too long to get answer");
-            clearInterval(answerInterval);
+    });
+
+    let mailboxChecks = 0;
+    const checkInterval = setInterval(() => {
+        getMessages();
+        mailboxChecks += 1;
+        if (mailboxChecks > 30) {
+            clearInterval(checkInterval);
+            console.log("timed out");
         }
     }, 2000);
-});
 
-function receiveChannelCallback(event) {
-    receiveChannel = event.channel;
-    receiveChannel.onmessage = handleReceiveMessage;
-}
-
-function handleReceiveMessage(event) {
-    console.log("MESSAGE: " + event.data);
-}
-
-function handleChannelStatusChange() {
-    if (channel) {
-        if (channel.readyState === "open") {
-            console.log("Channel now OPEN");
-            channel.send("channel open");
-        } else {
-            console.log("Channel now CLOSED");
+    function dealWithMessage(message) {
+        const messageObj = JSON.parse(message);
+        if (messageObj.type === "candidate") {
+            console.log("received candidate");
+            connection.addIceCandidate(messageObj.candidate);
+        }
+        if (messageObj.type === "answer") {
+            console.log("received answer");
+            connection.setRemoteDescription(messageObj.answer).then(() => {
+                console.log("answer received and accepted");
+            });
         }
     }
-}
+
+    function getMessages() {
+        console.log("looking for a message");
+        const nextMessageKey = `${streamId}fromRemote${nextReceiveMessage}`;
+        getFromDatabase(nextMessageKey).then((message) => {
+            if (message) {
+                dealWithMessage(message);
+                nextReceiveMessage += 1;
+                getMessages();
+            }
+        });
+    }
+
+    function sendMessage(message) {
+        const messageKey = `${streamId}fromHost${nextSendMessage}`;
+        saveToDatabase(messageKey, message);
+        nextSendMessage += 1;
+    }
+
+    function receiveChannelCallback(event) {
+        receiveChannel = event.channel;
+        receiveChannel.onmessage = handleReceiveMessage;
+    }
+    
+    function handleReceiveMessage(event) {
+        console.log("MESSAGE: " + event.data);
+    }
+    
+    function handleChannelStatusChange() {
+        if (channel) {
+            if (channel.readyState === "open") {
+                console.log("Channel now OPEN");
+                clearInterval(checkInterval);
+                channel.send("channel open");
+            } else {
+                console.log("Channel now CLOSED");
+            }
+        }
+    }
+
+    document.getElementById("test-message").addEventListener("click", () => {
+        const message = "test";
+        console.log("attempting test message: " + message);
+    
+        channel.send(message);
+    });
+
+});
 
 
 

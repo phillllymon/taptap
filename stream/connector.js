@@ -6,9 +6,9 @@ class Connector {
         this.channel.onopen = this.handleChannelStatusChange;
         this.channel.onclose = this.handleChannelStatusChange;
         this.streamId = 0;
-        this.candidateNum = 0;
 
-        this.lastCandidateNum = -1;
+        this.nextSendMessage = 0;
+        this.nextReceiveMessage = 0;
 
         document.getElementById("connect-stream-button").addEventListener("click", () => {
             console.log("Trying to connect");
@@ -23,118 +23,81 @@ class Connector {
         });
 
         // unsure if necessary
-        // this.receiveChannel = null;
+        this.receiveChannel = null;
         this.connection.ondatachannel = this.receiveChannelCallback;
+
         this.connection.onicecandidate = (e) => {
             if (e.candidate) {
-                console.log("sending new counter candidate");
-                const candidateKey = `${this.streamId}counterCandidate${this.candidateNum}`;
-                saveToDatabase(candidateKey, JSON.stringify(e.candidate)).then((res) => {
-                    console.log(res);
-                });
-                saveToDatabase(`${this.streamId}counterCandidateNum`, JSON.stringify(this.candidateNum)).then((res) => {
-                    console.log(res);
-                });
-                this.candidateNum += 1;
+                console.log("sending candidate");
+                const objToSend = {
+                    type: "candidate",
+                    candidate: e.candidate
+                };
+                this.sendMessage(JSON.stringify(objToSend));
             }
+        }
+
+        this.connection.addEventListener("icegatheringstatechange", (e) => {
+            console.log("ICE gathering state change: " + e.target.iceGatheringState);
+        });
+    }
+
+    dealWithMessage(message) {
+        const messageObj = JSON.parse(message);
+        if (messageObj.type === "candidate") {
+            console.log("received candidate");
+            this.connection.addIceCandidate(messageObj.candidate);
+        }
+        if (messageObj.type === "offer") {
+            console.log("received offer");
+
+            this.connection.setRemoteDescription(messageObj.offer).then(() => {
+                this.connection.createAnswer().then((answer) => {
+                    this.connection.setLocalDescription(answer).then(() => {
+                        const objToSend = {
+                            type: "answer",
+                            answer: answer
+                        };
+                        this.sendMessage(JSON.stringify(objToSend));
+                    });
+                });
+            });
         }
     }
 
     connect(streamId) {
         this.streamId = streamId;
-        console.log("Looking for offer...");
-        setMessage("searching for stream");
-
-        let lookForOfferAttempts = 0;
-        const offerInterval = setInterval(() => {
-            getFromDatabase(`${streamId}offer`).then((offerStr) => {
-                if (offerStr) {
-                    console.log("offer found");
-                    setMessage("stream found");
-                    clearInterval(offerInterval);
-                    this.connection.setRemoteDescription(JSON.parse(offerStr));
-                    this.getCandidates(streamId, this.lastCandidateNum + 1).then(() => {
-                        this.connection.createAnswer().then((answer) => {
-                            this.connection.setLocalDescription(answer);
-                            setMessage("attempting connection");
-                            console.log("sending answer");
-                            saveToDatabase(`${streamId}answer`, JSON.stringify(answer)).then(() => {
-                                console.log("answer sent");
-
-                                // wait a bit and try again
-                                // setTimeout(() => {
-                                //     if (this.channel.readyState !== "open") {
-                                //         console.log("Trying again - proposing counter offer");
-
-                                //     }
-                                // }, 7000);
-                            });
-                        }).catch((err) => { 
-                            console.log("ERROR creating answer");
-                            console.log(err.message);
-                        });
-                    }).catch((err) => {
-                        console.log("ERROR getting candidates");
-                        console.log(err.message);
-                    });
-                } else {
-                    console.log("no offer yet");
-                }
-            });
-            lookForOfferAttempts += 1;
-            if (lookForOfferAttempts > 20) {
-                console.log("Took too long looking for offer");
-                clearInterval(offerInterval);
+        let mailboxChecks = 0;
+        const checkInterval = setInterval(() => {
+            this.getMessages();
+            mailboxChecks += 1;
+            if (mailboxChecks > 30) {
+                clearInterval(checkInterval);
+                console.log("timed out");
+            }
+            if (this.channel.readyState === "open") {
+                clearInterval(checkInterval);
             }
         }, 2000);
     }
 
-    recursiveGetCandidates(streamId, n, i) {
-        return new Promise((resolve) => {
-            if (i > n) {
-                resolve();
-            } else {
-                const candidateKey = `${streamId}candidate${n}`;
-                getFromDatabase(candidateKey).then((can) => {
-                    this.connection.addIceCandidate(JSON.parse(can)).then(() => {
-                        this.lastCandidateNum = i;
-                        this.recursiveGetCandidates(streamId, n, i + 1).then(() => {
-                            resolve();
-                        });
-                    });
-                });
+    getMessages() {
+        console.log("looking for a message");
+        const nextMessageKey = `${this.streamId}fromHost${this.nextReceiveMessage}`;
+        getFromDatabase(nextMessageKey).then((message) => {
+            if (message) {
+                this.dealWithMessage(message);
+                this.nextReceiveMessage += 1;
+                this.getMessages();
             }
         });
     }
 
-    getCandidates(streamId, i) {
-        return new Promise((resolve) => {
-            getFromDatabase(`${streamId}candidateNum`).then((num) => {
-                const n = JSON.parse(num);
-                this.recursiveGetCandidates(streamId, n, i).then(() => {
-                    resolve();
-                });
-            });
-        });
+    sendMessage(message) {
+        const messageKey = `${this.streamId}fromRemote${this.nextSendMessage}`;
+        saveToDatabase(messageKey, message);
+        this.nextSendMessage += 1;
     }
-
-    // getCandidates(streamId) {
-    //     return new Promise((resolve) => {
-    //         getFromDatabase(`${streamId}candidateNum`).then((num) => {
-    //             const n = JSON.parse(num);
-    //             for (let i = 0; i < n + 1; i++) {
-    //                 const candidateKey = `${streamId}candidate${n}`;
-    //                 getFromDatabase(candidateKey).then((can) => {
-    //                     this.connection.addIceCandidate(JSON.parse(can)).then(() => {
-    //                         if (i === n) {
-    //                             resolve();
-    //                         }
-    //                     });
-    //                 });
-    //             }
-    //         });
-    //     });
-    // }
 
     handleChannelStatusChange() {
         if (this.channel) {
