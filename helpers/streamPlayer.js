@@ -14,12 +14,12 @@ class StreamPlayer {
 
         this.song1.addEventListener("ended", () => {
             this.song2.play();
-            this.currentSong = song2;
+            this.currentSong = this.song2;
             setTimeout(this.populateNext, 1.1 * this.songDelay);
         });
         this.song2.addEventListener("ended", () => {
             this.song1.play();
-            this.currentSong = song1;
+            this.currentSong = this.song1;
             setTimeout(this.populateNext, 1.1 * this.songDelay);
         });
     }
