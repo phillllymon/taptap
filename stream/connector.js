@@ -63,23 +63,51 @@ class Connector {
         }, 2000);
     }
 
+    recursiveGetCandidates(streamId, n, i) {
+        return new Promise((resolve) => {
+            if (i > n) {
+                resolve();
+            } else {
+                const candidateKey = `${streamId}candidate${n}`;
+                getFromDatabase(candidateKey).then((can) => {
+                    this.connection.addIceCandidate(JSON.parse(can)).then(() => {
+                        this.recursiveGetCandidates(streamId, n, i + 1).then(() => {
+                            resolve();
+                        });
+                    });
+                });
+            }
+        });
+    }
+
     getCandidates(streamId) {
         return new Promise((resolve) => {
             getFromDatabase(`${streamId}candidateNum`).then((num) => {
                 const n = JSON.parse(num);
-                for (let i = 0; i < n + 1; i++) {
-                    const candidateKey = `${streamId}candidate${n}`;
-                    getFromDatabase(candidateKey).then((can) => {
-                        this.connection.addIceCandidate(JSON.parse(can)).then(() => {
-                            if (i === n) {
-                                resolve();
-                            }
-                        });
-                    });
-                }
+                this.recursiveGetCandidates(streamId, n, 0).then(() => {
+                    resolve();
+                });
             });
         });
     }
+
+    // getCandidates(streamId) {
+    //     return new Promise((resolve) => {
+    //         getFromDatabase(`${streamId}candidateNum`).then((num) => {
+    //             const n = JSON.parse(num);
+    //             for (let i = 0; i < n + 1; i++) {
+    //                 const candidateKey = `${streamId}candidate${n}`;
+    //                 getFromDatabase(candidateKey).then((can) => {
+    //                     this.connection.addIceCandidate(JSON.parse(can)).then(() => {
+    //                         if (i === n) {
+    //                             resolve();
+    //                         }
+    //                     });
+    //                 });
+    //             }
+    //         });
+    //     });
+    // }
 
     handleChannelStatusChange() {
         if (this.channel) {

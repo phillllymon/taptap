@@ -28,7 +28,6 @@ class StreamPlayer {
         console.log("data received by streamPlayer");
         console.log(typeof data);
         try {
-
             const dataObj = JSON.parse(data);
             this.nextSong = `data:audio/x-wav;base64,${dataObj.str}`;
             this.nextNotes = dataObj.notes;
@@ -36,9 +35,6 @@ class StreamPlayer {
                 this.song1.src = this.nextSong;
                 this.notes1 = this.nextNotes;
                 this.dataReceived = true;
-    
-                this.start();
-    
             } else {
                 if (!this.playing) {
                     this.populateNext();
