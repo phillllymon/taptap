@@ -7,8 +7,15 @@ let chunksB = [];
 let notesArrA = [];
 let notesArrB = [];
 
+const times = {
+    A: 0,
+    B: 0
+}
+
 let currentRecorder = "A";
 let wait;
+
+let timestamp = performance.now();
 
 let channel;
 
@@ -25,7 +32,7 @@ document.getElementById("start-listening").addEventListener("click", () => {
         [
             [mediaRecorderA, chunksA, notesArrA],
             [mediaRecorderB, chunksB, notesArrB]
-        ].forEach((recordSet) => {
+        ].forEach((recordSet, n) => {
             recordSet[0].ondataavailable = (e) => {
                 recordSet[1].push(e.data);
             };
@@ -38,12 +45,14 @@ document.getElementById("start-listening").addEventListener("click", () => {
                     recordSet[1].shift();
                 }
     
+                const thisTime = n === 0 ? times.A : times.B;
                 const reader = new FileReader();
                 reader.onload = (readerE) => {
                     const str = btoa(readerE.target.result);
                     const strToSave = JSON.stringify({
                         data: recordSet[2],
-                        str: str
+                        str: str,
+                        time: thisTime
                     });
         
                     // what I want.....
@@ -62,6 +71,7 @@ document.getElementById("start-listening").addEventListener("click", () => {
             };
         });
     
+        timestamp = performance.now();
         player.start();
 
         wait = setTimeout(() => {
@@ -94,10 +104,16 @@ document.getElementById("start-listening").addEventListener("click", () => {
 function switchRecorder(recorderA, recorderB) {
     if (currentRecorder === "A") {
         recorderB.start();
+        const now = performance.now();
+        times.A = now - timestamp;
+        timestamp = performance.now();
         recorderA.stop();
         currentRecorder = "B"
     } else {
         recorderA.start();
+        const now = performance.now();
+        times.B = now - timestamp;
+        timestamp = performance.now();
         recorderB.stop();
         currentRecorder = "A"
     }
