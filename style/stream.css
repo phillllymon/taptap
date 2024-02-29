@@ -1,0 +1,35 @@
+#stream-modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3vmin;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: gray;
+    z-index: 1;
+    padding: 15px;
+    border-radius: 0.5vmin;
+    background-color: lightgray;
+    box-sizing: border-box;
+    z-index: 4;
+}
+
+#stream-status {
+    font-size: 2vmin;
+}
+
+#equalizer {
+    height: 255px;
+    width: 512px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 2px solid black;
+}
+
+.equ-col {
+    width: 32px;
+    height: 4px;
+    background-color: red;
+}
+

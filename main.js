@@ -73,6 +73,7 @@ let algorithm = "A";
 let autoCalibrating = true;
 let sustainedNotes = true;
 let animatedBackground = true;
+let streaming = false;
 
 let autoAdjustments = [];
 let autoAdjustment = -0.05 * travelLength;
@@ -87,6 +88,7 @@ const masterInfo = {
     allSlides,
     animatedBackground,
     autoAdjustment,
+    currentSong,
     maxTailLength,
     minNoteGap,
     mostRecentNotesOrTails,
@@ -94,6 +96,7 @@ const masterInfo = {
     noteSpeed,
     slideLength,
     songDelay,
+    streaming,
     sustainedNotes,
     targets,
     targetBounds,
@@ -131,6 +134,13 @@ const player = new Player(
 const controlsManager = new ControlsManager(
     masterInfo
 );
+const streamPlayer = new StreamPlayer(
+    masterInfo.songDelay,
+    addNote
+);
+const connector = new Connector();
+
+
 // ------------------------------------------ ACTIVATORS
 activateSettings(tapperKeys, (newCode) => {
     waitingForKey = newCode;
@@ -143,6 +153,7 @@ activateCalibration();
 activateSongControls(
     player,
     animator,
+    streamPlayer,
     killAllNotes
 );
 activateSongSelection(
@@ -161,27 +172,6 @@ activateMenu();
 
 document.isFullscreen = false;
 document.wantFullscreenReturn = false;
-// document.addEventListener("fullscreenchange", (e) => {
-//     if (document.isFullscreen) {
-//         document.isFullscreen = false;
-//     } else {
-//         document.isFullscreen = true;
-//     }
-//     if (detectMobile()) {
-//         const viewHeight = document.getElementById("game-container").clientHeight;
-//         masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
-
-//         const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
-//         masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
-//         masterInfo.targetBounds.bottom = gameDataConst.mobile.targetBounds.bottom * masterInfo.travelLength;
-//         masterInfo.noteSpeed = newNoteSpeed;
-//         masterInfo.maxTailLength = 1.0 * gameDataConst.mobile.maxTailLength * masterInfo.travelLength;
-//         masterInfo.slideLength = masterInfo.travelLength * 1.3;
-//     }
-// });
-
-
-
 
 // main
 let waitingForKey = false;
@@ -191,7 +181,7 @@ showSongControlButton("button-play");
 
 // setup for items handled on this page
 document.addEventListener("keypress", (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
     if (waitingForKey) {
         e.preventDefault();
@@ -571,16 +561,16 @@ function setupMobile() {
     });
     
     document.addEventListener("touchend", (e) => {
-        if (e.target.id === "slide-left") {
+        if (e.target.id === "slide-left" || e.target.id === "tapper-left") {
             deactivateTapper("tapper-left");
         }
-        if (e.target.id === "slide-a") {
+        if (e.target.id === "slide-a" || e.target.id === "tapper-a") {
             deactivateTapper("tapper-a");
         }
-        if (e.target.id === "slide-b") {
+        if (e.target.id === "slide-b" || e.target.id === "tapper-b") {
             deactivateTapper("tapper-b");
         }
-        if (e.target.id === "slide-right") {
+        if (e.target.id === "slide-right" || e.target.id === "tapper-right") {
             deactivateTapper("tapper-right");
         }
     });

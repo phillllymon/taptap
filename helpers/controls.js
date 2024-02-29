@@ -97,35 +97,43 @@ function activateSongSelection(
     });
 }
 
-function activateSongControls(thePlayer, theAnimator, killNotes) {
+function activateSongControls(thePlayer, theAnimator, theStreamPlayer, killNotes) {
     setButtonClick("button-play", () => {
-        playFunction(thePlayer, theAnimator);
+        playFunction(thePlayer, theAnimator, theStreamPlayer);
     });
     setButtonClick("button-pause", () => {
-        pauseFunction(thePlayer, theAnimator);
+        pauseFunction(thePlayer, theAnimator, theStreamPlayer);
     });
     setButtonClick("button-restart", () => {
         restartFunction(thePlayer, theAnimator, killNotes)
     });
     masterInfo.spaceFunction = () => {
-        playFunction(thePlayer, theAnimator);
+        playFunction(thePlayer, theAnimator, theStreamPlayer);
     };
 }
 
-function playFunction(thePlayer, theAnimator) {
-    thePlayer.start();
+function playFunction(thePlayer, theAnimator, theStreamPlayer) {
+    if (masterInfo.streaming) {
+        theStreamPlayer.start();
+    } else {
+        thePlayer.start();
+    }
     theAnimator.runAnimation({ player: thePlayer, algorithm: masterInfo.algorithm });
     showSongControlButton("button-pause");
     masterInfo.spaceFunction = () => {
-        pauseFunction(thePlayer, theAnimator);
+        pauseFunction(thePlayer, theAnimator, theStreamPlayer);
     };
 }
-function pauseFunction(thePlayer, theAnimator) {
-    thePlayer.pause();
+function pauseFunction(thePlayer, theAnimator, theStreamPlayer) {
+    if (masterInfo.streaming) {
+        theStreamPlayer.pause();
+    } else {
+        thePlayer.pause();
+    }
     theAnimator.stopAnimation();
     showSongControlButton("button-play");
     masterInfo.spaceFunction = () => {
-        playFunction(thePlayer, theAnimator);
+        playFunction(thePlayer, theAnimator, theStreamPlayer);
     };
 }
 function restartFunction(thePlayer, theAnimator, killNotes) {

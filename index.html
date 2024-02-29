@@ -9,22 +9,26 @@
     <link rel="stylesheet" href="style/style.css">
     <link id="background-css" rel="stylesheet" href="style/background.css">
     <link rel="stylesheet" href="style/menu.css">
+    <link rel="stylesheet" href="style/stream.css">
 </head>
 <body>
     <center>
         
         <div id="game-container" class="game-container">
             <div id="modal-background" class="hidden"></div>
-            <div id="full-screen-modal" class="hidden">
-                <button id="enter-game">Enter game</button>
-
-                <div id="full-screen-question" class="hidden">
-                    Use full screen?
-                    <br>
-                    <br>
-                    <button id="full-screen-button">Yes</button>
-                    <button id="small-screen-button">No</button>
-                </div>
+            <!-- <div id="stream-modal" class="hidden"> -->
+            <div id="stream-modal" class="hidden">    
+                Note: This feature is in active development.
+                <br>
+                <br>
+                <input type="text" id="stream-id" placeholder="enter stream id"/>
+                <br>
+                <button id="connect-stream-button">Connect</button>
+                <br>
+                <br>
+                <div id="stream-status">waiting to connect</div>
+                <br>
+                <button id="cancel-stream-button">Cancel</button>
             </div>
             <div id="settings-modal" class="hidden">
                 Tapper keys:
@@ -210,6 +214,8 @@
                     <br>
                     <div id="choose-button" class="menu-button">Choose song</div>
                     <br>
+                    <div id="stream-mode" class="menu-button">Stream mode</div>
+                    <br>
                     <div class="menu-title">Difficulty</div>
                     <div id="level-1" class="level">stupid</div>
                     <div id="level-2" class="level">easy</div>
@@ -238,6 +244,8 @@
     <script type="text/javascript" src="./helpers/animator.js"></script>
     <script type="text/javascript" src="./helpers/backgroundAnimator.js"></script>
     <script type="text/javascript" src="./helpers/controlsManager.js"></script>
+    <script type="text/javascript" src="./helpers/streamPlayer.js"></script>
+    <script type="text/javascript" src="./stream/connector.js"></script>
     <script type="text/javascript" src="./data.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </body>

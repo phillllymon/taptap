@@ -101,9 +101,4 @@ class Player {
             this.song1.currentTime = this.song2.currentTime + delayInSeconds;
         }
     }
-
-    // methods for streaming mode
-    setSourceStream(songData) {
-        this.sourceWaiting = songData;
-    }
 }

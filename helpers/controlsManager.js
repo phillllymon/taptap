@@ -2,6 +2,13 @@ class ControlsManager {
     constructor(masterInfo) {
         this.masterInfo = masterInfo;
         this.activateFullscreen();
+        this.activateMenuButtons();
+    }
+
+    activateMenuButtons() {
+        setButtonClick("stream-mode", () => {
+            showModal("stream");
+        });
     }
 
     activateFullscreen() {
