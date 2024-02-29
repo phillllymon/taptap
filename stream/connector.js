@@ -5,6 +5,8 @@ class Connector {
         this.channel = this.connection.createDataChannel("channel");
         this.channel.onopen = this.handleChannelStatusChange;
         this.channel.onclose = this.handleChannelStatusChange;
+        this.streamId = 0;
+        this.candidateNum = 0;
 
         this.lastCandidateNum = -1;
 
@@ -23,9 +25,23 @@ class Connector {
         // unsure if necessary
         // this.receiveChannel = null;
         this.connection.ondatachannel = this.receiveChannelCallback;
+        this.connection.onicecandidate = (e) => {
+            if (e.candidate) {
+                console.log("sending new counter candidate");
+                const candidateKey = `${this.streamId}counterCandidate${this.candidateNum}`;
+                saveToDatabase(candidateKey, JSON.stringify(e.candidate)).then((res) => {
+                    console.log(res);
+                });
+                saveToDatabase(`${this.streamId}counterCandidateNum`, JSON.stringify(this.candidateNum)).then((res) => {
+                    console.log(res);
+                });
+                this.candidateNum += 1;
+            }
+        }
     }
 
     connect(streamId) {
+        this.streamId = streamId;
         console.log("Looking for offer...");
         setMessage("searching for stream");
 
@@ -44,14 +60,14 @@ class Connector {
                             console.log("sending answer");
                             saveToDatabase(`${streamId}answer`, JSON.stringify(answer)).then(() => {
                                 console.log("answer sent");
-                                console.log(answer);
 
                                 // wait a bit and try again
                                 // setTimeout(() => {
                                 //     if (this.channel.readyState !== "open") {
-                                //         this.getCandidates(streamId, this.las)
+                                //         console.log("Trying again - proposing counter offer");
+
                                 //     }
-                                // }, 5000);
+                                // }, 7000);
                             });
                         }).catch((err) => { 
                             console.log("ERROR creating answer");

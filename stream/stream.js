@@ -166,6 +166,7 @@ document.getElementById("start-connect").addEventListener("click", () => {
             if (answerStr) {
                 console.log("answer received");
                 connection.setRemoteDescription(JSON.parse(answerStr));
+                console.log(JSON.parse(answerStr));
                 clearInterval(answerInterval);
             } else {
                 console.log("no answer yet");
