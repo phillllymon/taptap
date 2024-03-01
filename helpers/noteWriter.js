@@ -111,6 +111,8 @@ class NoteWriter {
     // addNote takes a slideId
     // mobile only allows 2 notes at once
     writeNotes(slideIds, notesPerSecond, addNote, mobile, masterData) {
+
+        console.log("HERE!");
         
         const vals = [];
 
@@ -286,7 +288,8 @@ class NoteWriter {
                 }
 
                 // write notes - same for both algorithms once slideToUse is established
-
+                console.log("and here...");
+                console.log("SLIDE: " + slideToUse);
                 if (slideToUse) { // make sure note wasn't triggered in slide we're not currently using
                         
                     // --------------------- old faithful notes --------------------

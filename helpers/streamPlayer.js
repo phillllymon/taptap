@@ -16,8 +16,9 @@ class StreamPlayer {
 
     playOnDelay(songObj) {
         songObj.silentSong.play();
+        const thisObj = this;
         setTimeout(() => {
-            this.currentAudio = songObj.song;
+            thisObj.currentAudio = songObj.song;
             songObj.song.play();
         }, this.songDelay);
     }
@@ -58,8 +59,8 @@ class StreamPlayer {
         console.log("new chunk added to queue");
 
         if (!this.started && this.queue.length > 1) {
+            console.log("starting music " + this.queue.length);
             this.startNextChunk();
-            console.log("starting music");
             document.getElementById("song-label").innerText = "streaming";
         }
     }
@@ -73,7 +74,8 @@ class StreamPlayer {
 
     startNextChunk() {
         if (this.queue.length < 1) {
-            console.log("music queue empty");
+            console.log("music queue empty " + this.queue.length);
+            this.started = false;
         } else {
             this.current = this.queue.shift();
             this.playOnDelay(this.current);
@@ -91,10 +93,16 @@ class StreamPlayer {
     start() {
         this.muted = false;
         this.current.song.volume = 1;
+        if (this.currentAudio) {
+            this.currentAudio.volume = 1;
+        }
     }
 
     stop() {
         this.muted = true;
         this.current.song.volume = 0;
+        if (this.currentAudio) {
+            this.currentAudio.volume = 0;
+        }
     }
 }
