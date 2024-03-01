@@ -405,7 +405,11 @@ function killAllNotes() {
 
 let labelInUse = false;
 function triggerHitNote(slideId) {
-    player.setVolume(1);
+    if (masterInfo.streaming) {
+        streamPlayer.setVolume(1);
+    } else {
+        player.setVolume(1);
+    }
     const cloudId = {
         "slide-left": "cloud-left",
         "slide-a": "cloud-a",
@@ -457,7 +461,11 @@ function triggerHitNote(slideId) {
 
 function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
-    player.setVolume(0.3);
+    if (masterInfo.streaming) {
+        streamPlayer.setVolume(0.3);
+    } else {
+        player.setVolume(0.3);
+    }
     animator.recordNoteMissed();
     removeElementClass("song-label", "font-bigA");
     setElementText("song-label", currentSong);
