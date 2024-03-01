@@ -16,9 +16,9 @@ class StreamPlayer {
 
     playOnDelay(songObj) {
         songObj.silentSong.play();
-        const thisObj = this;
+        // const thisObj = this;
         setTimeout(() => {
-            thisObj.currentAudio = songObj.song;
+            // thisObj.currentAudio = songObj.song;
             songObj.song.play();
         }, this.songDelay);
     }
@@ -66,9 +66,9 @@ class StreamPlayer {
     }
 
     setVolume(val) {
-        if (this.currentAudio) {
-            this.currentAudio.volume = val;
-        }
+        // if (this.currentAudio) {
+        //     this.currentAudio.volume = val;
+        // }
         this.current.song.volume = val;
     }
 
@@ -93,16 +93,16 @@ class StreamPlayer {
     start() {
         this.muted = false;
         this.current.song.volume = 1;
-        if (this.currentAudio) {
-            this.currentAudio.volume = 1;
-        }
+        // if (this.currentAudio) {
+        //     this.currentAudio.volume = 1;
+        // }
     }
 
     stop() {
         this.muted = true;
         this.current.song.volume = 0;
-        if (this.currentAudio) {
-            this.currentAudio.volume = 0;
-        }
+        // if (this.currentAudio) {
+        //     this.currentAudio.volume = 0;
+        // }
     }
 }
