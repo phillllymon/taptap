@@ -17,6 +17,7 @@ class StreamPlayer {
     playOnDelay(songObj) {
         songObj.silentSong.play();
         setTimeout(() => {
+            this.currentAudio = songObj.song;
             songObj.song.play();
         }, this.songDelay);
     }
@@ -34,14 +35,6 @@ class StreamPlayer {
         console.log("streamPlayer data received");
         const dataObj = JSON.parse(data);
 
-        // old
-        // const newSongObj = {
-        //     song: new Audio(`data:audio/x-wav;base64,${dataObj.str}`),
-        //     notes: dataObj.notes,
-        //     time: dataObj.time
-        // };
-
-        // EXPERIMENT
         const audioCtx = new AudioContext();
         const silentSong = new Audio(`data:audio/x-wav;base64,${dataObj.str}`);
         const audioSource = audioCtx.createMediaElementSource(silentSong);
@@ -60,7 +53,6 @@ class StreamPlayer {
             analyser: analyser,
             dataArray: dataArray
         };
-        // END EXPERIMENT
 
         this.queue.push(newSongObj);
         console.log("new chunk added to queue");
@@ -73,6 +65,9 @@ class StreamPlayer {
     }
 
     setVolume(val) {
+        if (this.currentAudio) {
+            this.currentAudio.volume = val;
+        }
         this.current.song.volume = val;
     }
 
@@ -81,7 +76,6 @@ class StreamPlayer {
             console.log("music queue empty");
         } else {
             this.current = this.queue.shift();
-            // this.current.song.play();
             this.playOnDelay(this.current);
             if (this.muted) {
                 this.current.song.volume = 0;
