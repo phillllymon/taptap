@@ -75,7 +75,7 @@ class StreamPlayer {
     startNextChunk() {
         if (this.queue.length < 1) {
             console.log("music queue empty " + this.queue.length);
-            this.started = false;
+            // this.started = false;
         } else {
             this.current = this.queue.shift();
             this.playOnDelay(this.current);
