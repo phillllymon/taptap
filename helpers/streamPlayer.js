@@ -75,6 +75,7 @@ class StreamPlayer {
     startNextChunk() {
         if (this.queue.length < 1) {
             console.log("music queue empty " + this.queue.length);
+            document.getElementById("song-label").innerText = "stream ended";
             // this.started = false;
         } else {
             this.current = this.queue.shift();
