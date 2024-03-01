@@ -65,6 +65,9 @@ document.getElementById("start-listening").addEventListener("click", () => {
                 const thisTime = n === 0 ? times.A : times.B;
                 const reader = new FileReader();
                 reader.onload = (readerE) => {
+
+                    console.log("time: " + thisTime);
+
                     const str = btoa(readerE.target.result);
                     const strToSave = JSON.stringify({
                         data: recordSet[2],
@@ -112,12 +115,6 @@ document.getElementById("start-listening").addEventListener("click", () => {
                 const colId = `col${i}`;
                 document.getElementById(colId).style.height = `${Math.max(4, dataArray[i])}px`;
             }
-
-            // -------------------- Generate NOTES ------------------
-
-            // .....gonna pursue generating them on the frontend.....
-
-            // -----------------End Generate NOTES ------------------
 
             requestAnimationFrame(animate);
         }
