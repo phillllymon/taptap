@@ -1,5 +1,6 @@
 class Connector {
-    constructor() {
+    constructor(masterInfo) {
+        this.masterInfo = masterInfo;
 
         this.connection = new RTCPeerConnection();
         this.channel = this.connection.createDataChannel("channel");
@@ -132,9 +133,10 @@ function handleReceiveMessage(e) {
         masterInfo.streaming = true;
         document.getElementById("stream-status").innerText = "connected";
         masterInfo.currentSong = "streaming";
-        document.getElementById("song-label").innerText = "streaming";
+        document.getElementById("song-label").innerText = "awaiting stream";
         document.getElementById("stream-mode").innerText = "Stop streaming";
         hideModal("stream");
+        masterInfo.streaming = true;
     } else {
         console.log("other message woo!");
         streamPlayer.setData(e.data);

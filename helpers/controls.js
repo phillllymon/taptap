@@ -115,10 +115,11 @@ function activateSongControls(thePlayer, theAnimator, theStreamPlayer, killNotes
 function playFunction(thePlayer, theAnimator, theStreamPlayer) {
     if (masterInfo.streaming) {
         theStreamPlayer.start();
+        theAnimator.runAnimation({ player: theStreamPlayer, algorithm: masterInfo.algorithm });
     } else {
         thePlayer.start();
+        theAnimator.runAnimation({ player: thePlayer, algorithm: masterInfo.algorithm });
     }
-    theAnimator.runAnimation({ player: thePlayer, algorithm: masterInfo.algorithm });
     showSongControlButton("button-pause");
     masterInfo.spaceFunction = () => {
         pauseFunction(thePlayer, theAnimator, theStreamPlayer);
@@ -126,7 +127,7 @@ function playFunction(thePlayer, theAnimator, theStreamPlayer) {
 }
 function pauseFunction(thePlayer, theAnimator, theStreamPlayer) {
     if (masterInfo.streaming) {
-        theStreamPlayer.pause();
+        theStreamPlayer.stop();
     } else {
         thePlayer.pause();
     }

@@ -19,6 +19,23 @@ let timestamp = performance.now();
 
 let channel;
 
+// for note generation
+let slideIds = [
+    "slide-left",
+    "slide-a",
+    "slide-b",
+    "slide-right"
+];
+let notesPerSecond = 8;
+const addNote = () => {
+    console.log("NEW NOTE WOO!");
+};
+const masterInfo = {
+    maxTailLength: 500,
+    minNoteGap: 200
+}
+const noteWriter = new NoteWriter(masterInfo);
+
 document.getElementById("start-listening").addEventListener("click", () => {
     navigator.mediaDevices.getUserMedia({ audio: {
         noiseSuppression: false,
@@ -95,6 +112,13 @@ document.getElementById("start-listening").addEventListener("click", () => {
                 const colId = `col${i}`;
                 document.getElementById(colId).style.height = `${Math.max(4, dataArray[i])}px`;
             }
+
+            // -------------------- Generate NOTES ------------------
+
+            // .....gonna pursue generating them on the frontend.....
+
+            // -----------------End Generate NOTES ------------------
+
             requestAnimationFrame(animate);
         }
 

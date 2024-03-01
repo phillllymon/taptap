@@ -131,14 +131,16 @@ const player = new Player(
         masterInfo.autoAdjustment = autoAdjustment;
     }
 );
+const streamPlayer = new StreamPlayer(
+    masterInfo.songDelay
+);
 const controlsManager = new ControlsManager(
+    masterInfo,
+    streamPlayer
+);
+const connector = new Connector(
     masterInfo
 );
-const streamPlayer = new StreamPlayer(
-    masterInfo.songDelay,
-    addNote
-);
-const connector = new Connector();
 
 
 // ------------------------------------------ ACTIVATORS

@@ -87,7 +87,7 @@ class Animator {
         const dataArray = player.getDataArray();
         const val0 = averageOf(dataArray.slice(0, 4));
         this.arrays[0].push(val0);
-        const val1 = averageOf(dataArray.slice(4, 8))
+        const val1 = averageOf(dataArray.slice(4, 8));
         this.arrays[1].push(val1);
         const val2 = averageOf(dataArray.slice(8, 12));
         this.arrays[2].push(val2);

@@ -1,13 +1,19 @@
 class ControlsManager {
-    constructor(masterInfo) {
+    constructor(masterInfo, streamPlayer) {
         this.masterInfo = masterInfo;
+        this.streamPlayer = streamPlayer;
         this.activateFullscreen();
         this.activateMenuButtons();
     }
 
     activateMenuButtons() {
         setButtonClick("stream-mode", () => {
-            showModal("stream");
+            if (this.masterInfo.streaming) {
+                this.masterInfo.streaming = false;
+                this.streamPlayer.stop();
+            } else {
+                showModal("stream");
+            }
         });
     }
 
