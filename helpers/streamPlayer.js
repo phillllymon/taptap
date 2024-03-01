@@ -72,6 +72,10 @@ class StreamPlayer {
         }
     }
 
+    setVolume(val) {
+        this.current.song.volume = val;
+    }
+
     startNextChunk() {
         if (this.queue.length < 1) {
             console.log("music queue empty");

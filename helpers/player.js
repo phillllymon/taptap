@@ -96,7 +96,7 @@ class Player {
     }
 
     calibrateLag() {
-        const delayInSeconds = this.delay / 1000;
+        const delayInSeconds = 1.0 * this.delay / 1000;
         if (this.song1.currentTime > delayInSeconds) {  // just check to make sure we're playing song2 yet
             this.song1.currentTime = this.song2.currentTime + delayInSeconds;
         }

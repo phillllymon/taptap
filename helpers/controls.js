@@ -102,7 +102,7 @@ function activateSongControls(thePlayer, theAnimator, theStreamPlayer, killNotes
         playFunction(thePlayer, theAnimator, theStreamPlayer);
     });
     setButtonClick("button-pause", () => {
-        pauseFunction(thePlayer, theAnimator, theStreamPlayer);
+        pauseFunction(thePlayer, theAnimator, theStreamPlayer, killNotes);
     });
     setButtonClick("button-restart", () => {
         restartFunction(thePlayer, theAnimator, killNotes)
@@ -125,9 +125,10 @@ function playFunction(thePlayer, theAnimator, theStreamPlayer) {
         pauseFunction(thePlayer, theAnimator, theStreamPlayer);
     };
 }
-function pauseFunction(thePlayer, theAnimator, theStreamPlayer) {
+function pauseFunction(thePlayer, theAnimator, theStreamPlayer, killNotes) {
     if (masterInfo.streaming) {
         theStreamPlayer.stop();
+        killNotes();
     } else {
         thePlayer.pause();
     }
