@@ -53,24 +53,17 @@
     100%    {opacity: 1; top: 0px; left: -350vh}
 }
 
-#show-menu {
-    font-size: 12vw;
-}
 
-
-#play-controls {
+.side-controls {
     top: 25%;
 }
 
-.control-button {
-    height: 8vw;
-    font-size: 8vw;
-}
 
-#vertical {
+
+/* #vertical {
     height: 7.5vw;
     border-left: 0.75vw solid gray;
-}
+} */
 
 #song-label {
     font-size: 5vw;
@@ -134,11 +127,14 @@
     opacity: 1;
 }
 
-.outer-menu-item {
-    height: 10vmin;
-    width: 10vmin;
+.full-piece {
+    height: 5vh;
+    width: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6vh;
 }
-
-#show-menu {
-    font-size: 9vmin;
-}
+#full-top-left { display: none; }
+#full-bottom-left { display: none; }
+#full-bottom-right { display: none; }

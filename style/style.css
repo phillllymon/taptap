@@ -88,37 +88,6 @@
 
 
 
-#play-controls {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    z-index: 1;
-}
-
-.control-button {
-    text-shadow: 0px 0px 10px lightgray;
-    height: 5vmin;
-    user-select: none;
-    cursor: pointer;
-    font-size: 5vmin;
-    color: gray;
-    text-shadow: 0px 0px 10px lightgray;
-    z-index: 4;
-    padding: 0.5vmin;
-    padding-bottom: 0vmin;
-    /* border-radius: 10%; */
-    border-radius: 0.5vmin;
-    border: 5px solid rgba(180, 180, 180, 0.4);
-    background-color: rgba(180, 180, 180, 0.8);
-}
-#vertical {
-    height: 4.5vmin;
-    border-left: 0.5vmin solid gray;
-}
-.disabled-button {
-    opacity: 0.5;
-}
-
 .song-label {
     position: absolute;
     left: 50%;
@@ -148,6 +117,7 @@
     opacity: 0.3;
     animation-name: youRock;
     animation-duration: 500ms;
+    text-shadow: 0px 0px 10px lightgray;
 }
 @keyframes youRock {
     0%    {font-size: 0px}

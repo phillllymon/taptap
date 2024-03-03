@@ -63,59 +63,80 @@
     cursor: default;
 }
 
-#outer-menu {
-    position: absolute;
-    top: 0vmin;
-    left: 100%;
-    /* width: 100%; */
-    transform: translate(-100%, 0%);
-    display: flex;
-    flex-direction: row;
-}
-
-.outer-menu-item {
-    height: 8vmin;
-    width: 8vmin;
-    color: gray;
+.control-button {
     text-shadow: 0px 0px 10px lightgray;
+    height: 6.5vh;
+    width: 6.5vh;
+    user-select: none;
     cursor: pointer;
-}
-
-#show-menu {
-    font-size: 7vmin;
-}
-
-#full-screen {
+    font-size: 5vh;
     color: gray;
     text-shadow: 0px 0px 10px lightgray;
-    font-size: 5vw;
+    z-index: 4;
+    padding: 0.5vh;
+    padding-bottom: 0vh;
+    border-radius: 0.5vh;
+    border: 0.75vh solid rgba(180, 180, 180, 0.4);
+    background-color: rgba(180, 180, 180, 0.8);
+    box-sizing: border-box;
 }
-.full-piece {
-    position: absolute;
-    height: 50%;
-    width: 50%;
+
+#inner-full-button {
+    width: 5vw;
+    height: 5vw;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0vh;
+    transform: translate(-0.5vh, -0.75vh);
+}
+
+.full-piece {
+    height: 2.5vh;
+    width: 2.5vh;
+    display: flex;
     align-items: center;
-    font-size: 4vmin;
+    justify-content: center;
+    font-size: 4vh;
 }
-#full-top-left {
-    top: 5%;
-    left: -10%;
-}
-#full-top-right {
-    top: 5%;
-    left: 10%;
-    transform: scaleX(-1);
-}
-#full-bottom-left {
+
+#full-top-right { transform: scaleX(-1); }
+#full-bottom-left { transform: scaleY(-1); }
+#full-bottom-right { transform: scaleY(-1) scaleX(-1); }
+
+.side-controls {
+    position: absolute;
     top: 50%;
-    left: -10%;
-    transform: scaleY(-1);
+    z-index: 1;
 }
-#full-bottom-right {
-    top: 50%;
-    left: 10%;
-    transform: scaleY(-1) scaleX(-1);
+
+#controls-right {
+    left: 100%;
+    transform: translate(-110%, 0%);
+}
+
+#controls-left {
+    left: 0%;
+    transform: translate(10%, 0%);
+}
+
+
+#vertical {
+    height: 4.5vh;
+    border-left: 0.5vh solid gray;
+}
+#hamburger {
+    font-size: 7vh;
+    transform: translate(-1.1vh, -1.75vh);
+}
+#gear {
+    font-size: 7.5vh;
+    transform: translate(-0.2vh, -1.75vh);
+}
+
+.disabled-button {
+    opacity: 0.5;
+}
+.disabled-button:hover {
+    opacity: 1;
 }

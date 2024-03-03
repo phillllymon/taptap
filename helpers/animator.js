@@ -7,6 +7,7 @@ class Animator {
         makeTail,
         triggerMissedNote,
         numArrays = 4
+        // numArrays = 1
     ) {
         this.masterInfo = masterInfo;
         this.recents = masterInfo.mostRecentNotesOrTails;
@@ -82,6 +83,37 @@ class Animator {
         this.time = newTime;
         
         player.calibrateLag();
+
+        // also new
+        // const dataArray = player.getDataArray().map((val) => {
+        //     return val * val;
+        // });
+        // this.arrays[0].push(averageOf(dataArray));
+
+        // also new
+        // const dataArray = player.getDataArray().map((val) => {
+        //     return val * val;
+        // });
+        // const val0 = 1;
+        // const val1 = 1;
+        // const val2 = 1;
+        // const val3 = 1;
+        // for (let i = 0; i < 16; i++) {
+        //     this.arrays[i].push(dataArray[i]);
+        // }
+
+        // new (faithful below)
+        // const dataArray = player.getDataArray().map((val) => {
+        //     return val;
+        // });
+        // const val0 = averageOf(dataArray.slice(2, 5));
+        // this.arrays[0].push(val0);
+        // const val1 = averageOf(dataArray.slice(5, 8));
+        // this.arrays[1].push(val1);
+        // const val2 = averageOf(dataArray.slice(8, 11));
+        // this.arrays[2].push(val2);
+        // const val3 = averageOf(dataArray.slice(11, 14));
+        // this.arrays[3].push(val3);
 
         // faithful
         const dataArray = player.getDataArray();

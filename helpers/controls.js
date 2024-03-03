@@ -26,7 +26,7 @@ function activateSongSelection(
     setCurrentSong
 ) {
     const songSelector = document.getElementById("select-song");
-    setButtonClick("choose-button", () => {
+    setButtonClick("choose-song-button", () => {
         if (document.isFullscreen) {
             try {
                 controlsManager.toggleFullscreen().then(() => {
@@ -40,10 +40,6 @@ function activateSongSelection(
             showModal("choose");
         }
     });
-    
-    // setButtonClick("choose-button", () => {
-    //     showModal("choose");
-    // });
     
     songSelector.addEventListener("change", () => {
         const newValue = songSelector.value;
@@ -206,11 +202,16 @@ function deselectSlides() {
 
 function activateLevelSelector(theAnimator) {
     [
-        ["level-1", 2],
-        ["level-2", 4],
-        ["level-3", 6],
-        ["level-4", 8],
-        ["level-5", 10]
+        // ["level-1", 2],
+        // ["level-2", 4],
+        // ["level-3", 6],
+        // ["level-4", 8],
+        // ["level-5", 10]
+        ["level-1", 1],
+        ["level-2", 2],
+        ["level-3", 3],
+        ["level-4", 5],
+        ["level-5", 8]
     ].forEach((levelSet) => {
         setButtonClick(levelSet[0], () => {
             ["level-1", "level-2", "level-3", "level-4", "level-5"].forEach((level) => {
@@ -223,23 +224,8 @@ function activateLevelSelector(theAnimator) {
     addElementClass("level-2", "level-selected");
 }
 
-function activateMenu() {
-    const showButton = document.getElementById("show-menu");
-    const theMenu = document.getElementById("main-menu");
-    setButtonClick("show-menu", () => {
-        theMenu.classList.add("slide-left");
-        theMenu.classList.remove("slide-right");
-        showButton.classList.add("hidden");
-    });
-    setButtonClick("hide-menu", () => {
-        theMenu.classList.add("slide-right");
-        theMenu.classList.remove("slide-left");
-        showButton.classList.remove("hidden");
-    });
-}
-
 function activateSettings(tapperKeyCodes, setNewKeyCode) {
-    setButtonClick("settings", () => {
+    setButtonClick("show-settings", () => {
         showModal("settings");
     });
     setButtonClick("save-settings", () => {

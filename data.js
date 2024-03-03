@@ -2,8 +2,8 @@ const gameDataConst = {
     songDelay: 4000, // ms
     maxTailLength: 500,
     targetBoundSizes: {
-        top: 0.03,
-        bottom: 0.02
+        top: 0.04,
+        bottom: 0.03
     },
     mobile: {
         maxTailLength: 1.2,
@@ -13,7 +13,7 @@ const gameDataConst = {
             bottom: 1.03    // fraction of travelLength
         }
     },
-    minNoteGap: 200,    // ms between notes on the same slide
+    minNoteGap: 500,    // ms between notes on the same slide
     allSlides: [
         "slide-left",
         "slide-a",

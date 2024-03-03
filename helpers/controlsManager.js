@@ -3,7 +3,20 @@ class ControlsManager {
         this.masterInfo = masterInfo;
         this.streamPlayer = streamPlayer;
         this.activateFullscreen();
+        this.activateMenu();
         this.activateMenuButtons();
+    }
+
+    activateMenu() {
+        const theMenu = document.getElementById("main-menu");
+        setButtonClick("show-menu", () => {
+            theMenu.classList.add("slide-left");
+            theMenu.classList.remove("slide-right");
+        });
+        setButtonClick("hide-menu", () => {
+            theMenu.classList.add("slide-right");
+            theMenu.classList.remove("slide-left");
+        });
     }
 
     activateMenuButtons() {
