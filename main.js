@@ -459,11 +459,11 @@ function triggerHitNote(slideId) {
 }
 
 function triggerMissedNote() {
-    // twangs[Math.floor(twangs.length * Math.random())].play();
+    twangs[Math.floor(twangs.length * Math.random())].play();
     if (masterInfo.streaming) {
-        // streamPlayer.setVolume(0.3);
+        streamPlayer.setVolume(0.3);
     } else {
-        // player.setVolume(0.3);
+        player.setVolume(0.3);
     }
     animator.recordNoteMissed();
     removeElementClass("song-label", "font-bigA");

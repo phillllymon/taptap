@@ -242,7 +242,7 @@
     top: 1263px;
 }
 #test-note2 {
-    top: 120vmin;
+    top: 136.5vmin;
 }
 
 .note-leaving-right {
@@ -354,7 +354,7 @@
         0px 0px 4vh rgb(255, 231, 188);
           
     margin: auto;
-    z-index: 2;
+    z-index: 4;
     animation-name: none;
     /* animation-duration: 0.3s;
     opacity: 0; */

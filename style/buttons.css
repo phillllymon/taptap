@@ -1,0 +1,94 @@
+#play-arrow {
+    height: 0vh;
+    border-left: 4vh solid gray;
+    border-top: 2vh solid rgba(0, 0, 0, 0);
+    border-bottom: 2vh solid rgba(0, 0, 0, 0);
+}
+#button-pause {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0px;
+}
+#button-restart {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0px;
+}
+.pause-rectangle {
+    height: 4vh;
+    width: 1.5vh;
+    background-color: gray;
+}
+#restart-arrow {
+    height: 0vh;
+    border-right: 3vh solid gray;
+    border-top: 2vh solid rgba(0, 0, 0, 0);
+    border-bottom: 2vh solid rgba(0, 0, 0, 0);
+}
+#restart-rectangle {
+    height: 4vh;
+    width: 0.75vh;
+    background-color: gray;
+}
+#show-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.hamburger-rectangle {
+    height: 0.75vh;
+    width: 4vh;
+    border-radius: 0.3vh;
+    background-color: gray;
+}
+#show-settings {
+    position: relative;
+}
+.gear-teeth {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2vh;
+    height: 0.6vh;
+    border-right: 1.25vh solid gray;
+    border-left: 1.25vh solid gray;
+    border-radius: 0.4vh;
+}
+#teeth1 {
+    transform: translate(-50%, -50%);
+}
+#teeth2 {
+    transform: translate(-50%, -50%) rotate(70deg);
+}
+#teeth3 {
+    transform: translate(-50%, -50%) rotate(35deg);
+}
+#teeth4 {
+    transform: translate(-50%, -50%) rotate(-35deg);
+}
+#teeth5 {
+    transform: translate(-50%, -50%) rotate(-70deg);
+}
+#outer-gear-circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2vh;
+    height: 2vh;
+    border: 0.75vh solid gray;
+    border-radius: 50%;
+}
+#inner-gear-circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1vh;
+    height: 1vh;
+    border-radius: 50%;
+    background-color: gray;
+}

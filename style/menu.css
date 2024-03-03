@@ -64,6 +64,7 @@
 }
 
 .control-button {
+    position: relative;
     text-shadow: 0px 0px 10px lightgray;
     height: 6.5vh;
     width: 6.5vh;
