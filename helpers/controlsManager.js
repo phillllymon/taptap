@@ -54,7 +54,7 @@ class ControlsManager {
             this.masterInfo.currentSong = newValue;
             this.animator.stopAnimation();
             this.player.pause();
-            this.player.setSource(`./songs/${currentSong}.m4a`);
+            this.player.setSource(`./songs/${this.masterInfo.currentSong}.m4a`);
             showSongControlButton("button-play");
             document.getElementById("song-label").innerText = newValue;
             hideModal("choose");
