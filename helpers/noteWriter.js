@@ -32,45 +32,42 @@ class NoteWriter {
                 "slide-b": noteVals[2],
                 "slide-right": noteVals[3]
             };
+
+            const slidesWithMakeNote = noteVals[noteVals.length - 1];
     
             slideIds.forEach((slideId) => {
                 const thisNoteVal = valsBySlideId[slideId];
                 if (!thisNoteVal) {
                     return;
                 }
+
                 const triggerSlideIdx = thisNoteVal.triggerSlideIdx;
-                const relevantNoteValData = noteVals[triggerSlideIdx];
-                const relevantAfterRatio = relevantNoteValData.afterRatio;
-                const relevantNoteVal = relevantNoteValData.val;
+
+                const triggerSlide = {
+                    0: "slide-left",
+                    1: "slide-a",
+                    2: "slide-b",
+                    3: "slide-right"
+                }[triggerSlideIdx];
+                
+                const lastTriggerNote = this.mostRecentNotes[triggerSlide];
+                if (!lastTriggerNote) {
+                    return;
+                }
+                
+                const makeNotePass = !slidesWithMakeNote[triggerSlide];
 
                 const lastNote = this.mostRecentNotes[slideId];
                 if (lastNote) {
-                    // check for tail too long - end it here
-                    if (lastNote.isTail && lastNote.totalHeight > this.masterInfo.maxTailLength) {
-                        this.mostRecentNotes[slideId] = null;
-                        return;
-                    }
-                    // if (valsBySlideId[slideId] > 3 * lastNote.val) {
-                    // if (valsBySlideId[slideId] < 0.1) {    
-                    // if (valsBySlideId[slideId].val > 1.5 * lastNote.val && valsBySlideId[slideId].afterRatio < 0.3) {
-                    // if (relevantNoteVal > 1.5 * lastNote.val && relevantAfterRatio > 0.7) {
-                    
-                    const ratioThreshold = {
-                        "slide-left": 0.9,
-                        "slide-a": 0.8,
-                        // "slide-a": 0.2,
-                        "slide-b": 0.7,
-                        "slide-right": 0.4
-                    }[slideId];
-                    const valThreshold = {
-                        "slide-left": 2.75,
-                        "slide-a": 2.25,
-                        // "slide-a": 0.5,
-                        "slide-b": 1.75,
-                        "slide-right": 0.9
+
+                    const adjust = {
+                        "slide-left": 1.1,
+                        "slide-a": 1.0,
+                        "slide-b": 0.9,
+                        "slide-right": 0.3
                     }[slideId];
                     
-                    if (relevantAfterRatio > ratioThreshold && relevantNoteVal > valThreshold * lastNote.val) {
+                    if (makeNotePass && thisNoteVal.val > adjust * lastTriggerNote.val) {
                         makeTail(slideId, lastNote);
                         const now = performance.now();
                         if (slideIds.length === 4) {
@@ -162,6 +159,7 @@ class NoteWriter {
         const tailLeg = Math.floor(1.0 * twoSecondLeg / 5);
 
         const noteVals = [];
+        const slidesWithMakeNote = {};
 
         for (let i = 0; i < arrays.length; i++) { // OLD
         // for (let i = 0; i < 1; i++) {   // JANKY TEMP ***************** just for trying all arrays together
@@ -184,51 +182,15 @@ class NoteWriter {
             let overallAfterMax = 0;
             let overallAfterMin = 255;
 
-            // EXPERIMENT
-            // analyze all arrays together below --- !!!!!! see JANKY ABOVE !!!!!!
-            // const combineArrs = [];
-            // for (let k = 0; k < arrays.length; k++) {
-            //     combineArrs.push(arr.slice(beforeIdx, afterIdx));
-            // }
-            
-            // let maxNoteHeight = 0;
-            // let maxNoteIdx = 0;
-
-            // for (let k = 0; k < arrays.length; k++) {
-            //     const combineArr = arrays[k];
-            //     let current = combineArr[1];
-            //     let dir = 1;
-            //     let low = combineArr[0];
-            //     let lowTimeIdx = 0;
-            //     for (let j = 1; j < combineArr.length; j++) {
-            //         current = combineArr[j];
-            //         const prev = combineArr[j - 1];
-            //         if (current > prev) {
-            //             dir = 1;
-            //         } else {
-            //             if (dir === 1) { // means we just reached a peak
-            //                 // see if we found new tallest note
-            //                 if (prev - low > maxNoteHeight) {
-            //                     maxNoteHeight = prev - low;
-            //                     maxNoteIdx = Math.floor(((j - 1) + lowTimeIdx) / 2);
-            //                 }
-            //             }
-    
-            //             dir = -1
-            //             low = current;
-            //             lowTimeIdx = j;
-            //         }
-            //     }
-            // }
-            
-            // const makeNote = maxNoteIdx === Math.floor(combineArrs[0].length / 2);
-
             // each array individually below and multiple biggests
             const combineArr = arr.slice(beforeIdx, afterIdx);
             let current = combineArr[1];
             let dir = 1; // 1 for up -1 for down
             let lowTimeIdx = times[0];
             let low = combineArr[0];
+
+            // for tails only
+            const tailRatioTime = 300;
 
             // each item is [height, idx] of an increase note
             const biggests = [];
@@ -237,10 +199,25 @@ class NoteWriter {
             }
 
             for (let j = 1; j < combineArr.length; j++) {
+
                 current = combineArr[j];
+
+                // for tails
+                const smallMidIdx = Math.floor(combineArr.length / 2);
+                if (j > smallMidIdx && times[j] < times[midIdx] + tailRatioTime) {
+                    if (current < overallAfterMin) {
+                        overallAfterMin = current;
+                    }
+                    if (current > overallAfterMax) {
+                        overallAfterMax = current;
+                    }
+                }
+                // end for tails
+
                 const prev = combineArr[j - 1];
-                if (current > prev) {
+                if (current > prev) { // means we're on our way up
                     dir = 1;
+
                 } else {
                     if (dir === 1) { // means we just reached a peak
                         // see if we found new tallest note
@@ -250,7 +227,7 @@ class NoteWriter {
                             biggests.shift();
                             biggests.push([newNoteHeight, newNoteIdx]);
                             biggests.sort((a, b) => {
-                                return a[0] > b[0] ? 1 : -1;
+                                return a[0] < b[0] ? -1 : 1;
                             });
                         }
                     }
@@ -258,110 +235,25 @@ class NoteWriter {
                     dir = -1
                     low = current;
                     lowTimeIdx = j;
+
                 }
             }
             
             const makeNote = biggests.map((noteArr) => {
                 return noteArr[1];
             }).includes(Math.floor(combineArr.length / 2));
+            slidesWithMakeNote[slideIds[i]] = makeNote;
 
-            // // each array individually below
-            // const combineArr = arr.slice(beforeIdx, afterIdx);
-            // let current = combineArr[1];
-            // let dir = 1; // 1 for up -1 for down
-            // let lowTimeIdx = times[0];
-            // let low = combineArr[0];
-
-            // let maxNoteHeight = 0;
-            // let maxNoteIdx = 0;
-
-            // for (let j = 1; j < combineArr.length; j++) {
-            //     current = combineArr[j];
-            //     const prev = combineArr[j - 1];
-            //     if (current > prev) {
-            //         dir = 1;
-            //     } else {
-            //         if (dir === 1) { // means we just reached a peak
-            //             // see if we found new tallest note
-            //             if (prev - low > maxNoteHeight) {
-            //                 maxNoteHeight = prev - low;
-            //                 maxNoteIdx = Math.floor(((j - 1) + lowTimeIdx) / 2);
-            //             }
-            //         }
-
-            //         dir = -1
-            //         low = current;
-            //         lowTimeIdx = j;
-            //     }
-            // }
-            
-            // const makeNote = maxNoteIdx === Math.floor(combineArr.length / 2);
-            // END EXPERIMENT
-            
-            // faithful
-            // const beforeArr = arr.slice(beforeIdx, midIdx);
-            // const afterArr = arr.slice(midIdx + 1, afterIdx);
-
-            // const beforeMax = Math.max(...beforeArr.map((val, n) => {
-                
-            //     // for tails only get values before 400ms
-            //     if (n <= tailLeg) {
-            //         if (val < overallBeforeMin) {
-            //             overallBeforeMin = val;
-            //         }
-            //         if (val > overallBeforeMax) {
-            //             overallBeforeMax = val;
-            //         }
-            //     }
-
-            //     // for notes only get values before leg
-            //     if (n <= leg) {
-
-            //         // return n < 2 ? 0 : (val - beforeArr[n - 1]) - (beforeArr[n - 1] - beforeArr[n - 2]);
-            //         return n === 0 ? 0 : val - beforeArr[n - 1];
-            //         // return n === 0 ? 0 : val;
-
-            //     } else {
-            //         return 0;
-            //     }
-            // }));
-            
-            // const afterMax = Math.max(...afterArr.map((val, n) => {
-
-            //     // if (val < overallAfterMin) {
-            //     //     overallAfterMin = val;
-            //     // }
-            //     // if (val > overallAfterMax) {
-            //     //     overallAfterMax = val;
-            //     // }
-
-            //     // only include values starting 300 ms out
-            //     // if (val < overallAfterMin && times[n] > 2300) {
-            //     if (val < overallAfterMin && times[n] > 2100 && times[n] < 2400) {
-            //         overallAfterMin = val;
-            //     }
-            //     if (val > overallAfterMax && times[n] > 2100 && times[n] < 2400) {
-            //         overallAfterMax = val;
-            //     }
-
-            //     // return n < 2 ? 0 : (val - afterArr[n - 1]) - (afterArr[n - 1] - afterArr[n - 2]);
-            //     return n === 0 ? 0 : val - afterArr[n - 1];
-            //     // return n === 0 ? 0 : val;
-            // }));
-            // end faithful
-
-
-            // noteVals.push(noteVal);
-            // noteVals.push((1.0 * overallMin) / overallMax);
             noteVals.push({
                 beforeRatio: (1.0 * overallBeforeMin) / overallBeforeMax,
-                afterRatio: (1.0 * overallAfterMin) / overallAfterMax,
+                afterRatio: (1.0 * overallAfterMin * overallAfterMin) / (overallAfterMax * overallAfterMax),
                 val: noteVal,
-                triggerSlideIdx: i 
+                val2: noteVal * noteVal,
+                triggerSlideIdx: i,
+                makeNote: makeNote,
+                firstTime: true
             });
 
-            // if (midVal > beforeMax && midVal > afterMax && amt > 300) {
-            // if (midVal > beforeMax && midVal > afterMax) {
             if (makeNote) {
                 let marked = false;
                 if (amt < 140) {
@@ -495,6 +387,7 @@ class NoteWriter {
                 }
             }
         }
+        noteVals.push(slidesWithMakeNote);
         return noteVals;
     }
 }

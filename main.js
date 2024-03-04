@@ -56,10 +56,10 @@ const targetTails = {
 };
 
 const tapperKeys = [
-    "KeyD",
-    "KeyV",
-    "KeyN",
-    "KeyK"
+    "KeyS",
+    "KeyC",
+    "KeyB",
+    "KeyJ"
 ];
 
 const activeTappers = {
@@ -385,7 +385,8 @@ function addNote(slideId, val, marked = false) {
         target: false,
         val: val,   // val in the array that triggered the note to be created
         isTail: false,
-        tail: null
+        tail: null,
+        seen: false
     };
     notes.add(noteInfo);
     document.getElementById(slideId).appendChild(newNote);

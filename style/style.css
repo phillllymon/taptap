@@ -114,7 +114,7 @@
     color: orange;
     z-index: 4;
     padding: 15px;
-    opacity: 0.3;
+    opacity: 0.5;
     animation-name: youRock;
     animation-duration: 500ms;
     text-shadow: 0px 0px 10px lightgray;

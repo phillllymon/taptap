@@ -1,8 +1,8 @@
 #play-arrow {
     height: 0vh;
     border-left: 4vh solid gray;
-    border-top: 2vh solid rgba(0, 0, 0, 0);
-    border-bottom: 2vh solid rgba(0, 0, 0, 0);
+    border-top: 2vh solid transparent;
+    border-bottom: 2vh solid transparent;
 }
 #button-pause {
     display: flex;
@@ -24,8 +24,8 @@
 #restart-arrow {
     height: 0vh;
     border-right: 3vh solid gray;
-    border-top: 2vh solid rgba(0, 0, 0, 0);
-    border-bottom: 2vh solid rgba(0, 0, 0, 0);
+    border-top: 2vh solid transparent;
+    border-bottom: 2vh solid transparent;
 }
 #restart-rectangle {
     height: 4vh;
@@ -43,6 +43,7 @@
     width: 4vh;
     border-radius: 0.3vh;
     background-color: gray;
+    box-shadow: 0px 0px 10px lightgray;
 }
 #show-settings {
     position: relative;
@@ -56,6 +57,7 @@
     border-right: 1.25vh solid gray;
     border-left: 1.25vh solid gray;
     border-radius: 0.4vh;
+    box-shadow: 0px 0px 10px lightgray;
 }
 #teeth1 {
     transform: translate(-50%, -50%);
