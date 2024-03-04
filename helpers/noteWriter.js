@@ -66,7 +66,7 @@ class NoteWriter {
                         "slide-b": 0.9,
                         "slide-right": 0.3
                     }[slideId];
-                    
+
                     if (makeNotePass && thisNoteVal.val > adjust * lastTriggerNote.val) {
                         makeTail(slideId, lastNote);
                         const now = performance.now();
@@ -94,7 +94,7 @@ class NoteWriter {
                         }
                     } else {
                         // check for tail too short - delete tail entirely
-                        if (lastNote.isTail && lastNote.totalHeight < 0.05 * this.masterInfo.maxTailLength) {
+                        if (lastNote.isTail && lastNote.totalHeight < 0.05 * this.masterInfo.travelLength) {
                             lastNote.cloud.remove();
                             lastNote.note.remove();
                             lastNote.parentNote.tail = null;

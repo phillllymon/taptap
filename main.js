@@ -82,6 +82,7 @@ let streak = 0;
 
 let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
+let waitingForKey = false;
 
 const masterInfo = {
     algorithm,
@@ -98,11 +99,13 @@ const masterInfo = {
     songDelay,
     streaming,
     sustainedNotes,
+    tapperKeys,
     targets,
     targetBounds,
     targetTails,
     travelLength,
-    vMin
+    vMin,
+    waitingForKey
 };
 
 // ----------------------------------------- HELPERS
@@ -136,46 +139,25 @@ const streamPlayer = new StreamPlayer(
 );
 const controlsManager = new ControlsManager(
     masterInfo,
-    streamPlayer
+    player,
+    streamPlayer,
+    animator
 );
 const connector = new Connector(
     masterInfo
 );
 
 
-// ------------------------------------------ ACTIVATORS
-activateSettings(tapperKeys, (newCode) => {
-    waitingForKey = newCode;
-});
-activateLevelSelector(animator);
-activateSlidesSelector((newVal) => {
-    animator.setNumSlides(newVal);
-});
-activateCalibration();
-activateSongControls(
-    player,
-    animator,
-    streamPlayer,
-    killAllNotes
-);
-activateSongSelection(
-    player,
-    animator,
-    showModal,
-    hideModal,
-    showSongControlButton,
-    killAllNotes,
-    resetAutoAdjustment,
-    (newSong) => {
-        currentSong = newSong;
-    }
-);
+
+
+
+
+
 
 document.isFullscreen = false;
 document.wantFullscreenReturn = false;
 
 // main
-let waitingForKey = false;
 showSongControlButton("button-play");
 
 
@@ -184,12 +166,12 @@ showSongControlButton("button-play");
 document.addEventListener("keypress", (e) => {
     // e.preventDefault();
     e.stopPropagation();
-    if (waitingForKey) {
+    if (masterInfo.waitingForKey) {
         e.preventDefault();
-        tapperKeys[waitingForKey[1]] = e.code;
-        document.getElementById(waitingForKey[0]).innerText = e.code;
+        tapperKeys[masterInfo.waitingForKey[1]] = e.code;
+        document.getElementById(masterInfo.waitingForKey[0]).innerText = e.code;
         document.getElementById("save-settings").disabled = false;
-        waitingForKey = false;
+        masterInfo.waitingForKey = false;
     }
     if (e.code === "Space") {
         masterInfo.spaceFunction();
