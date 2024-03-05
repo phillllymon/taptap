@@ -316,13 +316,13 @@ class ControlsManager {
         document.addEventListener("fullscreenchange", () => {
             if (document.isFullscreen) {
                 document.isFullscreen = false;
-                ["full-top-left", "full-top-right", "full-bottom-left", "full-bottom-right"].forEach((eleId) => {
-                    document.getElementById(eleId).innerHTML = "&#8689;";
+                ["full-top-left-quad", "full-top-right-quad", "full-bottom-left-quad", "full-bottom-right-quad"].forEach((eleId) => {
+                    document.getElementById(eleId).classList.remove("turned-inward");
                 });
             } else {
                 document.isFullscreen = true;
-                ["full-top-left", "full-top-right", "full-bottom-left", "full-bottom-right"].forEach((eleId) => {
-                    document.getElementById(eleId).innerHTML = "&#8690;";
+                ["full-top-left-quad", "full-top-right-quad", "full-bottom-left-quad", "full-bottom-right-quad"].forEach((eleId) => {
+                    document.getElementById(eleId).classList.add("turned-inward");
                 });
             }
             this.recalculateLengths();

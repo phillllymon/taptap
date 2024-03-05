@@ -192,8 +192,6 @@
                 </div>
                 <div id="rock-label"></div>
                 <div id="song-label" class="song-label"></div>
-                <!-- <div id="full-screen">&#8689;</div> -->
-                <!-- <div id="full-screen">&#8690;</div> -->
                 
                 <div id="main-menu" class="menu">
                     <div id="hide-menu" class="menu-button">Hide menu</div>
@@ -229,13 +227,14 @@
                 </div>
                 <div id="controls-right" class="side-controls">
                     <div id="full-screen" class="control-button">
-                        <div id="inner-full-button">
-                            <div id="full-top-left" class="full-piece">&#8689;</div>
-                            <div id="full-top-right" class="full-piece">&#8689;</div>
-                        
-                            <div id="full-bottom-left" class="full-piece">&#8689;</div>
-                            <div id="full-bottom-right" class="full-piece">&#8689;</div>
+                        <div id="full-button-container">
+                            <div id="full-top-left-quad" class="full-screen-quad"></div>
+                            <div id="full-top-right-quad" class="full-screen-quad"></div>
+                            <div id="full-bottom-left-quad" class="full-screen-quad"></div>
+                            <div id="full-bottom-right-quad" class="full-screen-quad"></div>
                         </div>
+                        <div id="full-arrow-a" class="full-arrow"></div>
+                        <div id="full-arrow-b" class="full-arrow"></div>
                     </div>
                     <div id="show-menu" class="control-button">
                         <div class="hamburger-rectangle"></div>
@@ -252,24 +251,7 @@
                         <div id="inner-gear-circle"></div>
                     </div>
                 </div>
-                <!-- <div id="controls-left" class="side-controls">
-                    <div id="button-play" class="control-button">&#9658;</div>
-                    <div id="button-pause" class="control-button">&#10073;&#10073;</div>
-                    <div id="button-restart" class="control-button"><div id="vertical">&#9664;</div></div>
-                </div>
-                <div id="controls-right" class="side-controls">
-                    <div id="full-screen" class="control-button">
-                        <div id="inner-full-button">
-                            <div id="full-top-left" class="full-piece">&#8689;</div>
-                            <div id="full-top-right" class="full-piece">&#8689;</div>
-                        
-                            <div id="full-bottom-left" class="full-piece">&#8689;</div>
-                            <div id="full-bottom-right" class="full-piece">&#8689;</div>
-                        </div>
-                    </div>
-                    <div id="show-menu" class="control-button"><div id="hamburger">&#9776;</div></div>
-                    <div id="show-settings" class="control-button"><div id="gear">&#9881;</div></div>
-                </div> -->
+                
             </div>
         </div>
     </center>
@@ -280,6 +262,7 @@
     <script type="text/javascript" src="./helpers/animator.js"></script>
     <script type="text/javascript" src="./helpers/backgroundAnimator.js"></script>
     <script type="text/javascript" src="./helpers/controlsManager.js"></script>
+    <script type="text/javascript" src="./helpers/menuManager.js"></script>
     <script type="text/javascript" src="./helpers/streamPlayer.js"></script>
     <script type="text/javascript" src="./stream/connector.js"></script>
     <script type="text/javascript" src="./data.js"></script>

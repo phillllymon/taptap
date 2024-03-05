@@ -143,6 +143,7 @@ const controlsManager = new ControlsManager(
     streamPlayer,
     animator
 );
+const menuManager = new MenuManager();
 const connector = new Connector(
     masterInfo
 );
