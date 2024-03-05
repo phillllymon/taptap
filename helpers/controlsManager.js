@@ -5,8 +5,6 @@ class ControlsManager {
         this.masterInfo = masterInfo;
         this.streamPlayer = streamPlayer;
         this.activateFullscreen();
-        this.activateMenu();
-        this.activateMenuButtons();
         this.activateSettings();
         this.activateLevelSelector();
         this.activateSlidesSelector((newVal) => {this.animator.setNumSlides(newVal)});
@@ -34,20 +32,6 @@ class ControlsManager {
 
     activateSongSelection() {
         const songSelector = document.getElementById("select-song");
-        setButtonClick("choose-song-button", () => {
-            if (document.isFullscreen) {
-                try {
-                    controlsManager.toggleFullscreen().then(() => {
-                        document.wantFullscreenReturn = true;
-                        showModal("choose");
-                    });
-                } catch (err) {
-                    showModal("choose");
-                }
-            } else {
-                showModal("choose");
-            }
-        });
         
         songSelector.addEventListener("change", () => {
             const newValue = songSelector.value;
@@ -60,11 +44,6 @@ class ControlsManager {
             hideModal("choose");
             killAllNotes();
             resetAutoAdjustment();
-            if (document.wantFullscreenReturn) {
-                controlsManager.toggleFullscreen().then(() => {
-                    document.wantFullscreenReturn = false;
-                });
-            }
         });
         
         document.getElementById("file-input").addEventListener("change", (e) => {
@@ -86,18 +65,9 @@ class ControlsManager {
                 resetAutoAdjustment();
                 
                 this.masterInfo.currentSong = e.target.files[0].name;
-                document.getElementById("song-label").innerText = currentSong;
-                if (document.wantFullscreenReturn) {
-                    controlsManager.toggleFullscreen().then(() => {
-                        document.wantFullScreenReturn = false;
-                    });
-                }
+                document.getElementById("song-label").innerText = this.masterInfo.currentSong;
             };
             reader.readAsBinaryString(file);
-        });
-    
-        setButtonClick("cancel-choose", () => {
-            hideModal("choose");
         });
     }
 
@@ -282,29 +252,6 @@ class ControlsManager {
                 masterInfo.animatedBackground = true;
                 setElementText("animated", "animated background ON");
                 setElementText("toggle-animate", "Turn off animated background");
-            }
-        });
-    }
-
-    activateMenu() {
-        const theMenu = document.getElementById("main-menu");
-        setButtonClick("show-menu", () => {
-            theMenu.classList.add("slide-left");
-            theMenu.classList.remove("slide-right");
-        });
-        setButtonClick("hide-menu", () => {
-            theMenu.classList.add("slide-right");
-            theMenu.classList.remove("slide-left");
-        });
-    }
-
-    activateMenuButtons() {
-        setButtonClick("stream-mode", () => {
-            if (this.masterInfo.streaming) {
-                this.masterInfo.streaming = false;
-                this.streamPlayer.stop();
-            } else {
-                showModal("stream");
             }
         });
     }

@@ -11,7 +11,7 @@
     border-radius: 0.5vmin;
     background-color: lightgray;
     box-sizing: border-box;
-    z-index: 4;
+    z-index: 5;
 }
 
 #stream-status {

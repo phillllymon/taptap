@@ -14,10 +14,87 @@
 </head>
 <body>
     <center>
-        
         <div id="game-container" class="game-container">
             <div id="modal-background" class="hidden"></div>
-            <!-- <div id="stream-modal" class="hidden"> -->
+            <div id="source-menu" class="menu">
+                <div class="menu-title">
+                    Select music source
+                </div>
+                <div id="source-demo-songs" class="menu-choice">
+                    Demo songs
+                </div>
+                <div id="source-upload" class="menu-choice">
+                    Upload music
+                </div>
+                <div id="source-radio" class="menu-choice">
+                    Live radio
+                </div>
+                <div id="source-streaming" class="menu-choice">
+                    Streaming
+                </div>
+            </div>
+            <div id="main-menu" class="menu">
+                <div id="show-source-menu" class="menu-button">&#8678; Source</div>
+                <br>
+                <div id="choose-song-button" class="menu-button">
+                    Song:
+                    <select id="select-song" class="select">
+                        <option value="bach">bach</option>
+                        <option value="boondock">boondock</option>
+                        <option value="brownEyed">brownEyed</option>
+                        <option value="danger">danger</option>
+                        <option value="devil">devil</option>
+                        <option value="dueling">dueling</option>
+                        <option value="evenRats">evenRats</option>
+                        <option value="everyTime">everyTime</option>
+                        <option value="farewell">farewell</option>
+                        <option value="fatLip">fatLip</option>
+                        <option value="feeling">feeling</option>
+                        <option value="fortunateSon">fortunateSon</option>
+                        <option value="girlfriend">girlfriend</option>
+                        <option value="jamesBond">jamesBond</option>
+                        <option value="lessTalkMoreRokk">lessTalkMoreRokk</option>
+                        <option value="mountainKing">mountainKing</option>
+                        <option value="oops">oops</option>
+                        <option value="ready2Rokk">ready2Rokk</option>
+                        <option selected="selected" value="rocknRoll">rocknRoll</option>
+                        <option value="smallThings">smallThings</option>
+                        <option value="sandstorm">sandstorm</option>
+                        <option value="sellOut">sellOut</option>
+                        <option value="semiCharmed">semiCharmed</option>
+                        <option value="stairway">stairway</option>
+                        <option value="starlight">starlight</option>
+                        <option value="sweetChild">sweetChild</option>
+                        <option value="takeOnMe">takeOnMe</option>
+                        <option value="topGun">topGun</option>
+                        <option value="tribute">tribute</option>
+                        <option value="vivaldi">vivaldi</option>
+                        <option value="volcano">volcano</option>
+                    </select> 
+                </div>
+                <div id="upload-song-button" class="menu-button">
+                    Upload song:
+                    <br>
+                    <input class="upload" id="file-input" type="file" />
+                </div>
+                <div id="show-stream-modal-button" class="menu-button">
+                    Connect stream
+                </div>
+                <br>
+                <div class="menu-title">Difficulty</div>
+                <div id="level-1" class="level">stupid</div>
+                <div id="level-2" class="level">easy</div>
+                <div id="level-3" class="level">medium</div>
+                <div id="level-4" class="level">hard</div>
+                <div id="level-5" class="level">crazy</div>
+                <br>
+                <div class="menu-title">Slides</div>
+                <div id="slides-2" class="level">2</div>
+                <div id="slides-3" class="level">3</div>
+                <div id="slides-4" class="level">4</div>
+                <br>
+                <div id="close-and-play" class="primary-button">Play</div>
+            </div>
             <div id="stream-modal" class="hidden">    
                 Note: This feature is in active development.
                 <br>
@@ -101,52 +178,6 @@
                 <br>
                 <button id="save-settings">Save</button>
             </div>
-            <div id="choose-modal" class="hidden">
-                Choose song:
-                <select id="select-song">
-                    <option value="bach">bach</option>
-                    <option value="boondock">boondock</option>
-                    <option value="brownEyed">brownEyed</option>
-                    <option value="danger">danger</option>
-                    <option value="devil">devil</option>
-                    <option value="dueling">dueling</option>
-                    <option value="evenRats">evenRats</option>
-                    <option value="everyTime">everyTime</option>
-                    <option value="farewell">farewell</option>
-                    <option value="fatLip">fatLip</option>
-                    <option value="feeling">feeling</option>
-                    <option value="fortunateSon">fortunateSon</option>
-                    <option value="girlfriend">girlfriend</option>
-                    <option value="jamesBond">jamesBond</option>
-                    <option value="lessTalkMoreRokk">lessTalkMoreRokk</option>
-                    <option value="mountainKing">mountainKing</option>
-                    <option value="oops">oops</option>
-                    <option value="ready2Rokk">ready2Rokk</option>
-                    <option value="rocknRoll">rocknRoll</option>
-                    <option value="smallThings">smallThings</option>
-                    <option value="sandstorm">sandstorm</option>
-                    <option value="sellOut">sellOut</option>
-                    <option value="semiCharmed">semiCharmed</option>
-                    <option value="stairway">stairway</option>
-                    <option value="starlight">starlight</option>
-                    <option value="sweetChild">sweetChild</option>
-                    <option value="takeOnMe">takeOnMe</option>
-                    <option value="topGun">topGun</option>
-                    <option value="tribute">tribute</option>
-                    <option value="vivaldi">vivaldi</option>
-                    <option value="volcano">volcano</option>
-                </select>
-                <br>
-                <br>
-                - or -
-                <br>
-                <br>
-                <input id="file-input" type="file" />
-                <br>
-                <br>
-                <button id="cancel-choose">cancel</button>
-            </div>
-            
             <div id="play-area" class="play-area">
                 <div id="background-left" class="left"></div>
                 <div id="background-right" class="right"></div>
@@ -192,26 +223,6 @@
                 </div>
                 <div id="rock-label"></div>
                 <div id="song-label" class="song-label"></div>
-                
-                <div id="main-menu" class="menu">
-                    <div id="hide-menu" class="menu-button">Hide menu</div>
-                    <br>
-                    <div id="choose-song-button" class="menu-button">Choose song</div>
-                    <br>
-                    <div id="stream-mode" class="menu-button">Stream mode</div>
-                    <br>
-                    <div class="menu-title">Difficulty</div>
-                    <div id="level-1" class="level">stupid</div>
-                    <div id="level-2" class="level">easy</div>
-                    <div id="level-3" class="level">medium</div>
-                    <div id="level-4" class="level">hard</div>
-                    <div id="level-5" class="level">crazy</div>
-                    <br>
-                    <div class="menu-title">Slides</div>
-                    <div id="slides-2" class="level">2</div>
-                    <div id="slides-3" class="level">3</div>
-                    <div id="slides-4" class="level">4</div>
-                </div>
                 <div id="controls-left" class="side-controls">
                     <div id="button-play" class="control-button">
                         <div id="play-arrow"></div>

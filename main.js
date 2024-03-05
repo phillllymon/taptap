@@ -143,7 +143,10 @@ const controlsManager = new ControlsManager(
     streamPlayer,
     animator
 );
-const menuManager = new MenuManager();
+const menuManager = new MenuManager(
+    masterInfo,
+    controlsManager
+);
 const connector = new Connector(
     masterInfo
 );
@@ -451,7 +454,7 @@ function triggerMissedNote() {
     }
     animator.recordNoteMissed();
     removeElementClass("song-label", "font-bigA");
-    setElementText("song-label", currentSong);
+    setElementText("song-label", masterInfo.currentSong);
     document.getElementById("slides").classList.remove("on-fire");
     document.getElementById("song-label").classList.remove("on-fire");
     

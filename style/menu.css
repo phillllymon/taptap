@@ -1,47 +1,65 @@
 .menu {
     position: absolute;
-    left: 100%;
-    top: 0px;
-    width: 240px;
-    font-size: 25px;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    max-height: 85vh;
+    max-width: 90vw;
+    font-size: 2.75vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: gray;
     text-shadow: 0px 0px 10px lightgray;
     z-index: 1;
-    padding: 15px;
-    /* border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px; */
-    border: 5px solid rgba(180, 180, 180, 0.4);
+    padding: 2vh;
+    border: 0.75vh solid rgba(180, 180, 180, 0.4);
     border-radius: 0.5vmin;
-    background-color: rgba(200, 200, 200);
+    background-color: rgba(200, 200, 200, 0.8);
     box-sizing: border-box;
     z-index: 4;
+    overflow: auto;
 }
 
-.slide-left {
-    transform: translate(-100%, 0px);
-    animation-name: slideLeft;
-    animation-duration: 0.3s;
-}
-@keyframes slideLeft {
-    0%    {transform: translate(0px, 0px);}
-    100%    {transform: translate(-100%, 0px);}
+.primary-button {
+    background-color: gray;
+    cursor: pointer;
+    color: lightgray;
+    padding: 1vh;
+    font-size: 3vh;
 }
 
-.slide-right {
-    transform: translate(0px, 0px);
-    animation-name: slideLeft;
-    animation-duration: 0.3s;
+.upload {
+    font-size: 1.75vh;
+    width: 25vh;
 }
-@keyframes slideLeft {
-    0%    {transform: translate(0px, 0px);}
-    100%    {transform: translate(-100%, 0px);}
+.select {
+    font-size: 2.5vh;
+    width: 15vh;
+}
+
+.menu-choice {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: gray;
+    margin: 2vh;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.menu-choice:hover {
+    background-color: gray;
+    color: lightgray;
+}
+
+.menu-choice-selected {
+    background-color: gray;
+    cursor: default;
+    color: lightgray;
+    padding-bottom: 1vh;
 }
 
 .level {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 16;
-    color: darkgray;
+    color: gray;
     margin: 5px;
     cursor: pointer;
     user-select: none;
@@ -58,9 +76,13 @@
 
 .menu-button {
     cursor: pointer;
+    width: 100%;
 }
 .menu-title {
     cursor: default;
+    font-size: 3vh;
+    color: rgb(105, 105, 105);
+    margin: 0.5vh;
 }
 
 .control-button {
@@ -81,29 +103,6 @@
     background-color: rgba(180, 180, 180, 0.8);
     box-sizing: border-box;
 }
-
-#inner-full-button {
-    width: 5vw;
-    height: 5vw;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 0vh;
-    transform: translate(-0.5vh, -0.75vh);
-}
-
-.full-piece {
-    height: 2.5vh;
-    width: 2.5vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4vh;
-}
-
-#full-top-right { transform: scaleX(-1); }
-#full-bottom-left { transform: scaleY(-1); }
-#full-bottom-right { transform: scaleY(-1) scaleX(-1); }
 
 .side-controls {
     position: absolute;
