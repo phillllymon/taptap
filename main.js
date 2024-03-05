@@ -83,6 +83,7 @@ let streak = 0;
 let currentSong = "rocknRoll";
 document.getElementById("song-label").innerText = currentSong;
 let waitingForKey = false;
+let songAtStart = true;
 
 const masterInfo = {
     algorithm,
@@ -96,6 +97,7 @@ const masterInfo = {
     notes,
     noteSpeed,
     slideLength,
+    songAtStart,
     songDelay,
     streaming,
     sustainedNotes,

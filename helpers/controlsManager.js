@@ -41,7 +41,6 @@ class ControlsManager {
             this.player.setSource(`./songs/${this.masterInfo.currentSong}.m4a`);
             showSongControlButton("button-play");
             document.getElementById("song-label").innerText = newValue;
-            hideModal("choose");
             killAllNotes();
             resetAutoAdjustment();
         });
@@ -60,7 +59,6 @@ class ControlsManager {
                 this.player.pause();
                 this.player.setSource(newSongData);
                 showSongControlButton("button-play");
-                hideModal("choose");
                 killAllNotes();
                 resetAutoAdjustment();
                 

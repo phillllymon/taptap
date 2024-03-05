@@ -1,6 +1,7 @@
 class Player {
     // delay in ms
     constructor(masterInfo, source, fftSize, onEnd) {
+        this.masterInfo = masterInfo;
         this.song1 = new Audio(source);
         this.song2 = new Audio(source);
         this.playing1 = false;
@@ -31,7 +32,15 @@ class Player {
         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     }
 
+    countdown() {
+        console.log("COUNTDOWN!");
+    }
+
     start() {
+        if (this.masterInfo.songAtStart) {
+            this.countdown();
+        }
+        this.masterInfo.songAtStart = false;
         this.song1.play();
         this.playing1 = true;
         this.timeStarted = performance.now();
@@ -78,12 +87,14 @@ class Player {
         this.timeToStart2 = this.delay;
         this.song1.currentTime = 0;
         this.song2.currentTime = 0;
+        this.masterInfo.songAtStart = true;
     }
 
     setSource(songData) {
         this.restart();
         this.song1.setAttribute("src", songData);
         this.song2.setAttribute("src", songData);
+        this.masterInfo.songAtStart = true;
     }
 
     getDataArray() {
