@@ -19,7 +19,9 @@ class Player {
             this.timeToStart2 = this.delay;
             onEnd();
         });
+        
         this.waiting = false;
+        this.countdownCanceled = false;
 
         const audioCtx = new AudioContext();
         // audioCtx.destination = { playSound: false };
@@ -30,10 +32,44 @@ class Player {
         this.analyser.connect(audioCtx.destination);
         this.analyser.fftSize = fftSize;
         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+
+        // For delayed frequency array requests
+        this.freqArrays = [];
+        this.times = [];
     }
 
     countdown() {
-        console.log("COUNTDOWN!");
+        const rockLabel = document.getElementById("rock-label");
+        rockLabel.classList.add("countdown-label");
+        rockLabel.innerText = "Ready";
+        this.countdownCanceled = false;
+        setTimeout(() => {
+            if (!this.countdownCanceled) {
+                rockLabel.innerText = "3";
+            } else {
+                rockLabel.classList.remove("countdown-label");
+            }
+        }, 1000);
+        setTimeout(() => {
+            if (!this.countdownCanceled) {
+                rockLabel.innerText = "2";
+            } else {
+                rockLabel.classList.remove("countdown-label");
+            }
+        }, 2000);
+        setTimeout(() => {
+            if (!this.countdownCanceled) {
+                rockLabel.innerText = "1";
+            } else {
+                rockLabel.classList.remove("countdown-label");
+            }
+        }, 3000);
+        setTimeout(() => {
+            if (!this.countdownCanceled) {
+                rockLabel.innerText = "";
+            }
+            rockLabel.classList.remove("countdown-label");
+        }, 4000);
     }
 
     start() {
@@ -73,6 +109,7 @@ class Player {
                 this.timeToStart2 = performance.now() - timeStarted;
             }
         }
+        this.countdownCanceled = true;
     }
 
     restart() {
@@ -88,6 +125,7 @@ class Player {
         this.song1.currentTime = 0;
         this.song2.currentTime = 0;
         this.masterInfo.songAtStart = true;
+        this.countdownCanceled = true;
     }
 
     setSource(songData) {
@@ -97,9 +135,34 @@ class Player {
         this.masterInfo.songAtStart = true;
     }
 
-    getDataArray() {
+    getDataFreqArray() {
         this.analyser.getByteFrequencyData(this.dataArray);
+
+        this.freqArrays.push(this.dataArray.map(val => val));
+        const now = performance.now();
+        this.times.push(now);
+        while (this.times[0] < now - this.delay) {
+            this.times.shift();
+            this.freqArrays.shift();
+        }
+
         return this.dataArray;
+    }
+
+    getDataFreqArrayDelayed(delay = 2000) {
+
+        let i = 0;
+        while (performance.now() - delay > this.times[i]){
+            i += 1;
+            if (!this.times[i]) {
+                break;
+            }
+        }
+        if (this.times[i]) {
+            return this.freqArrays[i];
+        } else {
+            return [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }
     }
 
     setVolume(val) {

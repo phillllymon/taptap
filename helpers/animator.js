@@ -84,64 +84,23 @@ class Animator {
         
         player.calibrateLag();
 
-        // also new
-        // const dataArray = player.getDataArray().map((val) => {
-        //     return val * val;
-        // });
-        // this.arrays[0].push(averageOf(dataArray));
-
-        // also new
-        // const dataArray = player.getDataArray().map((val) => {
-        //     return val * val;
-        // });
-        // const val0 = 1;
-        // const val1 = 1;
-        // const val2 = 1;
-        // const val3 = 1;
-        // for (let i = 0; i < 16; i++) {
-        //     this.arrays[i].push(dataArray[i]);
-        // }
-
-        // new (faithful below)
-        // const dataArray = player.getDataArray().map((val) => {
-        //     return val;
-        // });
-        // const val0 = averageOf(dataArray.slice(2, 5));
-        // this.arrays[0].push(val0);
-        // const val1 = averageOf(dataArray.slice(5, 8));
-        // this.arrays[1].push(val1);
-        // const val2 = averageOf(dataArray.slice(8, 11));
-        // this.arrays[2].push(val2);
-        // const val3 = averageOf(dataArray.slice(11, 14));
-        // this.arrays[3].push(val3);
-
         // faithful
-        const dataArray = player.getDataArray();
-        const val0 = averageOf(dataArray.slice(0, 4));
+        const dataFreqArray = player.getDataFreqArray();
+        const val0 = averageOf(dataFreqArray.slice(0, 4));
         this.arrays[0].push(val0);
-        const val1 = averageOf(dataArray.slice(4, 8));
+        const val1 = averageOf(dataFreqArray.slice(4, 8));
         this.arrays[1].push(val1);
-        const val2 = averageOf(dataArray.slice(8, 12));
+        const val2 = averageOf(dataFreqArray.slice(8, 12));
         this.arrays[2].push(val2);
-        const val3 = averageOf(dataArray.slice(12, 16));
+        const val3 = averageOf(dataFreqArray.slice(12, 16));
         this.arrays[3].push(val3);
 
         // for animated background
-        const upper = 1.5;
-        const lower = 0.5;
         const valsForBackground = [
             val0,
             val1,
             val2,
             val3
-            // val0 - this.arrayNow[0] > 0 ? this.arrayNow[0] * upper : this.arrayNow[0] * lower,
-            // val1 - this.arrayNow[1] > 0 ? this.arrayNow[1] * upper : this.arrayNow[1] * lower,
-            // val2 - this.arrayNow[2] > 0 ? this.arrayNow[2] * upper : this.arrayNow[2] * lower,
-            // val3 - this.arrayNow[3] > 0 ? this.arrayNow[3] * upper : this.arrayNow[3] * lower
-            // val0 - this.arrayNow[0] > 0 ? val0 - this.arrayNow[0]: this.arrayNow[0],
-            // val1 - this.arrayNow[1] > 0 ? val1 - this.arrayNow[1]: this.arrayNow[1],
-            // val2 - this.arrayNow[2] > 0 ? val2 - this.arrayNow[2]: this.arrayNow[2],
-            // val3 - this.arrayNow[3] > 0 ? val3 - this.arrayNow[3]: this.arrayNow[3]
         ];
         this.backgroundAnimator.animateBackground(valsForBackground);
         
@@ -155,7 +114,13 @@ class Animator {
             this.times.shift();
         }
         
-        const masterData = [this.arrays, this.times, this.slides.length, algorithm];
+        const masterData = {
+            arrays: this.arrays,
+            times: this.times,
+            numSlides: this.slides.length,
+            algorithm: algorithm,
+            dataFreqArray: player.getDataFreqArrayDelayed()
+        }
         
         const noteVals = this.noteWriter.writeNotes(
             this.slides,

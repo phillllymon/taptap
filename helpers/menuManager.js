@@ -1,10 +1,12 @@
 class MenuManager {
-    constructor(masterInfo, controlsManager) {
+    constructor(masterInfo, controlsManager, player) {
         this.masterInfo = masterInfo;
         this.controlsManager = controlsManager;
+        this.player = player;
         this.menus = [
             "source-menu",
-            "main-menu"
+            "main-menu",
+            "feedback"
         ];
         this.mainMenuOptions = [
             "choose-song-button",
@@ -16,8 +18,20 @@ class MenuManager {
         this.activateSourceMenuButtons();
 
         this.activateMainMenu();
+        this.activateFeedbackMenu();
 
         this.showMenu("source-menu");
+    }
+
+    activateFeedbackMenu() {
+        setButtonClick("replay", () => {
+            this.player.restart();
+            this.controlsManager.playFunction();
+            this.hideMenus();
+        });
+        setButtonClick("no-replay", () => {
+            this.showMenu("main-menu");
+        });
     }
 
     activateMainMenu() {
@@ -67,6 +81,7 @@ class MenuManager {
     activateMenuShowButtons() {
         setButtonClick("show-menu", () => {
             this.showMenu("main-menu");
+            this.player.countdownCanceled = true;
         });
         setButtonClick("show-source-menu", () => {
             this.showMenu("source-menu");

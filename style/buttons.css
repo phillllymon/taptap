@@ -43,7 +43,7 @@
     width: 4vh;
     border-radius: 0.3vh;
     background-color: gray;
-    box-shadow: 0px 0px 10px lightgray;
+    /* box-shadow: 0px 0px 10px lightgray; */
 }
 #show-settings {
     position: relative;
@@ -56,8 +56,8 @@
     height: 0.6vh;
     border-right: 1.25vh solid gray;
     border-left: 1.25vh solid gray;
-    border-radius: 0.4vh;
-    box-shadow: 0px 0px 10px lightgray;
+    /* border-radius: 0.4vh; */
+    /* box-shadow: 0px 0px 10px lightgray; */
 }
 #teeth1 {
     transform: translate(-50%, -50%);
@@ -79,21 +79,21 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 2vh;
-    height: 2vh;
-    border: 0.75vh solid gray;
+    width: 1.5vh;
+    height: 1.5vh;
+    border: 1vh solid gray;
     border-radius: 50%;
 }
-#inner-gear-circle {
+/* #inner-gear-circle {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 1vh;
-    height: 1vh;
+    width: 1.25vh;
+    height: 1.25vh;
     border-radius: 50%;
     background-color: gray;
-}
+} */
 #full-screen {
     position: relative;
 }

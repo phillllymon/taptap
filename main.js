@@ -85,6 +85,10 @@ document.getElementById("song-label").innerText = currentSong;
 let waitingForKey = false;
 let songAtStart = true;
 
+let songNotesHit = 0;
+let songNotesMissed = 0;
+let songStreak = 0;
+
 const masterInfo = {
     algorithm,
     allSlides,
@@ -99,6 +103,9 @@ const masterInfo = {
     slideLength,
     songAtStart,
     songDelay,
+    songNotesHit,
+    songNotesMissed,
+    songStreak,
     streaming,
     sustainedNotes,
     tapperKeys,
@@ -134,6 +141,15 @@ const player = new Player(
         showSongControlButton("button-restart");
         autoAdjustment = autoCalibrating ? -0.05 * travelLength : 0;
         masterInfo.autoAdjustment = autoAdjustment;
+        document.getElementById("feedback").classList.remove("hidden");
+        const fraction = 1.0 * masterInfo.songNotesHit / (masterInfo.songNotesHit + masterInfo.songNotesMissed);
+        document.getElementById("percent-bar").style.width = `${fraction * 30}vh`;
+        document.getElementById("feedback-percent").innerText = `Tap accuracy: ${Math.round(fraction * 100)}%`;
+        document.getElementById("feedback-streak").innerText = `Longest streak: ${masterInfo.songStreak}`;
+        document.getElementById("feedback-title").innerText = masterInfo.currentSong;
+        masterInfo.songNotesMissed = 0;
+        masterInfo.songNotesHit = 0;
+        masterInfo.songStreak = 0;
     }
 );
 const streamPlayer = new StreamPlayer(
@@ -147,7 +163,8 @@ const controlsManager = new ControlsManager(
 );
 const menuManager = new MenuManager(
     masterInfo,
-    controlsManager
+    controlsManager,
+    player
 );
 const connector = new Connector(
     masterInfo
@@ -364,7 +381,17 @@ function addNote(slideId, val, marked = false) {
     if (marked) {
         newNote.classList.add("note-marked");
     }
-    const startPos = -1.0 * autoAdjustment; // should be zero initially
+
+    let startPos = -1.0 * autoAdjustment; // should be zero initially
+    
+    // match previous note if super close
+    ["slide-left", "slide-a", "slide-b", "slide-right"].forEach((id) => {
+        const recent = mostRecentNotesOrTails[id];
+        if (recent && !recent.isTail && recent.position < 0.04 * masterInfo.travelLength + autoAdjustment) {
+            startPos = recent.position;
+        }
+    });
+
     newNote.style.top = `${startPos}px`;
     const noteInfo = {
         note: newNote,
@@ -414,6 +441,10 @@ function triggerHitNote(slideId) {
 
     animator.recordNoteHit();
     streak += 1;
+    if (streak > masterInfo.songStreak) {
+        masterInfo.songStreak = streak;
+    }
+    masterInfo.songNotesHit += 1;
     const songLabel = document.getElementById("song-label");
     if (streak > 9) {
         songLabel.innerText = `STREAK: ${streak}`;
@@ -487,6 +518,7 @@ function triggerMissedNote() {
         }, 1300);
     }
     streak = 0;
+    masterInfo.songNotesMissed += 1;
 }
 
 function showSongControlButton(buttonId) {

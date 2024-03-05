@@ -63,24 +63,37 @@
     background-color: rgba(180, 180, 180, 0.6);
 }
 
+.countdown-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18vh;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: gray;
+    z-index: 4;
+    padding: 15px;
+    opacity: 0.8;
+}
+
 .rock-label {
     position: absolute;
     left: 50%;
     top: 150px;
     transform: translate(-50%, 0px);
-    font-size: 80px;
+    font-size: 10vh;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: orange;
     z-index: 4;
     padding: 15px;
-    opacity: 0.5;
+    opacity: 0.4;
     animation-name: youRock;
     animation-duration: 500ms;
     text-shadow: 0px 0px 10px lightgray;
 }
 @keyframes youRock {
-    0%    {font-size: 0px}
-    100%    {font-size: 80px}
+    0%    {font-size: 0vh}
+    100%    {font-size: 10vh}
 }
 .rock-shrink {
     font-size: 0px;
@@ -88,8 +101,8 @@
     animation-duration: 500ms;
 }
 @keyframes rockShrink {
-    0%    {font-size: 80px}
-    100%    {font-size: 0px}
+    0%    {font-size: 10vh}
+    100%    {font-size: 0vh}
 }
 
 .font-bigA {

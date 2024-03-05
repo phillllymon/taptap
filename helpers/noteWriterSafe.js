@@ -21,9 +21,6 @@ class NoteWriter {
         this.sideWithNotes = null // remember which side can have new notes when sustained note in middle of 3 slides
     
         this.last = performance.now();
-
-        // EXPERIMENTAL
-        this.order = "0123";
     }
 
     writeTails(noteVals, slideIds, makeTail) {
@@ -63,19 +60,14 @@ class NoteWriter {
                 const lastNote = this.mostRecentNotes[slideId];
                 if (lastNote) {
 
-                    let thresholdPass = true;
                     const adjust = {
-                        "slide-left": 1.2,
+                        "slide-left": 1.1,
                         "slide-a": 1.0,
                         "slide-b": 0.9,
-                        "slide-right": 0.4
+                        "slide-right": 0.3
                     }[slideId];
-                    if (lastNote.isTail && lastNote.totalHeight < 0.1 * this.masterInfo.travelLength && thisNoteVal.val < adjust * lastTriggerNote.val) {
-                        thresholdPass = thisNoteVal.val > adjust * lastTriggerNote.val;
-                    }
 
-                    if (makeNotePass && thresholdPass) {
-                    // if (makeNotePass && thisNoteVal.val > adjust * lastTriggerNote.val) {
+                    if (makeNotePass && thisNoteVal.val > adjust * lastTriggerNote.val) {
                         makeTail(slideId, lastNote);
                         const now = performance.now();
                         if (slideIds.length === 4) {
@@ -119,10 +111,12 @@ class NoteWriter {
     // mobile only allows 2 notes at once
     writeNotes(slideIds, notesPerSecond, addNote, mobile, masterData) {
 
+        
+        
         const vals = [];
 
         let amt = 0;
-        const dataArrays = masterData.arrays;
+        const dataArrays = masterData[0];
         for (let i = 0; i < dataArrays.length; i++) {
             const arr = dataArrays[i];
             const midIdx = Math.floor(arr.length / 2);
@@ -134,77 +128,16 @@ class NoteWriter {
         amt = Math.max(...vals);
 
         const maxToneVal = Math.max(...vals);
-        
-        let thisToneVal = (vals[0] / maxToneVal) 
+        // const thisToneVal = (vals[0] / 255) + (2 * (vals[1] / 255)) + (3 * (vals[2] / 255)) + (4 * (vals[3] / 255));
+        const thisToneVal = (vals[0] / maxToneVal) 
             + (2 * (vals[1] / maxToneVal))
             + (3 * (vals[2] / maxToneVal))
             + (4 * (vals[3] / maxToneVal));
 
-        // FREQUENCY ORDER EXPERIMENT
-        const wholeArray = masterData.dataFreqArray;
-
-        const valPairings = [];
-        wholeArray.forEach((val, i) => {
-            valPairings.push([i, val]);
-        });
-
-        const newOrder = valPairings.sort((a, b) => {
-            return a[1] > b[1] ? -1 : 1;
-        }).map((pair) => {
-            return pair[0];
-        }).join("");
-
-        const newRanks = {};
-        newOrder.split("").forEach((char, i) => {
-            newRanks[char] = i;
-        });
-
-        let diffScore = 0;
-        
-        this.order.split("").forEach((char, i) => {
-            const newRank = newRanks[char];
-            let diff = newRank - i;
-            if (diff < 0) {
-                diff *= -1;
-            }
-            diffScore += diff;
-        });
-
-        const diffThreshold = {
-            6: 125,
-            4: 125,
-            3: 130,
-            2: 130,
-            1: 130
-        }[notesPerSecond];
-        this.order = newOrder;
-
-        const thisAmt = Math.max(...wholeArray);
-        if (diffScore > diffThreshold) {
-
-            const noteWriteParams = {
-                slideToUse: this.getSlideToUse(thisToneVal, masterData.numSlides),
-                slideIds,
-                noteVal: 255, // just make it hard to create tail from this note
-                toneVal: thisToneVal,
-                addNote,
-                marked: false,
-                mobile,
-                notesPerSecond
-            };
-            this.attemptNoteWrite(noteWriteParams);
-        }
-
-        
-        // END FREQUENCY ORDER EXPERIMENT
-        
-        
-        
-
         
         // NEW START -------------
-        const arrays = masterData.arrays;
-        const times = masterData.times;
+        const arrays = masterData[0];
+        const times = masterData[1];
         const startTime = times[0];
         const endTime = times[times.length - 1];
         const timeGiven = endTime - startTime;
@@ -222,15 +155,13 @@ class NoteWriter {
         const twoSecondLeg = 2000.0 / milsPerNode;
 
         // const leg = Math.floor(twoSecondLeg / notesPerSecond);
-        const leg = Math.floor(twoSecondLeg / 4);
+        const leg = Math.floor(twoSecondLeg / 16);
 
         // returned from this function to be used for writeTails
         const tailLeg = Math.floor(1.0 * twoSecondLeg / 5);
 
         const noteVals = [];
         const slidesWithMakeNote = {};
-
-        
 
         for (let i = 0; i < arrays.length; i++) { // OLD
         // for (let i = 0; i < 1; i++) {   // JANKY TEMP ***************** just for trying all arrays together
@@ -265,8 +196,7 @@ class NoteWriter {
 
             // each item is [height, idx] of an increase note
             const biggests = [];
-            const level = notesPerSecond;
-            for (let k = 0; k < level; k++) {
+            for (let k = 0; k < notesPerSecond; k++) {
                 biggests.push([0, 0]);
             }
 
@@ -310,16 +240,11 @@ class NoteWriter {
 
                 }
             }
-
-            
             
             const makeNote = biggests.map((noteArr) => {
                 return noteArr[1];
             }).includes(Math.floor(combineArr.length / 2));
-
             slidesWithMakeNote[slideIds[i]] = makeNote;
-
-            
 
             noteVals.push({
                 beforeRatio: (1.0 * overallBeforeMin) / overallBeforeMax,
@@ -331,7 +256,6 @@ class NoteWriter {
                 firstTime: true
             });
 
-            // if (false) {
             if (makeNote) {
                 let marked = false;
                 if (amt < 140) {
@@ -342,149 +266,131 @@ class NoteWriter {
                 let slideToUse;
                 if (algorithm === "A") {
                     
-                    slideToUse = this.getSlideToUse(thisToneVal, masterData.numSlides);
+                    const sortedTones = this.recentToneVals.map((val) => {
+                        return val;
+                    }).sort();
+
+                    slideToUse = "slide-left";
+                    const numSlides = masterData[2];
+                    if (numSlides === 4) {
+                        if (thisToneVal > sortedTones[0]) {
+                            slideToUse = "slide-a";
+                            if (thisToneVal > sortedTones[1]) {
+                                slideToUse = "slide-b"
+                                if (thisToneVal > sortedTones[2]){
+                                    slideToUse = "slide-right";
+                                }
+                            }
+                        }
+                    } else if (numSlides === 3) {
+                        if (thisToneVal > sortedTones[0]) {
+                            slideToUse = "slide-a";
+                            if (thisToneVal > sortedTones[2]) {
+                                slideToUse = "slide-right";
+                            }
+                        }
+                    } else {
+                        if (thisToneVal > sortedTones[1]) {
+                            slideToUse = "slide-right";
+                        }
+                    }
+
+                    // old
+                    // this.recentToneVals.push(thisToneVal);
+                    // this.recentToneVals.shift();
+                    
+                    // new
+                    if (!this.lastValTime || performance.now() - this.lastValTime > 100) {
+                        this.recentToneVals.push(thisToneVal);
+                        this.lastValTime = performance.now();
+                        this.recentToneVals.shift();
+                    }
+                    // end new
 
                 } else if (algorithm === "B") {
                     slideToUse = slideIds[i];
                 }
 
                 // write notes - same for both algorithms once slideToUse is established
-                const noteWriteParams = {
-                    slideToUse,
-                    // slideToUse: diffSlide,
-                    slideIds,
-                    noteVal,
-                    toneVal: thisToneVal,
-                    addNote,
-                    marked,
-                    mobile,
-                    notesPerSecond
-                };
-                this.attemptNoteWrite(noteWriteParams);
+                if (slideToUse) { // make sure note wasn't triggered in slide we're not currently using
+                        
+                    // --------------------- old faithful notes --------------------
+                    const now = performance.now();
+                    
+                    // TEMP
+                    // if (performance.now() - this.last > 100) {
+                    //     addNote(slideToUse, noteVal, marked);
+                    //     this.last = performance.now();    
+                    // }
+                    // return;
+
+                    // END TEMP
+                    
+                    
+                    
+                    
+                    
+                    if (now - this.lastAll[slideToUse] > this.masterInfo.minNoteGap) {
+                        if (mobile && slideIds.length > 2) {
+                            const gap = (1.0 / notesPerSecond) * 1000;
+                            if (slideIds.length === 3) {
+                                // check if note is on wrong side of middle sustained note
+                                if (this.mostRecentNotes["slide-a"] && this.mostRecentNotes["slide-a"].isTail) {
+                                    if (slideToUse !== this.sideWithNotes) {
+                                        return;
+                                    }
+                                }
+                                const leftTime = now - this.lastLeft;
+                                const midTime = now - this.lastMid;
+                                const rightTime = now - this.lastRight;
+                                if (slideToUse === this.rightId) {
+                                    if (leftTime > gap || midTime > gap) {
+                                        addNote(slideToUse, noteVal, marked);
+                                        this.sideWithNotes = slideToUse;
+                                        this.lastRight = now;
+                                        this.lastAll[slideToUse] = now;
+                                    }
+                                } else if (slideToUse === this.leftId) {
+                                    if (midTime > gap || rightTime > gap) {
+                                        addNote(slideToUse, noteVal, marked);
+                                        this.sideWithNotes = slideToUse;
+                                        this.lastLeft = now;
+                                        this.lastAll[slideToUse] = now;
+                                    }
+                                } else {
+                                    if (leftTime > gap || rightTime > gap) {
+                                        addNote(slideToUse, noteVal, marked);
+                                        this.lastMid = now;
+                                        this.lastAll[slideToUse] = now;
+                                    }
+                                }
+                            } else { // we have 4 slides
+                                const leftTime = now - this.lastLeft;
+                                const rightTime = now - this.lastRight;
+                                if (this.leftSlides.includes(slideToUse)) {
+                                    if (leftTime > gap) {
+                                        addNote(slideToUse, noteVal, marked);
+                                        this.lastLeft = now;
+                                        this.lastAll[slideToUse] = now;
+                                    }
+                                } else { // we're on the right side
+                                    if (rightTime > gap) {
+                                        addNote(slideToUse, noteVal, marked);
+                                        this.lastRight = now;
+                                        this.lastAll[slideToUse] = now;
+                                    }
+                                }
+                            }
+                        } else {
+                            addNote(slideToUse, noteVal, marked);
+                            this.lastAll[slideToUse] = now;
+                        }
+                    }
+                }
             }
         }
         noteVals.push(slidesWithMakeNote);
         return noteVals;
-    }
-
-    getSlideToUse(toneVal, numSlides) {
-        const sortedTones = this.recentToneVals.map((val) => {
-            return val;
-        }).sort();
-
-        let slideToUse = "slide-left";
-        if (numSlides === 4) {
-            if (toneVal > sortedTones[0]) {
-                slideToUse = "slide-a";
-                if (toneVal > sortedTones[1]) {
-                    slideToUse = "slide-b"
-                    if (toneVal > sortedTones[2]){
-                        slideToUse = "slide-right";
-                    }
-                }
-            }
-        } else if (numSlides === 3) {
-            if (toneVal > sortedTones[0]) {
-                slideToUse = "slide-a";
-                if (toneVal > sortedTones[2]) {
-                    slideToUse = "slide-right";
-                }
-            }
-        } else {
-            if (toneVal > sortedTones[1]) {
-                slideToUse = "slide-right";
-            }
-        }
-        
-        return slideToUse;
-    }
-
-    attemptNoteWrite(params) {
-        const {
-            slideToUse,
-            slideIds,
-            noteVal,
-            toneVal,
-            addNote,
-            marked,
-            mobile,
-            notesPerSecond
-        } = params;
-        let noteMade = false;
-        if (slideToUse) { // make sure note wasn't triggered in slide we're not currently using
-            const now = performance.now();
-            if (now - this.lastAll[slideToUse] > this.masterInfo.minNoteGap) {
-                if (mobile && slideIds.length > 2) {
-                    const gap = (1.0 / notesPerSecond) * 1000;
-                    if (slideIds.length === 3) {
-                        // check if note is on wrong side of middle sustained note
-                        if (this.mostRecentNotes["slide-a"] && this.mostRecentNotes["slide-a"].isTail) {
-                            if (slideToUse !== this.sideWithNotes) {
-                                return;
-                            }
-                        }
-                        const leftTime = now - this.lastLeft;
-                        const midTime = now - this.lastMid;
-                        const rightTime = now - this.lastRight;
-                        if (slideToUse === this.rightId) {
-                            if (leftTime > gap || midTime > gap) {
-                                addNote(slideToUse, noteVal, marked);
-                                noteMade = true;
-                                this.sideWithNotes = slideToUse;
-                                this.lastRight = now;
-                                this.lastAll[slideToUse] = now;
-                            }
-                        } else if (slideToUse === this.leftId) {
-                            if (midTime > gap || rightTime > gap) {
-                                addNote(slideToUse, noteVal, marked);
-                                noteMade = true;
-                                this.sideWithNotes = slideToUse;
-                                this.lastLeft = now;
-                                this.lastAll[slideToUse] = now;
-                            }
-                        } else {
-                            if (leftTime > gap || rightTime > gap) {
-                                addNote(slideToUse, noteVal, marked);
-                                noteMade = true;
-                                this.lastMid = now;
-                                this.lastAll[slideToUse] = now;
-                            }
-                        }
-                    } else { // we have 4 slides
-                        const leftTime = now - this.lastLeft;
-                        const rightTime = now - this.lastRight;
-                        if (this.leftSlides.includes(slideToUse)) {
-                            if (leftTime > gap) {
-                                addNote(slideToUse, noteVal, marked);
-                                noteMade = true;
-                                this.lastLeft = now;
-                                this.lastAll[slideToUse] = now;
-                            }
-                        } else { // we're on the right side
-                            if (rightTime > gap) {
-                                addNote(slideToUse, noteVal, marked);
-                                noteMade = true;
-                                this.lastRight = now;
-                                this.lastAll[slideToUse] = now;
-                            }
-                        }
-                    }
-                } else {
-                    addNote(slideToUse, noteVal, marked);
-                    noteMade = true;
-                    this.lastAll[slideToUse] = now;
-                }
-            }
-        }
-
-        if (noteMade) {
-            if (!this.lastValTime || performance.now() - this.lastValTime > 100) {
-                this.recentToneVals.push(toneVal);
-                this.lastValTime = performance.now();
-                this.recentToneVals.shift();
-            }
-        }
-
     }
 }
 
