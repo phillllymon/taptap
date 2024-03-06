@@ -111,6 +111,9 @@ class StationManager {
                 this.chunksB.push(e.data);
             };
             this.recorderA.onstop = () => {
+                const now = performance.now();
+                const timeToUse = now - this.times.A;
+
                 const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
                 this.chunksA = [];
                 const reader = new FileReader();
@@ -118,12 +121,15 @@ class StationManager {
                     const str = btoa(readerE.target.result);
                     this.streamPlayer.setData(JSON.stringify({
                         str: str,
-                        time: 10000
+                        time: timeToUse
                     }));
                 };
                 reader.readAsBinaryString(blob);
             };
             this.recorderB.onstop = () => {
+                const now = performance.now();
+                const timeToUse = now - this.times.B;
+                
                 const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
                 this.chunksB = [];
                 const reader = new FileReader();
@@ -131,13 +137,14 @@ class StationManager {
                     const str = btoa(readerE.target.result);
                     this.streamPlayer.setData(JSON.stringify({
                         str: str,
-                        time: 10000
+                        time: timeToUse
                     }));
                 };
                 reader.readAsBinaryString(blob);
             };
         
             this.recorderA.start();
+            this.times.A = performance.now();
             setTimeout(() => {
                 this.switchToB();
             }, 10000);
@@ -147,6 +154,7 @@ class StationManager {
 
     switchToB() {
         this.recorderB.start();
+        this.times.B = performance.now();
         this.recorderA.stop();
         if (this.listening) {
             setTimeout(() => {
@@ -156,6 +164,7 @@ class StationManager {
     }
     switchToA() {
         this.recorderA.start();
+        this.times.A = performance.now();
         this.recorderB.stop();
         if (this.listening) {
             setTimeout(() => {

@@ -63,6 +63,7 @@ class MenuManager {
             this.masterInfo.songMode = "radio";
             this.setMainMenuOption("select-station-button");
             this.showMenu("main-menu");
+            this.masterInfo.currentSong = "Unsung 80s";
         });
         setButtonClick("source-streaming", () => {
             this.masterInfo.songMode = "stream";
