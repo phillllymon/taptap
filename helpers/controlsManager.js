@@ -1,7 +1,8 @@
 class ControlsManager {
-    constructor(masterInfo, player, streamPlayer, animator) {
+    constructor(masterInfo, player, streamPlayer, animator, radioManager) {
         this.player = player;
         this.animator = animator;
+        this.radioManager = radioManager;
         this.masterInfo = masterInfo;
         this.streamPlayer = streamPlayer;
         this.activateFullscreen();
@@ -85,7 +86,7 @@ class ControlsManager {
     }
     
     playFunction() {
-        if (masterInfo.streaming) {
+        if (masterInfo.streaming || masterInfo.songMode === "radio") {
             this.streamPlayer.start();
             this.animator.runAnimation({ player: this.streamPlayer, algorithm: this.masterInfo.algorithm });
         } else {
@@ -98,7 +99,7 @@ class ControlsManager {
         };
     }
     pauseFunction() {
-        if (masterInfo.streaming) {
+        if (masterInfo.streaming || masterInfo.songMode === "radio") {
             this.streamPlayer.stop();
             killAllNotes();
         } else {

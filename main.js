@@ -89,6 +89,8 @@ let songNotesHit = 0;
 let songNotesMissed = 0;
 let songStreak = 0;
 
+let radioCode = "mvn925";
+
 const masterInfo = {
     algorithm,
     allSlides,
@@ -100,6 +102,7 @@ const masterInfo = {
     mostRecentNotesOrTails,
     notes,
     noteSpeed,
+    radioCode,
     slideLength,
     songAtStart,
     songDelay,
@@ -155,6 +158,10 @@ const player = new Player(
 const streamPlayer = new StreamPlayer(
     masterInfo.songDelay
 );
+const stationManager = new StationManager(
+    masterInfo,
+    streamPlayer
+);
 const controlsManager = new ControlsManager(
     masterInfo,
     player,
@@ -164,15 +171,13 @@ const controlsManager = new ControlsManager(
 const menuManager = new MenuManager(
     masterInfo,
     controlsManager,
-    player
+    player,
+    stationManager,
+    streamPlayer
 );
 const connector = new Connector(
     masterInfo
 );
-
-
-
-
 
 
 
@@ -420,7 +425,7 @@ function killAllNotes() {
 
 let labelInUse = false;
 function triggerHitNote(slideId) {
-    if (masterInfo.streaming) {
+    if (masterInfo.streaming || masterInfo.songMode === "radio") {
         streamPlayer.setVolume(1);
     } else {
         player.setVolume(1);
@@ -480,7 +485,7 @@ function triggerHitNote(slideId) {
 
 function triggerMissedNote() {
     twangs[Math.floor(twangs.length * Math.random())].play();
-    if (masterInfo.streaming) {
+    if (masterInfo.streaming || masterInfo.songMode === "radio") {
         streamPlayer.setVolume(0.3);
     } else {
         player.setVolume(0.3);

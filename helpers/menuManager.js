@@ -1,8 +1,10 @@
 class MenuManager {
-    constructor(masterInfo, controlsManager, player) {
+    constructor(masterInfo, controlsManager, player, stationManager, streamPlayer) {
         this.masterInfo = masterInfo;
         this.controlsManager = controlsManager;
+        this.stationManager = stationManager;
         this.player = player;
+        this.streamPlayer = streamPlayer;
         this.menus = [
             "source-menu",
             "main-menu",
@@ -11,6 +13,7 @@ class MenuManager {
         this.mainMenuOptions = [
             "choose-song-button",
             "upload-song-button",
+            "select-station-button",
             "show-stream-modal-button"
         ];
 
@@ -37,7 +40,11 @@ class MenuManager {
     activateMainMenu() {
         setButtonClick("close-and-play", () => {
             this.hideMenus();
-            this.controlsManager.playFunction();
+            if (this.masterInfo.songMode === "radio") {
+                this.stationManager.startListening();
+            } else {
+                this.controlsManager.playFunction();
+            }
         });
     }
 
@@ -54,9 +61,8 @@ class MenuManager {
         });
         setButtonClick("source-radio", () => {
             this.masterInfo.songMode = "radio";
-            alert("Radio coming soon!");
-            // this.setMainMenuOption("radio-station-button");
-            // this.showMenu("main-menu");
+            this.setMainMenuOption("select-station-button");
+            this.showMenu("main-menu");
         });
         setButtonClick("source-streaming", () => {
             this.masterInfo.songMode = "stream";
@@ -85,6 +91,9 @@ class MenuManager {
         });
         setButtonClick("show-source-menu", () => {
             this.showMenu("source-menu");
+            this.player.stop();
+            this.streamPlayer.stop();
+            this.stationManager.stopListening();
         });
     }
 

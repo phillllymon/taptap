@@ -5,6 +5,9 @@ class StreamPlayer {
         this.started = false;
         this.current = null;
         this.muted = false;
+
+        this.freqArrays = [];
+        this.times = [];
     }
 
     calibrateLag() {
@@ -23,7 +26,7 @@ class StreamPlayer {
         }, this.songDelay);
     }
 
-    getDataArray() {
+    getDataFreqArray() {
         if (this.current && !this.muted) {
             this.current.analyser.getByteFrequencyData(this.current.dataArray);
             return this.current.dataArray;
@@ -32,8 +35,26 @@ class StreamPlayer {
         }
     }
 
+    getDataFreqArrayDelayed(delay = 2000) {
+
+        let i = 0;
+        while (performance.now() - delay > this.times[i]){
+            i += 1;
+            if (!this.times[i]) {
+                break;
+            }
+        }
+        if (this.times[i]) {
+            return this.freqArrays[i];
+        } else {
+            return [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }
+    }
+
     setData(data) {
-        console.log("streamPlayer data received");
+        if (!this.started) {
+            document.getElementById("initial-received").style.color = "gray";
+        }
         const dataObj = JSON.parse(data);
 
         const audioCtx = new AudioContext();
@@ -61,7 +82,10 @@ class StreamPlayer {
         if (!this.started && this.queue.length > 1) {
             console.log("starting music " + this.queue.length);
             this.startNextChunk();
-            document.getElementById("song-label").innerText = "streaming";
+            document.getElementById("now-streaming").style.color = "gray";
+            setTimeout(() => {
+                document.getElementById("connecting-radio").classList.add("hidden");
+            }, 2000);
         }
     }
 
@@ -102,7 +126,9 @@ class StreamPlayer {
 
     stop() {
         this.muted = true;
-        this.current.song.volume = 0;
+        if (this.current) {
+            this.current.song.volume = 0;
+        }
         if (this.currentAudio) {
             this.currentAudio.volume = 0;
         }

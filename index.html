@@ -16,6 +16,20 @@
     <center>
         <div id="game-container" class="game-container">
             <div id="modal-background" class="hidden"></div>
+            <div id="connecting-radio" class="hidden">
+                <div class="menu-title">
+                    Connecting station
+                </div>
+                <div id="acquiring" class="menu-choice">
+                    Stream acquired
+                </div>
+                <div id="initial-received" class="menu-choice">
+                    Initial data received 
+                </div>
+                <div id="now-streaming" class="menu-choice">
+                    Streaming
+                </div>
+            </div>
             <div id="feedback" class="menu">
                 <div id="feedback-title" class="feedback-title"></div>
                 <div class="feedback-item">
@@ -88,6 +102,10 @@
                     Upload song:
                     <br>
                     <input class="upload" id="file-input" type="file" />
+                </div>
+                <div id="select-station-button" class="menu-button">
+                    Station:
+                    <select id="select-station" class="select"></select>
                 </div>
                 <div id="show-stream-modal-button" class="menu-button">
                     Connect stream
@@ -284,6 +302,7 @@
     <script type="text/javascript" src="./helpers/noteWriter.js"></script>
     <script type="text/javascript" src="./helpers/animator.js"></script>
     <script type="text/javascript" src="./helpers/backgroundAnimator.js"></script>
+    <script type="text/javascript" src="./helpers/stationManager.js"></script>
     <script type="text/javascript" src="./helpers/controlsManager.js"></script>
     <script type="text/javascript" src="./helpers/menuManager.js"></script>
     <script type="text/javascript" src="./helpers/streamPlayer.js"></script>
