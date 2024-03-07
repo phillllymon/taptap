@@ -140,7 +140,7 @@ class StationManager {
                 }, 10000);
                 setTimeout(() => {
                     recorder.stop();
-                }, 13000);
+                }, 15000);
                 recorder.start();
             };
             startNextRecording();

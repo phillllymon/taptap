@@ -80,21 +80,94 @@ class StreamPlayer {
         }
     }
 
+    getAdjustmentData() {
+        this.analyser.getByteFrequencyData(this.dataArray);
+        this.dataArrays.push(this.dataArray);
+        this.nextAnalyser.getByteFrequencyData(this.nextDataArray);
+        this.nextDataArrays.push(this.nextDataArray);
+
+        if (performance.now() - this.dataStartTime < 1000) {
+            // console.log("HERE");
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+
+                    this.getAdjustmentData();
+                }, 0);
+            });
+        } else {
+            // now our arrays are populated, analyze them
+            const numPoints = this.dataArrays.length;
+            const bArr = this.nextDataArrays.slice(Math.floor(0.25 * numPoints), Math.floor(0.75 * numPoints));
+            const numSteps = numPoints - bArr.length;
+
+            let smallestFound = 1000000;
+            let stepsNeeded = 0;
+            for (let i = 0; i < numSteps; i++) {
+                let total = 0;
+                for (let j = 0; j < bArr.length; j++) {
+                    const bVal = bArr[j];
+                    const aVal = this.dataArrays[i + j];
+                    let diff = bVal - aVal;
+                    if (diff < 0) {
+                        diff *= -1;
+                    }
+                    total += diff;
+                }
+                if (total < smallestFound) {
+                    smallestFound = total;
+                    stepsNeeded = i - Math.floor(numSteps / 2);
+                }
+            }
+            const timePerStep = 1000.0 / numSteps;
+            const msNeeded = timePerStep * stepsNeeded;
+            this.syncAdjustment = msNeeded / 1000.0;
+        }
+    }
+
+    startSyncAdjustment() {
+        this.dataStartTime = performance.now();
+        this.dataArrays = [];
+        this.nextDataArrays = [];
+        this.dataTimes = [];
+        this.analyser.getByteFrequencyData(this.dataArray);
+        console.log(this.dataArray);
+        this.getAdjustmentData();
+    }
+
     startNextRecording() {
         console.log(this.nextDelay);
         this.nextSilentPlayer.volume = 0;
         this.nextSilentPlayer.currentTime = this.silentPlayer.currentTime - (1.0 * this.nextDelay / 1000);
         this.nextSilentPlayer.play();
-        this.nextSilentPlayer.volume = 1;
-        // this.silentPlayer.pause();
-        this.silentPlayer.volume = 0;
-        this.silentPlayer = this.nextSilentPlayer;
-        this.analyser = this.nextAnalyser;
+
+        this.syncAdjustment = 0;
+        this.startSyncAdjustment();
+        // timeout for sync delay correction analysis
+        setTimeout(() => {
+
+            this.nextSilentPlayer.currentTime = this.silentPlayer.currentTime + this.syncAdjustment;
+            this.nextSilentPlayer.play();
+            this.nextSilentPlayer.volume = 1;
+            this.silentPlayer.volume = 0;
+            this.silentPlayer = this.nextSilentPlayer;
+            this.analyser = this.nextAnalyser;
+            this.dataArray = this.nextDataArray;
+        }, 2000);
+
+        // console.log(this.nextDelay);
+        // this.nextSilentPlayer.volume = 0;
+        // this.nextSilentPlayer.currentTime = this.silentPlayer.currentTime - (1.0 * this.nextDelay / 1000);
+        // this.nextSilentPlayer.play();
+        // this.nextSilentPlayer.volume = 1;
+        // // this.silentPlayer.pause();
+        // this.silentPlayer.volume = 0;
+        // this.silentPlayer = this.nextSilentPlayer;
+        // this.analyser = this.nextAnalyser;
 
         setTimeout(() => {
             console.log("CHANGE PLAYER " + this.nextDelay);
             this.nextPlayer.volume = 0;
-            this.nextPlayer.currentTime = this.player.currentTime - (1.0 * this.nextDelay / 1000);
+            this.nextPlayer.currentTime = this.player.currentTime - (1.0 * this.nextDelay / 1000) + this.syncAdjustment;
             this.nextPlayer.play();
             this.nextPlayer.volume = this.player.volume;
             this.player.volume = 0;
