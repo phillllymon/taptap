@@ -133,7 +133,10 @@ class StationManager {
                 const timeToUse = this.times.A;
 
                 const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
-                this.chunksA = [];
+                // this.chunksA = [];
+                while (this.chunksA.length > 0) {
+                    this.chunksA.shift();
+                }
                 const reader = new FileReader();
                 reader.onload = (readerE) => {
                     const str = btoa(readerE.target.result);
@@ -148,7 +151,10 @@ class StationManager {
                 const timeToUse = this.times.B;
                 
                 const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
-                this.chunksB = [];
+                // this.chunksB = [];
+                while (this.chunksB.length > 0) {
+                    this.chunksB.shift();
+                }
                 const reader = new FileReader();
                 reader.onload = (readerE) => {
                     const str = btoa(readerE.target.result);
@@ -165,7 +171,7 @@ class StationManager {
 
             // TEMP 
             // const wait = setInterval(() => {
-            //     console.log(this.recorderA.state);
+                
             //     this.recorderA.requestData();
                 
             //     console.log(this.recorderA.state);
@@ -178,16 +184,16 @@ class StationManager {
             // }, 10000);
             // END TEMP
 
-            setTimeout(() => {
-                this.switchToB();
-            }, 10000);
+            // setTimeout(() => {
+            //     this.switchToB();
+            // }, 10000);
             this.listening = true;
         });
     }
 
     switchToB() {
         this.times.B = performance.now();
-        this.recorderB.start(10000);
+        this.recorderB.start();
         const now = performance.now();
         this.times.A = now - this.timestamp;
         this.timestamp = now;
@@ -200,7 +206,7 @@ class StationManager {
     }
     switchToA() {
         this.times.A = performance.now();
-        this.recorderA.start(10000);
+        this.recorderA.start();
         const now = performance.now();
         this.times.B = now - this.timestamp;
         this.timestamp = now;
