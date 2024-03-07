@@ -82,7 +82,7 @@ class StationManager {
         document.getElementById("connecting-radio").classList.add("menu");
         setTimeout(() => {
             document.getElementById("song-label").innerText = "Keep your shirt on";
-        }, 4000);
+        }, 9000);
 
         // this.player = new Audio();
         // this.player.src = this.stationInfo.stream;
@@ -114,6 +114,8 @@ class StationManager {
             this.recorderA.ondataavailable = (e) => {
                 this.chunksA.push(e.data);
 
+                
+
                 // // TEMP
                 // const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
                 // // this.chunksA = [];
@@ -131,8 +133,14 @@ class StationManager {
             };
             this.recorderB.ondataavailable = (e) => {
                 this.chunksB.push(e.data);
+
+                
             };
             this.recorderA.onstop = () => {
+                const now = performance.now();
+                this.times.A = now - this.timestamp;
+                this.timestamp = now;
+
                 const timeToUse = this.times.A;
 
                 const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
@@ -151,6 +159,10 @@ class StationManager {
                 reader.readAsBinaryString(blob);
             };
             this.recorderB.onstop = () => {
+                const now = performance.now();
+                this.times.B = now - this.timestamp;
+                this.timestamp = now;
+
                 const timeToUse = this.times.B;
                 
                 const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
@@ -190,9 +202,9 @@ class StationManager {
             // END TEMP
 
             this.recorderA.onstart = () => {
-                const now = performance.now();
-                this.times.B = now - this.timestamp;
-                this.timestamp = now;
+                // const now = performance.now();
+                // this.times.B = now - this.timestamp;
+                // this.timestamp = now;
                 this.recorderB.stop();
                 if (this.listening) {
                     setTimeout(() => {
@@ -202,9 +214,9 @@ class StationManager {
             };
 
             this.recorderB.onstart = () => {
-                const now = performance.now();
-                this.times.A = now - this.timestamp;
-                this.timestamp = now;
+                // const now = performance.now();
+                // this.times.A = now - this.timestamp;
+                // this.timestamp = now;
                 this.recorderA.stop();
                 if (this.listening) {
                     setTimeout(() => {
