@@ -80,6 +80,9 @@ class StationManager {
         document.getElementById("now-streaming").style.color = "transparent";
         document.getElementById("connecting-radio").classList.remove("hidden");
         document.getElementById("connecting-radio").classList.add("menu");
+        setTimeout(() => {
+            document.getElementById("song-label").innerText = "Keep your shirt on";
+        }, 4000);
 
         // this.player = new Audio();
         // this.player.src = this.stationInfo.stream;
@@ -169,6 +172,8 @@ class StationManager {
             this.recorderA.start(10000);
             this.timestamp = performance.now();
 
+            
+
             // TEMP 
             // const wait = setInterval(() => {
                 
@@ -184,6 +189,30 @@ class StationManager {
             // }, 10000);
             // END TEMP
 
+            this.recorderA.onstart = () => {
+                const now = performance.now();
+                this.times.B = now - this.timestamp;
+                this.timestamp = now;
+                this.recorderB.stop();
+                if (this.listening) {
+                    setTimeout(() => {
+                        this.switchToB();
+                    }, 10000);
+                }
+            };
+
+            this.recorderB.onstart = () => {
+                const now = performance.now();
+                this.times.A = now - this.timestamp;
+                this.timestamp = now;
+                this.recorderA.stop();
+                if (this.listening) {
+                    setTimeout(() => {
+                        this.switchToA();
+                    }, 10000);
+                }
+            };
+
             setTimeout(() => {
                 this.switchToB();
             }, 10000);
@@ -194,28 +223,28 @@ class StationManager {
     switchToB() {
         this.times.B = performance.now();
         this.recorderB.start();
-        const now = performance.now();
-        this.times.A = now - this.timestamp;
-        this.timestamp = now;
-        this.recorderA.stop();
-        if (this.listening) {
-            setTimeout(() => {
-                this.switchToA();
-            }, 10000);
-        }
+        // const now = performance.now();
+        // this.times.A = now - this.timestamp;
+        // this.timestamp = now;
+        // this.recorderA.stop();
+        // if (this.listening) {
+        //     setTimeout(() => {
+        //         this.switchToA();
+        //     }, 10000);
+        // }
     }
     switchToA() {
         this.times.A = performance.now();
         this.recorderA.start();
-        const now = performance.now();
-        this.times.B = now - this.timestamp;
-        this.timestamp = now;
-        this.recorderB.stop();
-        if (this.listening) {
-            setTimeout(() => {
-                this.switchToB();
-            }, 10000);
-        }
+        // const now = performance.now();
+        // this.times.B = now - this.timestamp;
+        // this.timestamp = now;
+        // this.recorderB.stop();
+        // if (this.listening) {
+        //     setTimeout(() => {
+        //         this.switchToB();
+        //     }, 10000);
+        // }
     }
 
     
