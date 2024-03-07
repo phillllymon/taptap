@@ -103,6 +103,7 @@ class StreamPlayer {
             // this.started = false;
         } else {
             this.current = this.queue.shift();
+            
             this.playOnDelay(this.current);
             if (this.muted) {
                 this.current.song.volume = 0;

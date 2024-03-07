@@ -13,6 +13,10 @@ class StationManager {
             B: 0
         }
         this.timestamp = performance.now();
+
+        this.startTime = 0;
+        this.endTime = 0;
+
         this.recorderA = null;
         this.recorderB = null;
         
@@ -77,12 +81,13 @@ class StationManager {
         document.getElementById("connecting-radio").classList.remove("hidden");
         document.getElementById("connecting-radio").classList.add("menu");
 
-        this.player = new Audio();
-        this.player.src = this.stationInfo.stream;
-        this.player.crossOrigin = "anonymous";
+        // this.player = new Audio();
+        // this.player.src = this.stationInfo.stream;
+        // this.player.crossOrigin = "anonymous";
+        this.radioAudio.src = this.stationInfo.stream;
 
         const audioCtx = new AudioContext();
-        const audioSource = audioCtx.createMediaElementSource(this.player);
+        const audioSource = audioCtx.createMediaElementSource(this.radioAudio);
         const analyser = audioCtx.createAnalyser();
         audioSource.connect(analyser);
         audioCtx.setSinkId({ type: "none" });
@@ -92,20 +97,34 @@ class StationManager {
         let stream;
 
         // setTimeout(() => {
-        this.player.addEventListener("canplaythrough", () => {
+        this.radioAudio.addEventListener("canplaythrough", () => {
             document.getElementById("acquiring").style.color = "gray";
-            this.player.play();
-            // animate();
+            this.radioAudio.play();
         
             // audioCtx = new AudioContext();
             dest = audioCtx.createMediaStreamDestination();
             this.recorderA = new MediaRecorder(dest.stream);
             this.recorderB = new MediaRecorder(dest.stream);
-            stream = audioCtx.createMediaStreamSource(this.player.captureStream());
+            stream = audioCtx.createMediaStreamSource(this.radioAudio.captureStream());
             stream.connect(dest);
         
             this.recorderA.ondataavailable = (e) => {
                 this.chunksA.push(e.data);
+
+                // // TEMP
+                // const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
+                // // this.chunksA = [];
+                // const reader = new FileReader();
+                // reader.onload = (readerE) => {
+                //     const str = btoa(readerE.target.result);
+                //     this.streamPlayer.setData(JSON.stringify({
+                //         str: str,
+                //         time: 10000
+                //     }));
+                // };
+                // reader.readAsBinaryString(blob);
+                // // END TEMP
+
             };
             this.recorderB.ondataavailable = (e) => {
                 this.chunksB.push(e.data);
@@ -141,8 +160,24 @@ class StationManager {
                 reader.readAsBinaryString(blob);
             };
         
-            this.recorderA.start();
+            this.recorderA.start(10000);
             this.timestamp = performance.now();
+
+            // TEMP 
+            // const wait = setInterval(() => {
+            //     console.log(this.recorderA.state);
+            //     this.recorderA.requestData();
+                
+            //     console.log(this.recorderA.state);
+            //     setTimeout(() => {
+            //         console.log(this.recorderA.state);
+            //     }, 2000);
+            //     if (!this.listening) {
+            //         clearInterval(wait);
+            //     }
+            // }, 10000);
+            // END TEMP
+
             setTimeout(() => {
                 this.switchToB();
             }, 10000);
@@ -152,7 +187,7 @@ class StationManager {
 
     switchToB() {
         this.times.B = performance.now();
-        this.recorderB.start();
+        this.recorderB.start(10000);
         const now = performance.now();
         this.times.A = now - this.timestamp;
         this.timestamp = now;
@@ -165,7 +200,7 @@ class StationManager {
     }
     switchToA() {
         this.times.A = performance.now();
-        this.recorderA.start();
+        this.recorderA.start(10000);
         const now = performance.now();
         this.times.B = now - this.timestamp;
         this.timestamp = now;
