@@ -75,6 +75,11 @@ class StationManager {
             return;
         }
 
+        // LIVE STREAM VERSION
+        // this.streamPlayer.setData(this.stationInfo.stream, true);
+        // return;
+        // END LIVE STREAM VERSION
+
         document.getElementById("acquiring").style.color = "transparent";
         document.getElementById("initial-received").style.color = "transparent";
         document.getElementById("now-streaming").style.color = "transparent";
@@ -110,12 +115,45 @@ class StationManager {
             this.recorderB = new MediaRecorder(dest.stream);
             stream = audioCtx.createMediaStreamSource(this.radioAudio.captureStream());
             stream.connect(dest);
+
+
+            const startNextRecording = (prevStartTime) => {
+                const recorder = new MediaRecorder(dest.stream);
+                const startTimeArr = [0];
+                recorder.onstart = () => {
+                    startTimeArr[0] = performance.now();
+                };
+                recorder.ondataavailable = (e) => {
+                    const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
+                    const reader = new FileReader();
+                    reader.onload = (readerE) => {
+                        const str = btoa(readerE.target.result);
+                        this.streamPlayer.setData({
+                            str: str,
+                            timeDelay: prevStartTime ? startTimeArr[0] - prevStartTime : true
+                        });
+                    };
+                    reader.readAsBinaryString(blob);
+                };
+                setTimeout(() => {
+                    startNextRecording(startTimeArr[0]);
+                }, 10000);
+                setTimeout(() => {
+                    recorder.stop();
+                }, 13000);
+                recorder.start();
+            };
+            startNextRecording();
+
         
             this.recorderA.ondataavailable = (e) => {
-                this.chunksA.push(e.data);
-                const now = performance.now();
-                this.times.A = now - this.timestamp;
-                this.timestamp = now;
+                this.streamPlayer.setData(e.data, true);
+
+
+                // this.chunksA.push(e.data);
+                // const now = performance.now();
+                // this.times.A = now - this.timestamp;
+                // this.timestamp = now;
             };
             this.recorderB.ondataavailable = (e) => {
                 this.chunksB.push(e.data);
@@ -159,9 +197,13 @@ class StationManager {
                 };
                 reader.readAsBinaryString(blob);
             };
+
+
+            
+
         
-            this.recorderA.start(10000);
-            this.timestamp = performance.now();
+            // this.recorderA.start(10000);
+            // this.timestamp = performance.now();
 
             
 
@@ -180,34 +222,34 @@ class StationManager {
             // }, 10000);
             // END TEMP
 
-            this.recorderA.onstart = () => {
-                // const now = performance.now();
-                // this.times.B = now - this.timestamp;
-                // this.timestamp = now;
-                this.recorderB.stop();
-                if (this.listening) {
-                    setTimeout(() => {
-                        this.switchToB();
-                    }, 10000);
-                }
-            };
+            // this.recorderA.onstart = () => {
+            //     // const now = performance.now();
+            //     // this.times.B = now - this.timestamp;
+            //     // this.timestamp = now;
+            //     this.recorderB.stop();
+            //     if (this.listening) {
+            //         setTimeout(() => {
+            //             this.switchToB();
+            //         }, 10000);
+            //     }
+            // };
 
-            this.recorderB.onstart = () => {
-                // const now = performance.now();
-                // this.times.A = now - this.timestamp;
-                // this.timestamp = now;
-                this.recorderA.stop();
-                if (this.listening) {
-                    setTimeout(() => {
-                        this.switchToA();
-                    }, 10000);
-                }
-            };
+            // this.recorderB.onstart = () => {
+            //     // const now = performance.now();
+            //     // this.times.A = now - this.timestamp;
+            //     // this.timestamp = now;
+            //     this.recorderA.stop();
+            //     if (this.listening) {
+            //         setTimeout(() => {
+            //             this.switchToA();
+            //         }, 10000);
+            //     }
+            // };
 
-            setTimeout(() => {
-                this.switchToB();
-            }, 10000);
-            this.listening = true;
+            // setTimeout(() => {
+            //     this.switchToB();
+            // }, 10000);
+            // this.listening = true;
         });
     }
 
