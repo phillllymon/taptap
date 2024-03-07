@@ -120,7 +120,7 @@ class StreamPlayer {
             }
             const timePerStep = 1000.0 / numSteps;
             const msNeeded = timePerStep * stepsNeeded;
-            this.syncAdjustment = msNeeded / 1000.0;
+            this.syncAdjustment = msNeeded / -1000.0;
         }
     }
 
