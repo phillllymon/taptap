@@ -111,8 +111,7 @@ class StationManager {
                 this.chunksB.push(e.data);
             };
             this.recorderA.onstop = () => {
-                const now = performance.now();
-                const timeToUse = now - this.times.A;
+                const timeToUse = this.times.A;
 
                 const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
                 this.chunksA = [];
@@ -127,8 +126,7 @@ class StationManager {
                 reader.readAsBinaryString(blob);
             };
             this.recorderB.onstop = () => {
-                const now = performance.now();
-                const timeToUse = now - this.times.B;
+                const timeToUse = this.times.B;
                 
                 const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
                 this.chunksB = [];
@@ -144,7 +142,7 @@ class StationManager {
             };
         
             this.recorderA.start();
-            this.times.A = performance.now();
+            this.timestamp = performance.now();
             setTimeout(() => {
                 this.switchToB();
             }, 10000);
@@ -153,8 +151,11 @@ class StationManager {
     }
 
     switchToB() {
-        this.recorderB.start();
         this.times.B = performance.now();
+        this.recorderB.start();
+        const now = performance.now();
+        this.times.A = now - this.timestamp;
+        this.timestamp = now;
         this.recorderA.stop();
         if (this.listening) {
             setTimeout(() => {
@@ -163,8 +164,11 @@ class StationManager {
         }
     }
     switchToA() {
-        this.recorderA.start();
         this.times.A = performance.now();
+        this.recorderA.start();
+        const now = performance.now();
+        this.times.B = now - this.timestamp;
+        this.timestamp = now;
         this.recorderB.stop();
         if (this.listening) {
             setTimeout(() => {
