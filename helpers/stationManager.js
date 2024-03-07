@@ -113,38 +113,21 @@ class StationManager {
         
             this.recorderA.ondataavailable = (e) => {
                 this.chunksA.push(e.data);
-
-                
-
-                // // TEMP
-                // const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
-                // // this.chunksA = [];
-                // const reader = new FileReader();
-                // reader.onload = (readerE) => {
-                //     const str = btoa(readerE.target.result);
-                //     this.streamPlayer.setData(JSON.stringify({
-                //         str: str,
-                //         time: 10000
-                //     }));
-                // };
-                // reader.readAsBinaryString(blob);
-                // // END TEMP
-
-            };
-            this.recorderB.ondataavailable = (e) => {
-                this.chunksB.push(e.data);
-
-                
-            };
-            this.recorderA.onstop = () => {
                 const now = performance.now();
                 this.times.A = now - this.timestamp;
                 this.timestamp = now;
+            };
+            this.recorderB.ondataavailable = (e) => {
+                this.chunksB.push(e.data);
+                const now = performance.now();
+                this.times.B = now - this.timestamp;
+                this.timestamp = now;
+            };
+            this.recorderA.onstop = () => {
 
                 const timeToUse = this.times.A;
 
                 const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
-                // this.chunksA = [];
                 while (this.chunksA.length > 0) {
                     this.chunksA.shift();
                 }
@@ -159,14 +142,10 @@ class StationManager {
                 reader.readAsBinaryString(blob);
             };
             this.recorderB.onstop = () => {
-                const now = performance.now();
-                this.times.B = now - this.timestamp;
-                this.timestamp = now;
 
                 const timeToUse = this.times.B;
                 
                 const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
-                // this.chunksB = [];
                 while (this.chunksB.length > 0) {
                     this.chunksB.shift();
                 }

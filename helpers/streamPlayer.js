@@ -8,6 +8,9 @@ class StreamPlayer {
 
         this.freqArrays = [];
         this.times = [];
+
+        // EXPERIMENT
+        this.player = new Audio();
     }
 
     calibrateLag() {
@@ -21,8 +24,10 @@ class StreamPlayer {
         songObj.silentSong.play();
         const thisObj = this;
         setTimeout(() => {
-            thisObj.currentAudio = songObj.song;
-            songObj.song.play();
+            this.player.src = songObj.source;
+            this.player.play();
+            // thisObj.currentAudio = songObj.song;
+            // songObj.song.play();
         }, this.songDelay);
     }
 
@@ -59,6 +64,7 @@ class StreamPlayer {
 
         const audioCtx = new AudioContext();
         const silentSong = new Audio(`data:audio/x-wav;base64,${dataObj.str}`);
+
         const audioSource = audioCtx.createMediaElementSource(silentSong);
         const analyser = audioCtx.createAnalyser();
         audioSource.connect(analyser);
@@ -73,7 +79,8 @@ class StreamPlayer {
             time: dataObj.time,
             silentSong: silentSong,
             analyser: analyser,
-            dataArray: dataArray
+            dataArray: dataArray,
+            source: `data:audio/x-wav;base64,${dataObj.str}`
         };
 
         this.queue.push(newSongObj);
@@ -94,6 +101,7 @@ class StreamPlayer {
             this.currentAudio.volume = val;
         }
         this.current.song.volume = val;
+        this.player.volume = val;
     }
 
     startNextChunk() {
@@ -109,6 +117,7 @@ class StreamPlayer {
                 this.current.song.volume = 0;
             }
             console.log(this.current.time);
+
             setTimeout(() => {
                 this.startNextChunk();
             }, this.current.time);
