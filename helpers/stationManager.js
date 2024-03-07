@@ -184,9 +184,9 @@ class StationManager {
             // }, 10000);
             // END TEMP
 
-            // setTimeout(() => {
-            //     this.switchToB();
-            // }, 10000);
+            setTimeout(() => {
+                this.switchToB();
+            }, 10000);
             this.listening = true;
         });
     }
