@@ -171,19 +171,43 @@
 
 /* note: slide is 150vmin long */
 .tapper {
-    position: absolute;
-    top: 135vmin;
+    /* position: absolute; */
+    /* top: 135vmin; */
+    top: 0vmin;
     /* travelLength is 136.5vmin to account for top border */
-    left: 50%;
-    transform: translate(-50%, 0px);
-    width: 80%;
-    height: 4%;
+    /* left: 50%; */
+    /* transform: translate(-50%, 0px); */
+    /* width: 80%; */
+    width: 25%;
+    /* height: 4%; */
+    height: 100%;
     background-color: rgba(168,0,93,0.2);
     margin: auto;
-    border: 1.5vmin solid rgb(168, 0, 93);
+    /* border: 1.5vmin solid rgb(168, 0, 93);
     border-left: 3vmin solid rgb(168, 0, 93);
-    border-right: 3vmin solid rgb(168, 0, 93);
+    border-right: 3vmin solid rgb(168, 0, 93); */
     z-index: 1;
+}
+
+#slider {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#tappers {
+    position: absolute;
+    top: 135vmin;
+    width: 100%;
+    height: 2%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: darkred;
 }
 
 .note {

@@ -92,6 +92,9 @@ let songStreak = 0;
 
 let radioCode = "mvn925";
 
+// TEMP FOR SLIDER EXPERIMENT
+let sliderPos = 0;
+
 const masterInfo = {
     algorithm,
     allSlides,
@@ -400,7 +403,8 @@ function addNote(slideId, val, marked = false) {
         }
     });
 
-    newNote.style.top = `${startPos}px`;
+    newNote.style.top = `${-1.0 * sliderPos}px`;
+    // newNote.style.top = `${startPos}px`;
     const noteInfo = {
         note: newNote,
         position: startPos,
