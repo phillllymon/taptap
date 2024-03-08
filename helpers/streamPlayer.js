@@ -82,30 +82,31 @@ class StreamPlayer {
     }
 
     startNextRecording() {
-        console.log(this.nextDelay);
+        // const now = performance.now();
+        // if (this.timestamp) {
+        //     const diff = now - this.timestamp;
+        //     console.log("time: " + diff);
+        // }
+        this.timestamp = now;
+        // console.log(this.nextDelay);
         this.nextSilentPlayer.volume = 0;
         this.nextSilentPlayer.play();
         this.nextSilentPlayer.currentTime = this.silentPlayer.currentTime - ((1.0 * this.nextDelay + this.masterInfo.streamSync) / 1000);
+        this.correction = 2.0 - this.nextSilentPlayer.currentTime;
+        // console.log("correction " + this.correction);
         // this.nextSilentPlayer.play();
         this.nextSilentPlayer.volume = 1;
         // this.silentPlayer.pause();
         this.silentPlayer.volume = 0;
         this.silentPlayer = this.nextSilentPlayer;
         this.analyser = this.nextAnalyser;
-
+        
         setTimeout(() => {
-            console.log("CHANGE PLAYER " + this.nextDelay);
-            console.log(this.nextDelay);
-            console.log(this.masterInfo.streamSync);
-            console.log(this.nextDelay + this.masterInfo.streamSync);
-            console.log((1.0 * (this.nextDelay + this.masterInfo.streamSync)) / 1000);
-            console.log(typeof this.masterInfo.streamSync);
-            console.log(typeof this.nextDelay);
-            console.log("player currentTime: " + this.player.currentTime);
+            // console.log("CHANGE PLAYER " + this.nextDelay);
             this.nextPlayer.volume = 0;
             this.nextPlayer.play();
             this.nextPlayer.currentTime = this.player.currentTime - ((1.0 * this.nextDelay + this.masterInfo.streamSync) / 1000);
-            console.log("nextPlayer start time: " + this.nextPlayer.currentTime);
+            // console.log("nextPlayer start time: " + this.nextPlayer.currentTime);
             this.nextPlayer.play();
             this.nextPlayer.volume = this.player.volume;
             this.player.volume = 0;
@@ -113,7 +114,7 @@ class StreamPlayer {
         }, 4000);
         setTimeout(() => {
             this.startNextRecording();
-        }, this.nextDelay);
+        }, this.nextDelay + (1000.0 * this.correction));
     }
 
     setData(data, blobStream = false) {
@@ -171,13 +172,13 @@ class StreamPlayer {
                         }, 4000);
                         setTimeout(() => {
                             this.startNextRecording();
-                        }, 10000);
+                        }, 12000);
                     }, 5000);
                 };
                 this.silentPlayer.addEventListener("canplaythrough", startPlaying);
             }
 
-
+            
             return;
         }
         if (blobStream) { // accept blobs only the first of which can be the start of a sound file

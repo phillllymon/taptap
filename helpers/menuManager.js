@@ -92,7 +92,7 @@ class MenuManager {
         });
         setButtonClick("show-source-menu", () => {
             this.showMenu("source-menu");
-            this.player.stop();
+            this.player.pause();
             this.streamPlayer.stop();
             this.stationManager.stopListening();
         });
