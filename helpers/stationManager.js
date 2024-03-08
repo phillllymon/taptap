@@ -32,6 +32,34 @@ class StationManager {
             "unsung80s": {
                 name: "Unsung 80s",
                 stream: "https://unsung80s.out.airtime.pro/unsung80s_a"
+            },
+            "beat90s": {
+                name: "The beat",
+                stream: "https://ice10.securenetsystems.net/AM1380?playSessionID=1C5D8230-00FD-2EFE-2AEE4302B829B5F3"
+            },
+            "100hitz": {
+                name: "100 hitz",
+                stream: "https://pureplay.cdnstream1.com/6045_128.mp3"
+            },
+            "mlelive": {
+                name: "MLE live",
+                stream: "https://listen.radioking.com/radio/114610/stream/462118"
+            },
+            "chetFM": {
+                name: "93.5 Chet FM",
+                stream: "https://ice23.securenetsystems.net/KDJF?playSessionID=1CE4C155-F05D-ADFF-15CD1D9351B467C0"
+            },
+            "scooter": {
+                name: "Scooterist radio",
+                stream: "https://listen.radioking.com/radio/214267/stream/257398?1709875088135"
+            },
+            "1234gr": {
+                name: "1234 GR",
+                stream: "https://radio1234gr.radioca.st/live"
+            },
+            "hawk": {
+                name: "Hawk classic rock",
+                stream: "https://ice6.securenetsystems.net/KRSE?playSessionID=1D6EEF83-C785-2F70-5A76B4CD63C85056"
             }
         };
 
