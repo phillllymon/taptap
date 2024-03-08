@@ -87,7 +87,7 @@ class StreamPlayer {
         //     const diff = now - this.timestamp;
         //     console.log("time: " + diff);
         // }
-        this.timestamp = now;
+        // this.timestamp = now;
         // console.log(this.nextDelay);
         this.nextSilentPlayer.volume = 0;
         this.nextSilentPlayer.play();
