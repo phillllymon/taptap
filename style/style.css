@@ -143,8 +143,8 @@
     transform-style: preserve-3d;
     transform: rotateX(20deg);
     box-shadow: 0px 10px 10px rgb(168, 0, 93);
-    border-left: 3px solid rgb(168, 0, 93);
-    border-right: 3px solid rgb(168, 0, 93);
+    border-left: 3px outset rgb(168, 0, 93);
+    border-right: 3px outset rgb(168, 0, 93);
     box-sizing: border-box;
     opacity: 0.9;
     display: flex;
@@ -164,29 +164,38 @@
     width: 25vmin;
     height: 50%;
     box-sizing: border-box;
-    border-left: 0.5vmin solid rgb(168, 0, 93);
-    border-right: 0.5vmin solid rgb(168, 0, 93);
+    border-left: 0.5vmin outset rgb(168, 0, 93);
+    border-right: 0.5vmin outset rgb(168, 0, 93);
     text-align: center;
 }
 
 /* note: slide is 150vmin long */
 .tapper {
-    /* position: absolute; */
-    /* top: 135vmin; */
-    top: 0vmin;
+    position: absolute;
+    top: 135vmin;
+    /* top: 0vmin; */
     /* travelLength is 136.5vmin to account for top border */
-    /* left: 50%; */
-    /* transform: translate(-50%, 0px); */
-    /* width: 80%; */
-    width: 25%;
-    /* height: 4%; */
-    height: 100%;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    width: 80%;
+    /* width: 25%; */
+    height: 4%;
+    /* height: 100%; */
     background-color: rgba(168,0,93,0.2);
     margin: auto;
-    /* border: 1.5vmin solid rgb(168, 0, 93);
+    /* border: 1.5vmin solid rgba(168,0,93,0.4);
+    border-left: 3vmin solid rgba(168,0,93,0.4);
+    border-right: 3vmin solid rgba(168,0,93,0.4); */
+    border: 1.5vmin solid rgb(168, 0, 93);
     border-left: 3vmin solid rgb(168, 0, 93);
-    border-right: 3vmin solid rgb(168, 0, 93); */
+    border-right: 3vmin solid rgb(168, 0, 93);
     z-index: 1;
+}
+
+.active-tapper {
+    border: 1.5vmin outset rgb(168, 0, 93);
+    border-left: 3vmin outset rgb(168, 0, 93);
+    border-right: 3vmin outset rgb(168, 0, 93);
 }
 
 #slider {

@@ -259,6 +259,7 @@ document.addEventListener("keyup", (e) => {
 });
 
 function deactivateTapper(tapperId) {
+    // document.getElementById(tapperId).classList.remove("active-tapper");
     document.getElementById(tapperId).style.backgroundColor = "rgba(168,0,93,0.2)";
     activeTappers[tapperId] = false;
     const slideIds = {
@@ -309,6 +310,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
         }
     }
 
+    // document.getElementById(tapperId).classList.add("active-tapper");
     document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
     const tapperTargets = targets[slideId];
     if (tapperTargets.size === 0) {
@@ -403,8 +405,8 @@ function addNote(slideId, val, marked = false) {
         }
     });
 
-    newNote.style.top = `${-1.0 * sliderPos}px`;
-    // newNote.style.top = `${startPos}px`;
+    // newNote.style.top = `${-1.0 * sliderPos}px`; // FOR SLIDER
+    newNote.style.top = `${startPos}px`;
     const noteInfo = {
         note: newNote,
         position: startPos,
