@@ -74,6 +74,7 @@ let autoCalibrating = true;
 let sustainedNotes = true;
 let animatedBackground = true;
 let streaming = false;
+let streamSync = 0;
 
 let autoAdjustments = [];
 let autoAdjustment = -0.05 * travelLength;
@@ -110,6 +111,7 @@ const masterInfo = {
     songNotesMissed,
     songStreak,
     streaming,
+    streamSync,
     sustainedNotes,
     tapperKeys,
     targets,
@@ -156,6 +158,7 @@ const player = new Player(
     }
 );
 const streamPlayer = new StreamPlayer(
+    masterInfo,
     masterInfo.songDelay
 );
 const stationManager = new StationManager(

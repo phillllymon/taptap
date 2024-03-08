@@ -253,6 +253,10 @@ class ControlsManager {
                 setElementText("toggle-animate", "Turn off animated background");
             }
         });
+        document.getElementById("sync-adjust").addEventListener("change", () => {
+            masterInfo.streamSync = parseInt(document.getElementById("sync-adjust").value);
+            console.log(masterInfo.streamSync);
+        });
     }
 
     activateFullscreen() {
