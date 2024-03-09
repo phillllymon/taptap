@@ -318,11 +318,20 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
     if (tapperTargets.has(target)) {
         notes.delete(target);
+        target.note.remove();
         target.note.classList.add(leavingClass);
-        setTimeout(() => {
-            target.note.remove();
-        }, 500);
         targets[slideId].delete(target);
+
+        const noteLeaving = document.createElement("div");
+        noteLeaving.classList.add("note");
+        noteLeaving.classList.add(leavingClass);
+        document.getElementById(tapperId).appendChild(noteLeaving);
+
+        setTimeout(() => {
+            noteLeaving.remove();
+        }, 600);
+
+        
         triggerHitNote(slideId);
 
         if (target.tail) {
@@ -346,12 +355,12 @@ function resetAutoAdjustment() {
 
 function makeTail(slideId, parentNote) {
     if (parentNote.isTail) { // stretch instead of making new
-        const startPos = -1.0 * autoAdjustment;
+        const startPos = (-1.0 * autoAdjustment);
         const additionalHeight = parentNote.position - startPos;
         parentNote.totalHeight = parentNote.totalHeight + additionalHeight;
         const newHeight = parentNote.height + additionalHeight;
         parentNote.note.style.height = `${newHeight}px`;
-        parentNote.note.style.top = `${startPos}px`;
+        parentNote.note.style.top = `${startPos - sliderPos}px`;
         parentNote.height = newHeight;
         parentNote.position = startPos;
     } else {
@@ -359,7 +368,7 @@ function makeTail(slideId, parentNote) {
         newTail.classList.add("note-tail");
         const startPos = -1.0 * autoAdjustment;
         // const startPos = -1.0 * autoAdjustment - 300;
-        newTail.style.top = `${startPos}px`;
+        newTail.style.top = `${(-1.0 * sliderPos) + startPos}px`;
         const heightNeeded = parentNote.position - startPos;
         newTail.style.height = `${heightNeeded}px`;
         // newTail.style.height = `${300}px`;
@@ -405,8 +414,8 @@ function addNote(slideId, val, marked = false) {
         }
     });
 
-    // newNote.style.top = `${-1.0 * sliderPos}px`; // FOR SLIDER
-    newNote.style.top = `${startPos}px`;
+    newNote.style.top = `${(-1.0 * sliderPos) + startPos}px`; // FOR SLIDER
+    // newNote.style.top = `${startPos}px`;
     const noteInfo = {
         note: newNote,
         position: startPos,
@@ -594,27 +603,30 @@ function setupMobile() {
     }, 500); // without small delay this was getting missed
 
     [
-        ["tapper-left", "slide-left", "note-leaving-left"],
-        ["tapper-right", "slide-right", "note-leaving-right"],
-        ["tapper-a", "slide-a", "note-leaving-left"],
-        ["tapper-b", "slide-b", "note-leaving-right"]
+        ["tapper-left", "slide-left", "note-leaving-left", "clear-slide-left", "dummy-left"],
+        ["tapper-right", "slide-right", "note-leaving-right", "clear-slide-right", "dummy-right"],
+        ["tapper-a", "slide-a", "note-leaving-left", "clear-slide-a", "dummy-a"],
+        ["tapper-b", "slide-b", "note-leaving-right", "clear-slide-b", "dummy-b"]
     ].forEach((idSet) => {
-        document.getElementById(idSet[1]).addEventListener("touchstart", (e) => {
+        document.getElementById(idSet[3]).addEventListener("touchstart", (e) => {
+            activateTapper(...idSet);
+        });
+        document.getElementById(idSet[4]).addEventListener("touchstart", (e) => {
             activateTapper(...idSet);
         });
     });
-    
+
     document.addEventListener("touchend", (e) => {
-        if (e.target.id === "slide-left" || e.target.id === "tapper-left") {
+        if (e.target.id === "dummy-left" || e.target.id === "tapper-left") {
             deactivateTapper("tapper-left");
         }
-        if (e.target.id === "slide-a" || e.target.id === "tapper-a") {
+        if (e.target.id === "dummy-a" || e.target.id === "tapper-a") {
             deactivateTapper("tapper-a");
         }
-        if (e.target.id === "slide-b" || e.target.id === "tapper-b") {
+        if (e.target.id === "dummy-b" || e.target.id === "tapper-b") {
             deactivateTapper("tapper-b");
         }
-        if (e.target.id === "slide-right" || e.target.id === "tapper-right") {
+        if (e.target.id === "dummy-right" || e.target.id === "tapper-right") {
             deactivateTapper("tapper-right");
         }
     });

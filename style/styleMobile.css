@@ -16,12 +16,36 @@
     width: 50vw;
 }
 
+.clear-slide {
+    width: 50vw;
+}
+
 .tapper {
-    top: 127vh;
+    /* top: 0vh; */
     /* travelLength is 128.5vh to account for top border */
     border: 1.5vh solid rgb(168, 0, 93);
     border-left: 3vh solid rgb(168, 0, 93);
     border-right: 3vh solid rgb(168, 0, 93);
+}
+
+#tappers-inner-container {
+    position: absolute;
+    top: 127vh;
+    
+}
+
+.tapper-shadow-bar {
+    height: 1.5vh;
+}
+#lower-shadow-bar {
+    top: 100%;
+    box-shadow: 0px 2.5px 5px rgb(51, 0, 28);
+    transform: translate(0vmin, -4.5vh);
+    /* ^this is a mystery - why does -4.5vmin get it to the right spot? */
+}
+
+#tappers {
+    top: 127vh;
 }
 
 #test-note2 {
@@ -42,15 +66,15 @@
 }
 
 .cloud {
-    top: 128.5vh;
+    top: 1.5vh;
 }
 @keyframes note-leave-right {
-    0%      {opacity: 1; top: 128.5vh; left: 50%}
-    100%    {opacity: 1; top: 0px; left: 350vh}
+    0%      {opacity: 1; top: 1.5vh; left: 50%}
+    100%    {opacity: 1; top: -85vh; left: 100vh}
 }
 @keyframes note-leave-left {
-    0%      {opacity: 1; top: 128.5vh; left: 50%}
-    100%    {opacity: 1; top: 0px; left: -350vh}
+    0%      {opacity: 1; top: 1.5vh; left: 50%}
+    100%    {opacity: 1; top: -85vh; left: -100vh}
 }
 
 
@@ -139,19 +163,6 @@
 .slides {
     opacity: 1;
 }
-
-.full-piece {
-    height: 5vh;
-    width: 6vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 6vh;
-}
-#full-top-left { display: none; }
-#full-bottom-left { display: none; }
-#full-bottom-right { display: none; }
-
 
 #feedback {
     width: 80vmin;

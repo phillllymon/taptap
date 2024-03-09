@@ -147,6 +147,10 @@ class ControlsManager {
     selectSlides(n, setNumSlides) {
         const slideA = document.getElementById("slide-a");
         const slideB = document.getElementById("slide-b");
+        const clearSlideA = document.getElementById("clear-slide-a");
+        const clearSlideB = document.getElementById("clear-slide-b");
+        const dummyA = document.getElementById("dummy-a");
+        const dummyB = document.getElementById("dummy-b");
         const slidesContainer = document.getElementById("slides-container");
         
         if (n === 2) {
@@ -154,6 +158,10 @@ class ControlsManager {
             setNumSlides(2);
             slideA.classList.add("hidden");
             slideB.classList.add("hidden");
+            clearSlideA.classList.add("hidden");
+            clearSlideB.classList.add("hidden");
+            dummyA.classList.add("hidden");
+            dummyB.classList.add("hidden");
     
             slidesContainer.classList.remove("three-wide-slides-container");
             slidesContainer.classList.remove("four-wide-slides-container");
@@ -163,6 +171,10 @@ class ControlsManager {
             document.getElementById("slides-container").classList.add("three-wide-slides-container");
             slideA.classList.remove("hidden");
             slideB.classList.add("hidden");
+            clearSlideA.classList.remove("hidden");
+            clearSlideB.classList.add("hidden");
+            dummyA.classList.remove("hidden");
+            dummyB.classList.add("hidden");
     
             slidesContainer.classList.add("three-wide-slides-container");
             slidesContainer.classList.remove("four-wide-slides-container");
@@ -171,6 +183,10 @@ class ControlsManager {
             setNumSlides(4);
             slideA.classList.remove("hidden");
             slideB.classList.remove("hidden");
+            clearSlideA.classList.remove("hidden");
+            clearSlideB.classList.remove("hidden");
+            dummyA.classList.remove("hidden");
+            dummyB.classList.remove("hidden");
     
             slidesContainer.classList.remove("three-wide-slides-container");
             slidesContainer.classList.add("four-wide-slides-container");

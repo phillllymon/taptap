@@ -195,7 +195,7 @@ function moveNotes(
         const tail = theTargetTails[slideId];
         if (tail) {
             const newPosition = tail.position + movement;
-            tail.note.style.top = `${newPosition}px`;
+            // tail.note.style.top = `${newPosition}px`;
             tail.position = newPosition;
             
             const newHeight = tail.height - movement;
@@ -209,14 +209,14 @@ function moveNotes(
     });
 
     // move slider
-    // sliderPos += movement;
-    // document.getElementById("slider").style.top = `${sliderPos}px`;
+    sliderPos += movement;
+    document.getElementById("slider").style.top = `${sliderPos}px`;
     
 
     // move notes
     for (const note of notes) {
         const newTop = note.position + movement;
-        note.note.style.top = `${newTop}px`;
+        // note.note.style.top = `${newTop}px`;
         note.position = newTop;
 
         // if (newTop > masterInfo.travelLength) {
@@ -227,7 +227,7 @@ function moveNotes(
         // move tail
         if (note.tail) {
             const newTailTop = note.tail.position + movement;
-            note.tail.note.style.top = `${newTailTop}px`;
+            // note.tail.note.style.top = `${newTailTop}px`;
             note.tail.position = newTailTop;
         }
 
