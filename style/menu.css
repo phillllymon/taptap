@@ -17,6 +17,8 @@
     box-sizing: border-box;
     z-index: 4;
     overflow: auto;
+
+    /* opacity: 0; */
 }
 
 .primary-button {

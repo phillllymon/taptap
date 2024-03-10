@@ -82,7 +82,7 @@ let autoAdjustment = -0.05 * travelLength;
 let streak = 0;
 
 let currentSong = "rocknRoll";
-document.getElementById("song-label").innerText = currentSong;
+// document.getElementById("song-label").innerText = currentSong;
 let waitingForKey = false;
 let songAtStart = true;
 

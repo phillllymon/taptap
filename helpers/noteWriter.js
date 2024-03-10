@@ -180,7 +180,7 @@ class NoteWriter {
         this.order = newOrder;
 
         const thisAmt = Math.max(...wholeArray);
-        if (diffScore > diffThreshold) {
+        if (diffScore > diffThreshold && amt > 140) {
 
             const noteWriteParams = {
                 slideToUse: this.getSlideToUse(thisToneVal, masterData.numSlides),
@@ -297,7 +297,8 @@ class NoteWriter {
                             const newNoteHeight = prev - low;
                             const newNoteIdx = Math.floor(((j - 1) + lowTimeIdx) / 2);
                             biggests.shift();
-                            biggests.push([newNoteHeight, newNoteIdx]);
+                            // biggests.push([newNoteHeight, newNoteIdx]);
+                            biggests.push([newNoteHeight, lowTimeIdx]); // use beginning of uphill
                             biggests.sort((a, b) => {
                                 return a[0] < b[0] ? -1 : 1;
                             });

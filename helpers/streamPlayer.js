@@ -36,11 +36,10 @@ class StreamPlayer {
     getDataFreqArray() {
         if (this.liveStream) {
             this.liveAnalyser.getByteFrequencyData(this.liveDataArray);
-
             this.freqArrays.push(this.liveDataArray.map(val => val));
             const now = performance.now();
             this.times.push(now);
-            while (this.times[0] < now - this.delay) {
+            while (this.times[0] < now - this.songDelay) {
                 this.times.shift();
                 this.freqArrays.shift();
             }
@@ -53,7 +52,7 @@ class StreamPlayer {
             this.freqArrays.push(this.dataArray.map(val => val));
             const now = performance.now();
             this.times.push(now);
-            while (this.times[0] < now - this.delay) {
+            while (this.times[0] < now - this.songDelay) {
                 this.times.shift();
                 this.freqArrays.shift();
             }
@@ -66,7 +65,7 @@ class StreamPlayer {
                 this.freqArrays.push(this.current.dataArray.map(val => val));
                 const now = performance.now();
                 this.times.push(now);
-                while (this.times[0] < now - this.delay) {
+                while (this.times[0] < now - this.songDelay) {
                     this.times.shift();
                     this.freqArrays.shift();
                 }
@@ -136,12 +135,29 @@ class StreamPlayer {
             document.getElementById("initial-received").style.color = "gray";
         }
         if (data.liveStream) {
+
+            document.getElementById("initial-received").style.color = "gray";
+
+            setTimeout(() => {
+                document.getElementById("now-streaming").style.color = "gray";
+                setTimeout(() => {
+                    document.getElementById("connecting-radio").classList.add("hidden");
+                }, 1000);
+            }, 2000);
+
+            if (this.livePlayer) {
+                this.livePlayer.pause();
+            }
+
             this.liveStream = true;
-            data.player.play();
+            this.livePlayer = data.player;
+            this.livePlayer.play();
             this.liveAnalyser = data.analyser;
             this.liveDataArray = data.dataArray;
+            this.gain = data.gain;
+            this.ctx = data.ctx;
 
-            document.getElementById("connecting-radio").classList.add("hidden");
+            // document.getElementById("connecting-radio").classList.add("hidden");
             return
         }
         if (data.timeDelay) {
@@ -332,6 +348,10 @@ class StreamPlayer {
         if (this.player) {
             this.player.volume = val;
         }
+        if (this.livePlayer) {
+            this.livePlayer.volume = val;
+            // this.livePlayer.currentTime = this.livePlayer.currentTime + 3.9;
+        }
     }
 
     start() {
@@ -342,5 +362,12 @@ class StreamPlayer {
     stop() {
         this.muted = true;
         this.setVolume(0);
+    }
+
+    stopStream() {
+        if (this.livePlayer) {
+            this.livePlayer.pause();
+            this.livePlayer = null;
+        }
     }
 }

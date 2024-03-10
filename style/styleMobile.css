@@ -152,7 +152,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 12vw;
+    font-size: 24vw;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: gray;
     z-index: 4;

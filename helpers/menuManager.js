@@ -53,11 +53,17 @@ class MenuManager {
             this.masterInfo.songMode = "demo";
             this.setMainMenuOption("choose-song-button");
             this.showMenu("main-menu");
+            if (this.masterInfo.songMode === "radio") {
+                this.stationManager.stopListening();
+            }
         });
         setButtonClick("source-upload", () => {
             this.masterInfo.songMode = "upload";
             this.setMainMenuOption("upload-song-button");
             this.showMenu("main-menu");
+            if (this.masterInfo.songMode === "radio") {
+                this.stationManager.stopListening();
+            }
         });
         setButtonClick("source-radio", () => {
             this.masterInfo.songMode = "radio";
@@ -70,6 +76,9 @@ class MenuManager {
             this.setMainMenuOption("show-stream-modal-button");
             this.showMenu("main-menu");
             showModal("stream");
+            if (this.masterInfo.songMode === "radio") {
+                this.stationManager.stopListening();
+            }
         });
 
         // putting this here just because

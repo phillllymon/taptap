@@ -95,13 +95,25 @@ class StationManager {
     }
 
     stopListening() {
-        this.listening = false;
+        if (this.listening) {
+            this.streamPlayer.stopStream();
+            this.listening = false;
+        }
     }
 
     startListening() {
         if (this.listening) {
             return;
         }
+        this.listening = true;
+
+        document.getElementById("acquiring").style.color = "transparent";
+        document.getElementById("initial-received").style.color = "transparent";
+        document.getElementById("now-streaming").style.color = "transparent";
+        document.getElementById("connecting-radio").classList.remove("hidden");
+        document.getElementById("connecting-radio").classList.add("menu");
+
+        document.getElementById("acquiring").style.color = "gray";
 
         // LIVE STREAM VERSION
         const radioPlayer = new Audio(this.stationInfo.stream);
@@ -115,6 +127,7 @@ class StationManager {
             radioDelay.delayTime.setValueAtTime(4.0, radioPlayer.currentTime);
             radioSourceDelay.connect(radioDelay);
             radioDelay.connect(audioCtx.destination);
+            const gain = audioCtx.createGain();
             
             const nowCtx = new AudioContext();
             const radioSource = nowCtx.createMediaStreamSource(radioPlayer.captureStream());
@@ -132,7 +145,9 @@ class StationManager {
                 liveStream: true,
                 player: radioPlayer,
                 analyser: analyser,
-                dataArray: dataArray
+                dataArray: dataArray,
+                gain: gain,
+                ctx: audioCtx
             });
         });
 
@@ -315,28 +330,10 @@ class StationManager {
     switchToB() {
         this.times.B = performance.now();
         this.recorderB.start();
-        // const now = performance.now();
-        // this.times.A = now - this.timestamp;
-        // this.timestamp = now;
-        // this.recorderA.stop();
-        // if (this.listening) {
-        //     setTimeout(() => {
-        //         this.switchToA();
-        //     }, 10000);
-        // }
     }
     switchToA() {
         this.times.A = performance.now();
         this.recorderA.start();
-        // const now = performance.now();
-        // this.times.B = now - this.timestamp;
-        // this.timestamp = now;
-        // this.recorderB.stop();
-        // if (this.listening) {
-        //     setTimeout(() => {
-        //         this.switchToB();
-        //     }, 10000);
-        // }
     }
 
     

@@ -96,22 +96,22 @@ class BackgroundAnimator {
                         }).join(",");
                     });
                     
-                    ["background-left", "fog-top-left", "fog-gradient-left"].forEach((eleId) => {
+                    ["background-left", "fog-top-left", "fog-middle-left", "fog-gradient-left"].forEach((eleId) => {
                         document.getElementById(eleId).style.background = `linear-gradient(
                             to right,
-                            rgba(${colsToUse[0]},0.95) ${a}%,
-                            rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
-                            rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
-                            rgba(${colsToUse[3]},0.95) ${f}%
+                            rgba(${colsToUse[0]},1.0) ${a}%,
+                            rgba(${colsToUse[1]},1.0) ${b}% ${c}%,
+                            rgba(${colsToUse[2]},1.0) ${d}% ${e}%,
+                            rgba(${colsToUse[3]},1.0) ${f}%
                         )`
                     });
-                    ["background-right", "fog-top-right", "fog-gradient-right"].forEach((eleId) => {
+                    ["background-right", "fog-top-right", "fog-middle-right", "fog-gradient-right"].forEach((eleId) => {
                         document.getElementById(eleId).style.background = `linear-gradient(
                             to left,
-                            rgba(${colsToUse[0]},0.95) ${a}%,
-                            rgba(${colsToUse[1]},0.95) ${b}% ${c}%,
-                            rgba(${colsToUse[2]},0.95) ${d}% ${e}%,
-                            rgba(${colsToUse[3]},0.95) ${f}%
+                            rgba(${colsToUse[0]},1.0) ${a}%,
+                            rgba(${colsToUse[1]},1.0) ${b}% ${c}%,
+                            rgba(${colsToUse[2]},1.0) ${d}% ${e}%,
+                            rgba(${colsToUse[3]},1.0) ${f}%
                         )`;
                     });
                 }
@@ -170,22 +170,22 @@ class BackgroundAnimator {
                     return col[0];
                 }).join(",");
             });
-            ["background-left", "fog-top-left", "fog-gradient-left"].forEach((eleId) => {
+            ["background-left", "fog-top-left", "fog-middle-left", "fog-gradient-left"].forEach((eleId) => {
                 document.getElementById(eleId).style.background = `linear-gradient(
                     to right,
-                    rgba(${colsToUse[0]},0.95) 20%,
-                    rgba(${colsToUse[1]},0.95) 30% 45%,
-                    rgba(${colsToUse[2]},0.95) 55% 70%,
-                    rgba(${colsToUse[3]},0.95) 80%
+                    rgba(${colsToUse[0]},1.0) 20%,
+                    rgba(${colsToUse[1]},1.0) 30% 45%,
+                    rgba(${colsToUse[2]},1.0) 55% 70%,
+                    rgba(${colsToUse[3]},1.0) 80%
                 )`
             });
-            ["background-right", "fog-top-right", "fog-gradient-right"].forEach((eleId) => {
+            ["background-right", "fog-top-right", "fog-middle-right", "fog-gradient-right"].forEach((eleId) => {
                 document.getElementById(eleId).style.background = `linear-gradient(
                     to left,
-                    rgba(${colsToUse[0]},0.95) 20%,
-                    rgba(${colsToUse[1]},0.95) 30% 45%,
-                    rgba(${colsToUse[2]},0.95) 55% 70%,
-                    rgba(${colsToUse[3]},0.95) 80%
+                    rgba(${colsToUse[0]},1.0) 20%,
+                    rgba(${colsToUse[1]},1.0) 30% 45%,
+                    rgba(${colsToUse[2]},1.0) 55% 70%,
+                    rgba(${colsToUse[3]},1.0) 80%
                 )`;
             });
         }
