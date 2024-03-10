@@ -1,10 +1,10 @@
 #stream-modal {
     position: fixed;
     left: 50%;
-    top: 50%;
-    max-width: 40vw;
-    transform: translate(-50%, -50%);
-    font-size: 2vmin;
+    top: 5%;
+    max-width: 95vw;
+    transform: translate(-50%, 0%);
+    font-size: 2vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: gray;
     z-index: 1;
@@ -16,7 +16,7 @@
 }
 
 #stream-status {
-    font-size: 2vmin;
+    font-size: 2vh;
     color: darkgray;
 }
 
