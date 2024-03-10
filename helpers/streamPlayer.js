@@ -307,6 +307,7 @@ class StreamPlayer {
         console.log("new chunk added to queue");
 
         if (!this.started && this.queue.length > 1) {
+            hideModal("stream");
             console.log("starting music " + this.queue.length);
             this.startNextChunk();
             document.getElementById("now-streaming").style.color = "gray";

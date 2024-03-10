@@ -13,7 +13,7 @@ class Connector {
 
         document.getElementById("connect-stream-button").addEventListener("click", () => {
             console.log("Trying to connect");
-            setMessage("not connected");
+            setMessage("attempting to connect");
             const streamId = document.getElementById("stream-id").value;
             this.connect(streamId);
         });
@@ -80,6 +80,9 @@ class Connector {
             }
             if (this.channel.readyState === "open") {
                 setMessage("connected to source");
+                setTimeout(() => {
+                    setMessage("listening for music");
+                }, 1000);
                 clearInterval(checkInterval);
             }
         }, 2000);
