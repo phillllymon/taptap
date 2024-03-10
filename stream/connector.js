@@ -45,6 +45,7 @@ class Connector {
 
     dealWithMessage(message) {
         const messageObj = JSON.parse(message);
+        setMessage("communication established");
         if (messageObj.type === "candidate") {
             console.log("received candidate");
             this.connection.addIceCandidate(messageObj.candidate);
@@ -75,8 +76,10 @@ class Connector {
             if (mailboxChecks > 30) {
                 clearInterval(checkInterval);
                 console.log("timed out");
+                setMessage("could not connect");
             }
             if (this.channel.readyState === "open") {
+                setMessage("connected to source");
                 clearInterval(checkInterval);
             }
         }, 2000);

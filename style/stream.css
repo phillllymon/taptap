@@ -2,8 +2,9 @@
     position: fixed;
     left: 50%;
     top: 50%;
+    max-width: 40vw;
     transform: translate(-50%, -50%);
-    font-size: 3vmin;
+    font-size: 2vmin;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: gray;
     z-index: 1;
@@ -16,6 +17,7 @@
 
 #stream-status {
     font-size: 2vmin;
+    color: darkgray;
 }
 
 #equalizer {
