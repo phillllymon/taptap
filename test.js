@@ -1,12 +1,8 @@
 console.log("here");
 
-const radioStream = "https://23093.live.streamtheworld.com/KQMVFM.mp3?dist=hubbard&source=hubbard-web&ttag=web&gdpr=0";
+
 const player = new Audio();
-player.src = radioStream;
-player.crossOrigin = "anonymous";
-
-
-const player2 = new Audio(radioStream);
+const radioPlayer = new Audio();
 
 document.getElementById("file-input").addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -16,94 +12,60 @@ document.getElementById("file-input").addEventListener("change", (e) => {
         const newSongData = `data:audio/x-wav;base64,${str}`;
         
         player.src = newSongData;
+
+        const audioCtx = new AudioContext();
+        const audioSource = audioCtx.createMediaElementSource(player);
+        
+        // audioCtx.setSinkId({ type: "none" });
+        const myDelay = audioCtx.createDelay(4.0);
+        myDelay.delayTime.setValueAtTime(4.0, player.currentTime);
+        audioSource.connect(myDelay);
+        myDelay.connect(audioCtx.destination);
+
+        player.addEventListener("canplaythrough", () => {
+            // console.log("ready to play");
+            // const source2 = audioCtx.createMediaStreamSource(player.captureStream());
+            // const player2 = new Audio(source2);
+        });
+
+        radioPlayer.src = "https://classicalking.streamguys1.com/king-fm-aac-128k";
+        radioPlayer.crossOrigin = "anonymous";
+        radioPlayer.addEventListener("canplaythrough", () => {
+            console.log("radio ready");
+
+            const radioSourceDelay = audioCtx.createMediaElementSource(radioPlayer);
+            const radioDelay = audioCtx.createDelay(4.0);
+            radioDelay.delayTime.setValueAtTime(4.0, radioPlayer.currentTime);
+            radioSourceDelay.connect(radioDelay);
+            radioDelay.connect(audioCtx.destination);
+            
+            const nowCtx = new AudioContext();
+            const radioSource = nowCtx.createMediaStreamSource(radioPlayer.captureStream());
+            const analyser = nowCtx.createAnalyser();
+            radioSource.connect(analyser);
+            nowCtx.setSinkId({ type: "none" });
+            analyser.connect(nowCtx.destination);
+            analyser.fftSize = 32;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            setInterval(() => {
+                analyser.getByteFrequencyData(dataArray);
+                console.log(dataArray);
+            }, 500);
+        });
+
     };
     reader.readAsBinaryString(file);
 });
 
-// ---------------- silent play and capture data
-const audioCtx = new AudioContext();
-// audioCtx.destination = { playSound: true };
-const audioSource = audioCtx.createMediaElementSource(player);
-const analyser = audioCtx.createAnalyser();
-audioSource.connect(analyser);
-audioCtx.setSinkId({ type: "none" });
-analyser.connect(audioCtx.destination);
-analyser.fftSize = 32;
-dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-// ----------------- record segment
-let playerB;
-let arr = [];
-let recordAudioCtx;
-let dest;
-let recorder;
-let stream;
 
 
-function animate() {
-    analyser.getByteFrequencyData(dataArray);
-    dataArray.forEach((val, i) => {
-        document.getElementById(`col${i}`).style.height = `${val}px`;
-    });
-    requestAnimationFrame(animate);
-}
 
-document.getElementById("record-button").addEventListener("click", () => {
-    player.play();
-    animate();
-
-    // audioCtx = new AudioContext();
-    dest = audioCtx.createMediaStreamDestination();
-    recorder = new MediaRecorder(dest.stream);
-    stream = audioCtx.createMediaStreamSource(player.captureStream());
-    stream.connect(dest);
-
-    recorder.ondataavailable = (e) => {
-        arr.push(e.data);
-    };
-    recorder.onstop = () => {
-
-        console.log("recorder stopped");
-
-        const blob = new Blob(arr, { type: "audio/ogg; codecs=opus" });
-        const reader = new FileReader();
-        reader.onload = (readerE) => {
-
-            console.log("reader loaded");
-
-            const str = btoa(readerE.target.result);
-
-            console.log("here");
-            console.log(str);
-
-            playerB = new Audio(`data:audio/x-wav;base64,${str}`);
-        };
-        reader.readAsBinaryString(blob);
-    };
-
-    recorder.start();
+document.getElementById("play-button").addEventListener("click", () => {
+    radioPlayer.play();
 });
 
 document.getElementById("stop-button").addEventListener("click", () => {
-    player.pause();
-    // player2.pause();
-    recorder.stop();
-});
-
-const audioA = new Audio(radioStream);
-const audioB = new Audio(radioStream);
-
-document.getElementById("play-button").addEventListener("click", () => {
-    playerB.play();
-    
-    
-    // audioA.play();
-    // audioB.play();
-    // setTimeout(() => {
-    //     audioB.play();
-    // }, 4000);
-    // setInterval(() => {
-    //     console.log(audioA.currentTime + "  " + audioB.currentTime);
-    // }, 1000);
+    radioPlayer.pause();
 });
 

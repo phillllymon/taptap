@@ -34,6 +34,19 @@ class StreamPlayer {
     }
 
     getDataFreqArray() {
+        if (this.liveStream) {
+            this.liveAnalyser.getByteFrequencyData(this.liveDataArray);
+
+            this.freqArrays.push(this.liveDataArray.map(val => val));
+            const now = performance.now();
+            this.times.push(now);
+            while (this.times[0] < now - this.delay) {
+                this.times.shift();
+                this.freqArrays.shift();
+            }
+
+            return this.liveDataArray;
+        }
         if (this.silentPlayer) {
             this.analyser.getByteFrequencyData(this.dataArray);
 
@@ -121,6 +134,15 @@ class StreamPlayer {
         console.log("data received");
         if (!this.started) {
             document.getElementById("initial-received").style.color = "gray";
+        }
+        if (data.liveStream) {
+            this.liveStream = true;
+            data.player.play();
+            this.liveAnalyser = data.analyser;
+            this.liveDataArray = data.dataArray;
+
+            document.getElementById("connecting-radio").classList.add("hidden");
+            return
         }
         if (data.timeDelay) {
             console.log("timeDelay recognized");

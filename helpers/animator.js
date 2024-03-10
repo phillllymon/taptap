@@ -207,6 +207,18 @@ function moveNotes(
             tail.height = newHeight;
         }
     });
+    
+    // -------- periodically reset slider
+    if (sliderPos > 100000) {
+        for (const note of notes) {
+            document.getElementById("slider").style.top = `${sliderPos}px`;
+            note.note.style.top = `${note.position}px`;
+            if (note.tail) {
+                note.tail.note.style.top = `${note.tail.position}`;
+            }
+        }
+        sliderPos = 0;
+    }
 
     // move slider
     sliderPos += movement;

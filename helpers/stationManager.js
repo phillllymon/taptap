@@ -104,127 +104,158 @@ class StationManager {
         }
 
         // LIVE STREAM VERSION
-        // this.streamPlayer.setData(this.stationInfo.stream, true);
-        // return;
+        const radioPlayer = new Audio(this.stationInfo.stream);
+        radioPlayer.crossOrigin = "anonymous";
+
+        radioPlayer.addEventListener("canplaythrough", () => {
+
+            const audioCtx = new AudioContext();
+            const radioSourceDelay = audioCtx.createMediaElementSource(radioPlayer);
+            const radioDelay = audioCtx.createDelay(4.0);
+            radioDelay.delayTime.setValueAtTime(4.0, radioPlayer.currentTime);
+            radioSourceDelay.connect(radioDelay);
+            radioDelay.connect(audioCtx.destination);
+            
+            const nowCtx = new AudioContext();
+            const radioSource = nowCtx.createMediaStreamSource(radioPlayer.captureStream());
+            const analyser = nowCtx.createAnalyser();
+            radioSource.connect(analyser);
+            nowCtx.setSinkId({ type: "none" });
+            analyser.connect(nowCtx.destination);
+            analyser.fftSize = 32;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    
+    
+    
+    
+            this.streamPlayer.setData({
+                liveStream: true,
+                player: radioPlayer,
+                analyser: analyser,
+                dataArray: dataArray
+            });
+        });
+
+        return;
         // END LIVE STREAM VERSION
 
-        document.getElementById("acquiring").style.color = "transparent";
-        document.getElementById("initial-received").style.color = "transparent";
-        document.getElementById("now-streaming").style.color = "transparent";
-        document.getElementById("connecting-radio").classList.remove("hidden");
-        document.getElementById("connecting-radio").classList.add("menu");
-        setTimeout(() => {
-            document.getElementById("song-label").innerText = "Keep your shirt on";
-        }, 9000);
-
-        // this.player = new Audio();
-        // this.player.src = this.stationInfo.stream;
-        // this.player.crossOrigin = "anonymous";
-        this.radioAudio.src = this.stationInfo.stream;
-
-        const audioCtx = new AudioContext();
-        const audioSource = audioCtx.createMediaElementSource(this.radioAudio);
-        const analyser = audioCtx.createAnalyser();
-        audioSource.connect(analyser);
-        audioCtx.setSinkId({ type: "none" });
-
-        let dest;
-        
-        let stream;
-
+        // document.getElementById("acquiring").style.color = "transparent";
+        // document.getElementById("initial-received").style.color = "transparent";
+        // document.getElementById("now-streaming").style.color = "transparent";
+        // document.getElementById("connecting-radio").classList.remove("hidden");
+        // document.getElementById("connecting-radio").classList.add("menu");
         // setTimeout(() => {
-        this.radioAudio.addEventListener("canplaythrough", () => {
-            document.getElementById("acquiring").style.color = "gray";
-            this.radioAudio.play();
+        //     document.getElementById("song-label").innerText = "Keep your shirt on";
+        // }, 9000);
+
+        // // this.player = new Audio();
+        // // this.player.src = this.stationInfo.stream;
+        // // this.player.crossOrigin = "anonymous";
+        // this.radioAudio.src = this.stationInfo.stream;
+
+        // const audioCtx = new AudioContext();
+        // const audioSource = audioCtx.createMediaElementSource(this.radioAudio);
+        // const analyser = audioCtx.createAnalyser();
+        // audioSource.connect(analyser);
+        // audioCtx.setSinkId({ type: "none" });
+
+        // let dest;
         
-            // audioCtx = new AudioContext();
-            dest = audioCtx.createMediaStreamDestination();
-            this.recorderA = new MediaRecorder(dest.stream);
-            this.recorderB = new MediaRecorder(dest.stream);
-            stream = audioCtx.createMediaStreamSource(this.radioAudio.captureStream());
-            stream.connect(dest);
+        // let stream;
+
+        // // setTimeout(() => {
+        // this.radioAudio.addEventListener("canplaythrough", () => {
+        //     document.getElementById("acquiring").style.color = "gray";
+        //     this.radioAudio.play();
+        
+        //     // audioCtx = new AudioContext();
+        //     dest = audioCtx.createMediaStreamDestination();
+        //     this.recorderA = new MediaRecorder(dest.stream);
+        //     this.recorderB = new MediaRecorder(dest.stream);
+        //     stream = audioCtx.createMediaStreamSource(this.radioAudio.captureStream());
+        //     stream.connect(dest);
 
 
-            const startNextRecording = (prevStartTime) => {
-                const recorder = new MediaRecorder(dest.stream);
-                const startTimeArr = [0];
-                recorder.onstart = () => {
-                    startTimeArr[0] = performance.now();
-                };
-                recorder.ondataavailable = (e) => {
-                    const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
-                    const reader = new FileReader();
-                    reader.onload = (readerE) => {
-                        const str = btoa(readerE.target.result);
-                        this.streamPlayer.setData({
-                            str: str,
-                            timeDelay: prevStartTime ? startTimeArr[0] - prevStartTime : true
-                        });
-                    };
-                    reader.readAsBinaryString(blob);
-                };
-                setTimeout(() => {
-                    startNextRecording(startTimeArr[0]);
-                }, 10000);
-                setTimeout(() => {
-                    recorder.stop();
-                }, 15000);
-                recorder.start();
-            };
-            startNextRecording();
+        //     const startNextRecording = (prevStartTime) => {
+        //         const recorder = new MediaRecorder(dest.stream);
+        //         const startTimeArr = [0];
+        //         recorder.onstart = () => {
+        //             startTimeArr[0] = performance.now();
+        //         };
+        //         recorder.ondataavailable = (e) => {
+        //             const blob = new Blob([e.data], { type: "audio/ogg; codecs=opus" });
+        //             const reader = new FileReader();
+        //             reader.onload = (readerE) => {
+        //                 const str = btoa(readerE.target.result);
+        //                 this.streamPlayer.setData({
+        //                     str: str,
+        //                     timeDelay: prevStartTime ? startTimeArr[0] - prevStartTime : true
+        //                 });
+        //             };
+        //             reader.readAsBinaryString(blob);
+        //         };
+        //         setTimeout(() => {
+        //             startNextRecording(startTimeArr[0]);
+        //         }, 10000);
+        //         setTimeout(() => {
+        //             recorder.stop();
+        //         }, 15000);
+        //         recorder.start();
+        //     };
+        //     startNextRecording();
 
         
-            this.recorderA.ondataavailable = (e) => {
-                this.streamPlayer.setData(e.data, true);
+        //     this.recorderA.ondataavailable = (e) => {
+        //         this.streamPlayer.setData(e.data, true);
 
 
-                // this.chunksA.push(e.data);
-                // const now = performance.now();
-                // this.times.A = now - this.timestamp;
-                // this.timestamp = now;
-            };
-            this.recorderB.ondataavailable = (e) => {
-                this.chunksB.push(e.data);
-                const now = performance.now();
-                this.times.B = now - this.timestamp;
-                this.timestamp = now;
-            };
-            this.recorderA.onstop = () => {
+        //         // this.chunksA.push(e.data);
+        //         // const now = performance.now();
+        //         // this.times.A = now - this.timestamp;
+        //         // this.timestamp = now;
+        //     };
+        //     this.recorderB.ondataavailable = (e) => {
+        //         this.chunksB.push(e.data);
+        //         const now = performance.now();
+        //         this.times.B = now - this.timestamp;
+        //         this.timestamp = now;
+        //     };
+        //     this.recorderA.onstop = () => {
 
-                const timeToUse = this.times.A;
+        //         const timeToUse = this.times.A;
 
-                const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
-                while (this.chunksA.length > 0) {
-                    this.chunksA.shift();
-                }
-                const reader = new FileReader();
-                reader.onload = (readerE) => {
-                    const str = btoa(readerE.target.result);
-                    this.streamPlayer.setData(JSON.stringify({
-                        str: str,
-                        time: timeToUse
-                    }));
-                };
-                reader.readAsBinaryString(blob);
-            };
-            this.recorderB.onstop = () => {
+        //         const blob = new Blob(this.chunksA, { type: "audio/ogg; codecs=opus" });
+        //         while (this.chunksA.length > 0) {
+        //             this.chunksA.shift();
+        //         }
+        //         const reader = new FileReader();
+        //         reader.onload = (readerE) => {
+        //             const str = btoa(readerE.target.result);
+        //             this.streamPlayer.setData(JSON.stringify({
+        //                 str: str,
+        //                 time: timeToUse
+        //             }));
+        //         };
+        //         reader.readAsBinaryString(blob);
+        //     };
+        //     this.recorderB.onstop = () => {
 
-                const timeToUse = this.times.B;
+        //         const timeToUse = this.times.B;
                 
-                const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
-                while (this.chunksB.length > 0) {
-                    this.chunksB.shift();
-                }
-                const reader = new FileReader();
-                reader.onload = (readerE) => {
-                    const str = btoa(readerE.target.result);
-                    this.streamPlayer.setData(JSON.stringify({
-                        str: str,
-                        time: timeToUse
-                    }));
-                };
-                reader.readAsBinaryString(blob);
-            };
+        //         const blob = new Blob(this.chunksB, { type: "audio/ogg; codecs=opus" });
+        //         while (this.chunksB.length > 0) {
+        //             this.chunksB.shift();
+        //         }
+        //         const reader = new FileReader();
+        //         reader.onload = (readerE) => {
+        //             const str = btoa(readerE.target.result);
+        //             this.streamPlayer.setData(JSON.stringify({
+        //                 str: str,
+        //                 time: timeToUse
+        //             }));
+        //         };
+        //         reader.readAsBinaryString(blob);
+        //     };
 
 
             
@@ -278,7 +309,7 @@ class StationManager {
             //     this.switchToB();
             // }, 10000);
             // this.listening = true;
-        });
+        // });
     }
 
     switchToB() {
