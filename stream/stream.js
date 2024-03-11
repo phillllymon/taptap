@@ -4,9 +4,6 @@ const timing = 10000;
 let chunksA = [];
 let chunksB = [];
 
-let notesArrA = [];
-let notesArrB = [];
-
 const times = {
     A: 0,
     B: 0
@@ -19,17 +16,6 @@ let timestamp = performance.now();
 
 let channel;
 
-// for note generation
-let slideIds = [
-    "slide-left",
-    "slide-a",
-    "slide-b",
-    "slide-right"
-];
-let notesPerSecond = 8;
-const addNote = () => {
-    console.log("NEW NOTE WOO!");
-};
 const masterInfo = {
     maxTailLength: 500,
     minNoteGap: 200
@@ -41,14 +27,17 @@ document.getElementById("start-listening").addEventListener("click", () => {
         noiseSuppression: false,
         echoCancellation: false
     } }).then((stream) => {
+
+        const amts = [];
+
         const mediaRecorderA = new MediaRecorder(stream);
         const mediaRecorderB = new MediaRecorder(stream);
 
         let player = mediaRecorderA;
 
         [
-            [mediaRecorderA, chunksA, notesArrA],
-            [mediaRecorderB, chunksB, notesArrB]
+            [mediaRecorderA, chunksA],
+            [mediaRecorderB, chunksB]
         ].forEach((recordSet, n) => {
             recordSet[0].ondataavailable = (e) => {
                 recordSet[1].push(e.data);
@@ -80,12 +69,6 @@ document.getElementById("start-listening").addEventListener("click", () => {
                     if (channel && channel.readyState === "open") {
                         channel.send(strToSave);
                     }
-
-                    // clear notes array
-                    const numNotes = recordSet[2].length;
-                    for(let i = 0; i < numNotes; i++) {
-                        recordSet[2].shift();
-                    }
                 };
                 reader.readAsBinaryString(blob);
             };
@@ -104,6 +87,7 @@ document.getElementById("start-listening").addEventListener("click", () => {
         const audioSource = audioCtx.createMediaStreamSource(stream);
         const analyser = audioCtx.createAnalyser();
         audioSource.connect(analyser);
+        audioCtx.setSinkId({ type: "none" });
         analyser.connect(audioCtx.destination);
         analyser.fftSize = 32;
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -111,9 +95,26 @@ document.getElementById("start-listening").addEventListener("click", () => {
         animate();
         function animate() {
             analyser.getByteFrequencyData(dataArray);
+
+            amts.push(Math.max(...dataArray));
+            while (amts.length > 10) {
+                amts.shift();
+            }
+            if (amts.length === 10) {
+                if (400 > amts[0] + amts[1] + amts[2] + amts[3] + amts[4] + amts[5] + amts[6] + amts[7] + amts[8] + amts[9]){
+                    document.getElementById("message").innerText = "I don't hear anything...";
+                } else {
+                    document.getElementById("start-connect").disabled = false;
+                }
+            }
+
             for (let i = 0; i < dataArray.length; i++) {
                 const colId = `col${i}`;
+                const colId2 = `col${31 - i}`
                 document.getElementById(colId).style.height = `${Math.max(4, dataArray[i])}px`;
+                if (i > 0) {
+                    document.getElementById(colId2).style.height = `${Math.max(4, dataArray[i])}px`;
+                }
             }
 
             requestAnimationFrame(animate);
@@ -260,13 +261,6 @@ document.getElementById("start-connect").addEventListener("click", () => {
             }
         }
     }
-
-    document.getElementById("test-message").addEventListener("click", () => {
-        const message = "test";
-        console.log("attempting test message: " + message);
-    
-        channel.send(message);
-    });
 
 });
 

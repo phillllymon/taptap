@@ -1,3 +1,4 @@
+
 #stream-modal {
     position: fixed;
     left: 50%;
@@ -22,16 +23,25 @@
 
 #equalizer {
     height: 255px;
-    width: 512px;
+    width: 256px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid black;
+    justify-content: space-around;
+    /* border-radius: 50%; */
+    /* background-color: darkblue; */
 }
 
 .equ-col {
-    width: 32px;
+    width: 6px;
     height: 4px;
-    background-color: red;
+    border-radius: 2px;
+    background-color: darkblue;
+}
+
+#stream-id {
+    font-size: 50px;
+    color: darkblue;
+    font-family:'Courier New', Courier, monospace;
 }
 

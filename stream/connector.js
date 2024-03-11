@@ -14,7 +14,7 @@ class Connector {
         document.getElementById("connect-stream-button").addEventListener("click", () => {
             console.log("Trying to connect");
             setMessage("attempting to connect");
-            const streamId = document.getElementById("stream-id").value;
+            const streamId = document.getElementById("enter-stream-id").value;
             this.connect(streamId);
         });
 
@@ -139,8 +139,10 @@ function handleReceiveMessage(e) {
         masterInfo.streaming = true;
         document.getElementById("stream-status").innerText = "connected";
         masterInfo.currentSong = "streaming";
-        document.getElementById("song-label").innerText = "awaiting stream";
-        document.getElementById("stream-mode").innerText = "Stop streaming";
+        document.getElementById("song-label").innerText = "awaiting music";
+        setTimeout(() => {
+            document.getElementById("song-label").innerText = "keep your shirt on";
+        }, 2000);
         hideModal("stream");
         masterInfo.streaming = true;
     } else {

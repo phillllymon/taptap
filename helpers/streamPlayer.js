@@ -311,6 +311,10 @@ class StreamPlayer {
             console.log("starting music " + this.queue.length);
             this.startNextChunk();
             document.getElementById("now-streaming").style.color = "gray";
+            const songLabel = document.getElementById("song-label");
+            if (songLabel.innerText === "keep your shirt on") {
+                songLabel.innerText = "streaming";
+            }
             setTimeout(() => {
                 document.getElementById("connecting-radio").classList.add("hidden");
             }, 2000);
