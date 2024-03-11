@@ -1,3 +1,44 @@
+// instructions
+document.getElementById("instructions-pc").addEventListener("click", () => {
+    alert("Coming soon! For now, you should be able to adapt the mac instructions without too much trouble");
+});
+
+document.getElementById("instructions-mac").addEventListener("click", () => {
+    document.getElementById("instructions-modal").classList.remove("hidden");
+    showStep("1");
+});
+
+document.getElementById("close-instructions").addEventListener("click", () => {
+    document.getElementById("instructions-modal").classList.add("hidden");
+});
+
+document.getElementById("close-instructions-button").addEventListener("click", () => {
+    document.getElementById("instructions-modal").classList.add("hidden");
+});
+
+document.getElementById("finish").addEventListener("click", () => {
+    document.getElementById("instructions-modal").classList.add("hidden");
+});
+
+function showStep(stepNum) {
+    [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((num) => {
+        document.getElementById(`step-${num}`).classList.add("hidden");
+    });
+    document.getElementById(`step-${stepNum}`).classList.remove("hidden");
+}
+
+[2, 3, 4, 5, 6, 7, 8, 9].forEach((num) => {
+    document.getElementById(`show-step-${num}`).addEventListener("click", () => {
+        showStep(num);
+    });
+});
+
+[1, 2, 3, 4, 5, 6, 7, 8].forEach((num) => {
+    document.getElementById(`back-to-${num}`).addEventListener("click", () => {
+        showStep(num);
+    });
+});
+
 // recorder part
 const timing = 10000;
 

@@ -10,11 +10,146 @@
     <link rel="stylesheet" href="./stream.css">
 </head>
 <body>
+    <div id="instructions-modal" class="hidden">
+        <div id="close-instructions">close</div>
+        <div id="step-1" class="hidden">
+            <br>
+            Step 1: Go <a href="https://vb-audio.com/Cable/">here</a> and download the mac version of VB-CABLE.
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/download.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="close-instructions-button">Close</button>
+                <button id="show-step-2">OK, it's downloaded</button>
+            </div>
+        </div>
+        <div id="step-2" class="hidden">
+            <br>
+            Step 2: Open your downloads folder and double click on the file you just downloaded.
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/downloaded.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-1">Back</button>
+                <button id="show-step-3">OK, next</button>
+            </div>
+        </div>
+        <div id="step-3" class="hidden">
+            <br>
+            Step 3: When this window opens, double click on the box image and follow the installation prompts.
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/installer.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-2">Back</button>
+                <button id="show-step-4">OK, it's installed</button>
+            </div>
+        </div>
+        <div id="step-4" class="hidden">
+            <br>
+            Step 4: Open your streaming app and start the music. 
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-3">Back</button>
+                <button id="show-step-5">OK, music is playing</button>
+            </div>
+        </div>
+        <div id="step-5" class="hidden">
+            <br>
+            Step 5: Open your System Preferences and then open the Sound options.
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/preferences.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-4">Back</button>
+                <button id="show-step-6">OK, Sound is open</button>
+            </div>
+        </div>
+        <div id="step-6" class="hidden">
+            <br>
+            Step 6: Click on Output and then select VB-Cable from the list. You should stop 
+            hearing your music but fear not - This is expected.
+            <br>
+            <br>
+            <b>Important note:</b> Come back here and set output back to your speakers when you're done playing!
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/setOutput.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-5">Back</button>
+                <button id="show-step-7">OK, Output is set</button>
+            </div>
+        </div>
+        <div id="step-7" class="hidden">
+            <br>
+            Step 7: Click on Input and then select VB-Cable from the list.
+            <br>
+            <br>
+            <b>Important note:</b> Come back here and set input back to your microphone when you're done playing!
+            <br>
+            <br>
+            <img class="instruction-pic" src="./pics/setInput.png"></img>
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-6">Back</button>
+                <button id="show-step-8">OK, Input is set</button>
+            </div>
+        </div>
+        <div id="step-8" class="hidden">
+            <br>
+            Step 8: Click Start listener below and give your browser microphone permission. You should see the 
+            equalizer come to life - this means the listener hears your music.
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-7">Back</button>
+                <button id="show-step-9">OK, Equalizer is moving</button>
+            </div>
+        </div>
+        <div id="step-9" class="hidden">
+            <br>
+            Step 9: Click Connect. A unique stream id will be generated. Enter the stream id in your game.
+            <br>
+            <br>
+            Once the game connects, you should start hearing music within 30 seconds. Note: there will 
+            be a delay of 15-30 seconds between what is output from your streaming 
+            service and what you hear in the game.
+            <br>
+            <br>
+            <div class="instructions-button-bar">
+                <button id="back-to-8">Back</button>
+                <button id="finish">OK, I see the stream Id</button>
+            </div>
+        </div>
+    </div>
     <center>
-
         <br>
         <br>
-        <button id="instructions">Setup instructions</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        Streaming should take less than five minutes to set up.
+        <br>
+        <br>
+        Setup Instructions
+        <br>
+        <button id="instructions-mac">Mac</button>
+        <button id="instructions-pc">Windows</button>
         <br>
         <br>
         <button id="start-listening">Start listener</button>
