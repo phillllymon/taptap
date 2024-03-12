@@ -63,19 +63,19 @@ class NoteWriter {
                 const lastNote = this.mostRecentNotes[slideId];
                 if (lastNote) {
 
-                    let thresholdPass = true;
+                    let thresholdPass = false;
                     const adjust = {
                         "slide-left": 1.2,
                         "slide-a": 1.0,
                         "slide-b": 0.9,
                         "slide-right": 0.4
                     }[slideId];
-                    if (lastNote.isTail && lastNote.totalHeight < 0.1 * this.masterInfo.travelLength && thisNoteVal.val < adjust * lastTriggerNote.val) {
+                    // if (lastNote.isTail && thisNoteVal.val < adjust * lastTriggerNote.val) {
+                    // if (lastNote.isTail && lastNote.totalHeight < 0.1 * this.masterInfo.travelLength && thisNoteVal.val < adjust * lastTriggerNote.val) {
                         thresholdPass = thisNoteVal.val > adjust * lastTriggerNote.val;
-                    }
+                    // }
 
                     if (makeNotePass && thresholdPass) {
-                    // if (makeNotePass && thisNoteVal.val > adjust * lastTriggerNote.val) {
                         makeTail(slideId, lastNote);
                         const now = performance.now();
                         if (slideIds.length === 4) {

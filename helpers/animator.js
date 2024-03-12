@@ -249,6 +249,9 @@ function moveNotes(
             
         }
         if (newTop > theTargetBounds.bottom && note.target === true) {
+
+            // note.note.style.backgroundColor = "green";
+
             note.target = false;
             theTargets[note.slideId].delete(note);
             triggerMissedNote();

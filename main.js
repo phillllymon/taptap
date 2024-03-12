@@ -387,6 +387,8 @@ function makeTail(slideId, parentNote) {
     }
 
 }
+
+let lastNote = null;
 function addNote(slideId, val, marked = false) {
     const newNote = document.createElement("div");
     newNote.classList.add("note");
@@ -396,14 +398,12 @@ function addNote(slideId, val, marked = false) {
 
     let startPos = -1.0 * autoAdjustment; // should be zero initially
     
-    // match previous note if super close
-    ["slide-left", "slide-a", "slide-b", "slide-right"].forEach((id) => {
-        const recent = mostRecentNotesOrTails[id];
-        if (recent && !recent.isTail && recent.position < 0.04 * masterInfo.travelLength + autoAdjustment) {
-            startPos = recent.position;
-        }
-    });
-
+    // match previous note if super close    
+    if (lastNote && !lastNote.isTail && lastNote.position < 0.05 * (masterInfo.travelLength + autoAdjustment)) {
+        // newNote.style.backgroundColor = "green";
+        startPos = lastNote.position;
+    }
+    
     newNote.style.top = `${(-1.0 * sliderPos) + startPos}px`; // FOR SLIDER
     // newNote.style.top = `${startPos}px`;
     const noteInfo = {
@@ -419,6 +419,7 @@ function addNote(slideId, val, marked = false) {
     notes.add(noteInfo);
     document.getElementById(slideId).appendChild(newNote);
 
+    lastNote = noteInfo;
     mostRecentNotesOrTails[slideId] = noteInfo;
 }
 function killAllNotes() {
@@ -605,6 +606,7 @@ function setupMobile() {
 
         const viewHeight = document.getElementById("game-container").clientHeight;
         masterInfo.travelLength = gameDataConst.mobile.travelLength * viewHeight;
+        masterInfo.autoAdjustment = 0.05 * masterInfo.travelLength;
 
         const newNoteSpeed = Math.floor(masterInfo.travelLength / ( (masterInfo.songDelay / 1000) / 2 ));
         masterInfo.targetBounds.top = gameDataConst.mobile.targetBounds.top * masterInfo.travelLength;
