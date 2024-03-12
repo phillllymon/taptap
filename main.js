@@ -468,7 +468,7 @@ function triggerHitNote(slideId, tapperId) {
     const light = document.createElement("div");
     light.appendChild(lighted);
     light.appendChild(middleLighted);
-    document.getElementById(tapperId).appendChild(light);
+    document.getElementById(`dummy-${tapperId}`).appendChild(light);
     light.classList.add("flash");
     setTimeout(() => {
         light.remove();
@@ -615,10 +615,10 @@ function setupMobile() {
     }, 500); // without small delay this was getting missed
 
     [
-        ["tapper-left", "slide-left", "note-leaving-left", "clear-slide-left", "dummy-left"],
-        ["tapper-right", "slide-right", "note-leaving-right", "clear-slide-right", "dummy-right"],
-        ["tapper-a", "slide-a", "note-leaving-left", "clear-slide-a", "dummy-a"],
-        ["tapper-b", "slide-b", "note-leaving-right", "clear-slide-b", "dummy-b"]
+        ["tapper-left", "slide-left", "note-leaving-left", "dummy-tapper-left", "dummy-left"],
+        ["tapper-right", "slide-right", "note-leaving-right", "dummy-tapper-right", "dummy-right"],
+        ["tapper-a", "slide-a", "note-leaving-left", "dummy-tapper-a", "dummy-a"],
+        ["tapper-b", "slide-b", "note-leaving-right", "dummy-tapper-b", "dummy-b"]
     ].forEach((idSet) => {
         document.getElementById(idSet[3]).addEventListener("touchstart", (e) => {
             activateTapper(...idSet);
@@ -629,16 +629,16 @@ function setupMobile() {
     });
 
     document.addEventListener("touchend", (e) => {
-        if (e.target.id === "dummy-left" || e.target.id === "tapper-left") {
+        if (e.target.id === "dummy-left" || e.target.id === "dummy-tapper-left") {
             deactivateTapper("tapper-left");
         }
-        if (e.target.id === "dummy-a" || e.target.id === "tapper-a") {
+        if (e.target.id === "dummy-a" || e.target.id === "dummy-tapper-a") {
             deactivateTapper("tapper-a");
         }
-        if (e.target.id === "dummy-b" || e.target.id === "tapper-b") {
+        if (e.target.id === "dummy-b" || e.target.id === "dummy-tapper-b") {
             deactivateTapper("tapper-b");
         }
-        if (e.target.id === "dummy-right" || e.target.id === "tapper-right") {
+        if (e.target.id === "dummy-right" || e.target.id === "dummy-tapper-right") {
             deactivateTapper("tapper-right");
         }
     });

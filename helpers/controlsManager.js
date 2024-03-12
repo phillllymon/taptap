@@ -151,6 +151,8 @@ class ControlsManager {
         const clearSlideB = document.getElementById("clear-slide-b");
         const dummyA = document.getElementById("dummy-a");
         const dummyB = document.getElementById("dummy-b");
+        const dummyTapperA = document.getElementById("dummy-tapper-a-container");
+        const dummyTapperB = document.getElementById("dummy-tapper-b-container");
         const slidesContainer = document.getElementById("slides-container");
         
         if (n === 2) {
@@ -162,6 +164,8 @@ class ControlsManager {
             clearSlideB.classList.add("hidden");
             dummyA.classList.add("hidden");
             dummyB.classList.add("hidden");
+            dummyTapperA.classList.add("hidden");
+            dummyTapperB.classList.add("hidden");
     
             slidesContainer.classList.remove("three-wide-slides-container");
             slidesContainer.classList.remove("four-wide-slides-container");
@@ -175,6 +179,8 @@ class ControlsManager {
             clearSlideB.classList.add("hidden");
             dummyA.classList.remove("hidden");
             dummyB.classList.add("hidden");
+            dummyTapperA.classList.remove("hidden");
+            dummyTapperB.classList.add("hidden");
     
             slidesContainer.classList.add("three-wide-slides-container");
             slidesContainer.classList.remove("four-wide-slides-container");
@@ -187,6 +193,8 @@ class ControlsManager {
             clearSlideB.classList.remove("hidden");
             dummyA.classList.remove("hidden");
             dummyB.classList.remove("hidden");
+            dummyTapperA.classList.remove("hidden");
+            dummyTapperB.classList.remove("hidden");
     
             slidesContainer.classList.remove("three-wide-slides-container");
             slidesContainer.classList.add("four-wide-slides-container");
