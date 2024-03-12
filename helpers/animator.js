@@ -202,6 +202,16 @@ function moveNotes(
             if (newHeight < 0) {
                 tail.note.remove();
                 theTargetTails[slideId] = null;
+
+                const sustain = document.getElementById(`${slideId}-flash-sustain`);
+                if (sustain) {
+                    sustain.classList.add("light-off");
+                    setTimeout(() => {
+                        sustain.remove();
+                    }, 500);
+                        
+                    
+                }
             }
             tail.note.style.height = `${newHeight}px`;
             tail.height = newHeight;

@@ -23,9 +23,9 @@
 .tapper {
     /* top: 0vh; */
     /* travelLength is 128.5vh to account for top border */
-    border: 1.5vh solid rgb(134, 0, 74);
-    border-left: 3vh solid rgb(134, 0, 74);
-    border-right: 3vh solid rgb(134, 0, 74);
+    border: 1.5vh solid rgb(85, 0, 0);
+    border-left: 3vh solid rgb(85, 0, 0);
+    border-right: 3vh solid rgb(85, 0, 0);
 }
 
 #tappers-inner-container {
@@ -58,6 +58,10 @@
     border-right: 3vh solid darkorange;
     border-left: 3vh solid darkorange;
 }
+.note-tail {
+    width: 20%;
+}
+
 .note-leaving-right {
     top: 128.5vh;
 }
@@ -219,7 +223,11 @@
 
 .note-middle-lighted {
     top: 0.4vh;
-    width: 3vh;
-    height: 1.5vh;
+    width: 8vh;
+    height: 5vh;
+}
+
+.flash {
+    top: 0.7vh;
 }
 

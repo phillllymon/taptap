@@ -34,10 +34,9 @@
     box-sizing: border-box;
     z-index: 30;
     opacity: 0.9;
+    border: 4vmin solid rgb(255, 219, 189);
     border-top: 0.5vmin solid rgb(255, 225, 200);
     border-bottom: 2vmin solid rgb(255, 218, 184);
-    border-right: 4vmin solid rgb(255, 219, 189);
-    border-left: 4vmin solid rgb(255, 219, 189);
     /* border-top: 0.5vmin solid rgb(255, 236, 200);
     border-bottom: 2vmin solid rgb(255, 230, 184);
     border-right: 4vmin solid rgb(255, 232, 189);
@@ -79,6 +78,7 @@
         0px 0px 20px rgb(255, 231, 188),
         0px 0px 20px rgb(255, 231, 188); */
     opacity: 1;
+    z-index: 5;
 }
 
 .flash {
@@ -87,14 +87,45 @@
     left: 0px;
     width: 100%;
     height: 100%;
-    animation-name: lightup;
-    animation-duration: 0.2s;
+    animation-name: flash;
+    animation-duration: 0.3s;
     opacity: 0;
 }
+@keyframes flash {
+    0%      {opacity: 0}
+    5%      {opacity: 1}
+    25%      {opacity: 1}
+    100%    {opacity: 0}
+}
 
+.flash-sustain {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    animation-name: lightup;
+    animation-duration: 0.3s;
+    opacity: 1;
+}
 @keyframes lightup {
     0%      {opacity: 0}
     5%      {opacity: 1}
-    35%      {opacity: 1}
+    100%    {opacity: 1}
+}
+
+.light-off {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    animation-name: off;
+    animation-duration: 0.3s;
+    opacity: 0;
+}
+@keyframes off {
+    0%      {opacity: 1}
+    25%      {opacity: 0}
     100%    {opacity: 0}
 }

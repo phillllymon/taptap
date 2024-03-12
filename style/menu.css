@@ -13,7 +13,7 @@
     padding: 2vh;
     border: 0.75vh solid rgba(180, 180, 180, 0.4);
     border-radius: 0.5vmin;
-    background-color: rgba(200, 200, 200, 0.8);
+    background-color: rgba(200, 200, 200, 0.95);
     box-sizing: border-box;
     z-index: 4;
     overflow: auto;

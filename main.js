@@ -276,9 +276,15 @@ function deactivateTapper(tapperId) {
         if (tail.height > 0.1 * maxTailLength) {
             player.setVolume(0.3);
         }
-        // tail.note.classList.add("hidden");
+        
         tail.note.remove();
         mostRecentNotesOrTails[slideIds[tapperId]] = null;
+
+        const sustain = document.getElementById(`${slideIds[tapperId]}-flash-sustain`);
+        if (sustain) {
+            // sustain.classList.remove("flash-sustain");
+            sustain.remove();
+        }
     }
 }
 
@@ -324,19 +330,33 @@ function activateTapper(tapperId, slideId, leavingClass) {
         target.note.classList.add(leavingClass);
         targets[slideId].delete(target);
 
-        triggerHitNote(slideId, tapperId);
+        let hasTail = false;
 
         if (target.tail) {
+            hasTail = true;
             targetTails[slideId] = target.tail;
             target.tail.note.classList.add("tail-active");
 
             target.tail.cloud.classList.remove("hidden");
+
+            const lighted = document.createElement("div");
+            lighted.classList.add("note-lighted");
+            const middleLighted = document.createElement("div");
+            middleLighted.classList.add("note-middle-lighted");
+            const light = document.createElement("div");
+            light.appendChild(lighted);
+            light.appendChild(middleLighted);
+            document.getElementById(`dummy-${tapperId}`).appendChild(light);
+            light.classList.add("flash-sustain");
+            light.id = `${slideId}-flash-sustain`;
+            
 
             // make it look like you got the note spot on
             const perfectHeight = masterInfo.travelLength - target.tail.position;
             target.tail.note.style.height = `${perfectHeight}px`;
             target.tail.height = perfectHeight;
         }
+        triggerHitNote(slideId, tapperId, hasTail);
     }
 }
 
@@ -419,6 +439,7 @@ function addNote(slideId, val, marked = false) {
         seen: false
     };
     notes.add(noteInfo);
+    
     document.getElementById(slideId).appendChild(newNote);
 
     lastNote = noteInfo;
@@ -435,7 +456,7 @@ function killAllNotes() {
 }
 
 let labelInUse = false;
-function triggerHitNote(slideId, tapperId) {
+function triggerHitNote(slideId, tapperId, hasTail) {
     if (masterInfo.streaming || masterInfo.songMode === "radio") {
         streamPlayer.setVolume(1);
     } else {
@@ -464,19 +485,21 @@ function triggerHitNote(slideId, tapperId) {
     //     noteLeaving.remove();
     // }, 600);
 
-    const lighted = document.createElement("div");
-    lighted.classList.add("note-lighted");
-    const middleLighted = document.createElement("div");
-    middleLighted.classList.add("note-middle-lighted");
-    const light = document.createElement("div");
-    light.appendChild(lighted);
-    light.appendChild(middleLighted);
-    document.getElementById(`dummy-${tapperId}`).appendChild(light);
-    light.classList.add("flash");
-    setTimeout(() => {
-        light.remove();
-    }, 400);
-
+    if (!hasTail) {
+        const lighted = document.createElement("div");
+        lighted.classList.add("note-lighted");
+        const middleLighted = document.createElement("div");
+        middleLighted.classList.add("note-middle-lighted");
+        const light = document.createElement("div");
+        light.appendChild(lighted);
+        light.appendChild(middleLighted);
+        document.getElementById(`dummy-${tapperId}`).appendChild(light);
+        light.classList.add("flash");
+        setTimeout(() => {
+            light.remove();
+        }, 1000);
+    }
+    
     animator.recordNoteHit();
     streak += 1;
     if (streak > masterInfo.songStreak) {
