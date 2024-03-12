@@ -19,31 +19,35 @@
 
 #dummy-left {
     background-color: rgb(160, 118, 142);
-    background-color: rgb(56, 23, 23);
+    background-color: rgba(56, 23, 23, 0.5);
+    /* background-color: transparent; */
 
-    border-left: 0.5vmin outset rgb(56, 23, 23);
-    border-right: 0.5vmin outset rgb(56, 23, 23);
+    /* border-left: 0.5vmin outset rgb(56, 23, 23);
+    border-right: 0.5vmin outset rgb(56, 23, 23); */
 }
 #dummy-a {
     background-color: rgb(163, 169, 228);
-    background-color: rgb(34, 37, 68);
+    background-color: rgba(34, 37, 68, 0.5);
+    /* background-color: transparent; */
 
-    border-left: 0.5vmin outset rgb(34, 37, 68);
-    border-right: 0.5vmin outset rgb(34, 37, 68);
+    /* border-left: 0.5vmin outset rgb(34, 37, 68);
+    border-right: 0.5vmin outset rgb(34, 37, 68); */
 }
 #dummy-b {
     background-color: rgb(169, 130, 179);
-    background-color: rgb(70, 30, 82);
+    background-color: rgba(70, 30, 82, 0.5);
+    /* background-color: transparent; */
 
-    border-left: 0.5vmin outset rgb(70, 30, 82);
-    border-right: 0.5vmin outset rgb(70, 30, 82);
+    /* border-left: 0.5vmin outset rgb(70, 30, 82);
+    border-right: 0.5vmin outset rgb(70, 30, 82); */
 }
 #dummy-right {
     background-color: rgb(158, 202, 175);
-    background-color: rgb(25, 36, 29);
+    background-color: rgba(25, 36, 29, 0.5);
+    /* background-color: transparent; */
 
-    border-left: 0.5vmin outset rgb(25, 36, 29);
-    border-right: 0.5vmin outset rgb(25, 36, 29);
+    /* border-left: 0.5vmin outset rgb(25, 36, 29);
+    border-right: 0.5vmin outset rgb(25, 36, 29); */
 }
 
 #slide-left .note {
