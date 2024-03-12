@@ -311,7 +311,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
     }
 
     // document.getElementById(tapperId).classList.add("active-tapper");
-    document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.5)";
+    document.getElementById(tapperId).style.backgroundColor = "rgba(255, 166, 0, 0.2)";
     const tapperTargets = targets[slideId];
     if (tapperTargets.size === 0) {
         triggerMissedNote();
@@ -322,17 +322,7 @@ function activateTapper(tapperId, slideId, leavingClass) {
         target.note.classList.add(leavingClass);
         targets[slideId].delete(target);
 
-        const noteLeaving = document.createElement("div");
-        noteLeaving.classList.add("note");
-        noteLeaving.classList.add(leavingClass);
-        document.getElementById(tapperId).appendChild(noteLeaving);
-
-        setTimeout(() => {
-            noteLeaving.remove();
-        }, 600);
-
-        
-        triggerHitNote(slideId);
+        triggerHitNote(slideId, tapperId);
 
         if (target.tail) {
             targetTails[slideId] = target.tail;
@@ -442,7 +432,7 @@ function killAllNotes() {
 }
 
 let labelInUse = false;
-function triggerHitNote(slideId) {
+function triggerHitNote(slideId, tapperId) {
     if (masterInfo.streaming || masterInfo.songMode === "radio") {
         streamPlayer.setVolume(1);
     } else {
@@ -454,13 +444,35 @@ function triggerHitNote(slideId) {
         "slide-b": "cloud-b",
         "slide-right": "cloud-right"
     }[slideId];
-    const cloud = document.getElementById(cloudId);
-    cloud.classList.remove("hidden");
-    cloud.classList.add("cloud");
+    // const cloud = document.getElementById(cloudId);
+    // cloud.classList.remove("hidden");
+    // cloud.classList.add("cloud");
+    // setTimeout(() => {
+    //     cloud.classList.remove("cloud");
+    //     cloud.classList.add("hidden");
+    // }, 300);
+
+    // const noteLeaving = document.createElement("div");
+    // noteLeaving.classList.add("note");
+    // noteLeaving.classList.add(leavingClass);
+    // document.getElementById(tapperId).appendChild(noteLeaving);
+
+    // setTimeout(() => {
+    //     noteLeaving.remove();
+    // }, 600);
+
+    const lighted = document.createElement("div");
+    lighted.classList.add("note-lighted");
+    const middleLighted = document.createElement("div");
+    middleLighted.classList.add("note-middle-lighted");
+    const light = document.createElement("div");
+    light.appendChild(lighted);
+    light.appendChild(middleLighted);
+    document.getElementById(tapperId).appendChild(light);
+    light.classList.add("flash");
     setTimeout(() => {
-        cloud.classList.remove("cloud");
-        cloud.classList.add("hidden");
-    }, 300);
+        light.remove();
+    }, 400);
 
     animator.recordNoteHit();
     streak += 1;

@@ -39,7 +39,7 @@
 }
 #lower-shadow-bar {
     top: 100%;
-    box-shadow: 0px 2.5px 5px rgb(51, 0, 28);
+    /* box-shadow: 0px 2.5px 5px rgb(94, 0, 51); */
     transform: translate(0vmin, -4.5vh);
     /* ^this is a mystery - why does -4.5vmin get it to the right spot? */
 }
@@ -201,3 +201,24 @@
     height: 1vh;
     background-color: rgb(255, 231, 188);
 }
+
+.note-bulb {
+    border-top: 0.35vh solid rgb(241, 219, 177);
+    border-bottom: 1.5vh solid rgb(219, 199, 163);
+    border-right: 3vh solid rgb(241, 219, 177);
+    border-left: 3vh solid rgb(241, 219, 177);
+}
+
+.note-lighted {
+    border-top: 0.35vh solid rgb(255, 225, 200);
+    border-bottom: 1.5vh solid rgb(255, 218, 184);
+    border-right: 3vh solid rgb(255, 219, 189);
+    border-left: 3vh solid rgb(255, 219, 189);
+}
+
+.note-middle-lighted {
+    top: 0.4vh;
+    width: 3vh;
+    height: 1.5vh;
+}
+

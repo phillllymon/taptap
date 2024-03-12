@@ -143,11 +143,8 @@
     transform-style: preserve-3d;
     transform: rotateX(20deg);
     /* transform: rotateX(35deg); */
-    box-shadow: 0px 10px 10px rgb(168, 0, 93);
-    border-left: 3px outset rgb(168, 0, 93);
-    border-right: 3px outset rgb(168, 0, 93);
     box-sizing: border-box;
-    opacity: 0.9;
+    opacity: 1;
     display: flex;
     flex-direction: row;
 }
@@ -196,9 +193,9 @@
     /* border: 1.5vmin solid rgba(168,0,93,0.4);
     border-left: 3vmin solid rgba(168,0,93,0.4);
     border-right: 3vmin solid rgba(168,0,93,0.4); */
-    border: 1.5vmin solid rgb(168, 0, 93);
-    border-left: 3vmin solid rgb(168, 0, 93);
-    border-right: 3vmin solid rgb(168, 0, 93);
+    border: 1.5vmin solid rgb(151, 0, 83);
+    border-left: 3vmin solid rgb(151, 0, 83);
+    border-right: 3vmin solid rgb(151, 0, 83);
     z-index: 1;
     /* box-shadow: 0px 3px 5px rgb(51, 0, 28); */
 }
@@ -221,7 +218,7 @@
 }
 #lower-shadow-bar {
     top: 100%;
-    box-shadow: 0px 2.5px 5px rgb(87, 0, 48);
+    box-shadow: 0px 2.5px 5px rgb(94, 0, 51);
     transform: translate(0vmin, -4.5vmin);
     /* ^this is a mystery - why does -4.5vmin get it to the right spot? */
 }
@@ -266,7 +263,7 @@
     top: 1263px;
 }
 #test-note2 {
-    top: 136.5vmin;
+    top: 0vmin;
 }
 
 .note-leaving-right {
