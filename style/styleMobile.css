@@ -207,6 +207,7 @@
     border-bottom: 1.5vh solid rgb(219, 199, 163);
     border-right: 3vh solid rgb(241, 219, 177);
     border-left: 3vh solid rgb(241, 219, 177);
+    color: transparent;
 }
 
 .note-lighted {

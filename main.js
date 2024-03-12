@@ -204,6 +204,8 @@ document.addEventListener("keypress", (e) => {
         e.preventDefault();
         tapperKeys[masterInfo.waitingForKey[1]] = e.code;
         document.getElementById(masterInfo.waitingForKey[0]).innerText = e.code;
+        const bulbId = `bulb-${masterInfo.waitingForKey[0].split("").slice(0, masterInfo.waitingForKey[0].length - 4).join("")}`;
+        document.getElementById(bulbId).innerText = e.code;
         document.getElementById("save-settings").disabled = false;
         masterInfo.waitingForKey = false;
     }
