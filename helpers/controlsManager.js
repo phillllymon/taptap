@@ -210,9 +210,9 @@ class ControlsManager {
             // ["level-5", 10]
             ["level-1", 1],
             ["level-2", 2],
-            ["level-3", 3],
-            ["level-4", 4],
-            ["level-5", 6]
+            ["level-3", 4],
+            ["level-4", 6],
+            ["level-5", 8]
         ].forEach((levelSet) => {
             setButtonClick(levelSet[0], () => {
                 ["level-1", "level-2", "level-3", "level-4", "level-5"].forEach((level) => {

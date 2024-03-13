@@ -615,6 +615,11 @@ function setupMobile() {
     link.rel = "stylesheet";
     link.href = "./style/styleMobile.css";
     document.head.appendChild(link);
+    const colorLink = document.createElement("link");
+    colorLink.type = "text/css";
+    colorLink.rel = "stylesheet";
+    colorLink.href = "./style/noteColorsMobile.css";
+    document.head.appendChild(colorLink);
 
     [
         "fog-top-left",
