@@ -63,7 +63,7 @@
     
 }
 
-#slide-left .note {
+[id$="slide-left"] .note {
     background-color: rgb(125, 0, 0);
     border-top: 0.5vmin solid rgb(150, 0, 0);
     border-right: 4vmin solid rgb(107, 0, 0);
@@ -73,17 +73,17 @@
         -0.8vmin 0.35vmin 0.8vmin rgb(235, 0, 0),
         0.8vmin 0.35vmin 0.8vmin rgb(235, 0, 0);
 }
-#slide-left .note-tail {
+[id$="slide-left"] .note-tail {
     background-color: rgb(150, 0, 0);
     border-right: 5px solid rgb(107, 0, 0);
     border-left: 5px solid rgb(107, 0, 0);
 }
-#slide-left .tail-active {
+[id$="slide-left"] .tail-active {
     background-color: rgb(235, 0, 0);
     box-shadow: -4px 3px 15px rgb(235, 0, 0), 4px 3px 15px rgb(235, 0, 0);
 }
 
-#slide-a .note {
+[id$="slide-a"] .note {
     background-color: rgb(59, 59, 255);
     border-top: 0.5vmin solid rgb(95, 95, 255);
     border-right: 4vmin solid rgb(33, 33, 255);
@@ -93,17 +93,17 @@
         -0.8vmin 0.35vmin 0.8vmin rgb(41, 177, 255),
         0.8vmin 0.35vmin 0.8vmin rgb(41, 177, 255);
 }
-#slide-a .note-tail {
+[id$="slide-a"] .note-tail {
     background-color: rgb(42, 92, 255);
     border-right: 5px solid rgb(33, 33, 255);
     border-left: 5px solid rgb(33, 33, 255);
 }
-#slide-a .tail-active {
+[id$="slide-a"] .tail-active {
     background-color: rgb(41, 177, 255);
     box-shadow: -4px 3px 15px rgb(42, 92, 255), 4px 3px 15px rgb(42, 92, 255);
 }
 
-#slide-b .note {
+[id$="slide-b"] .note {
     background-color: rgb(150, 0, 150);
     border-top: 0.5vmin solid rgb(175, 0, 175);
     border-right: 4vmin solid rgb(132, 0, 132);
@@ -113,17 +113,17 @@
         -0.8vmin 0.35vmin 0.8vmin rgb(250, 0, 250),
         0.8vmin 0.35vmin 0.8vmin rgb(250, 0, 250);
 }
-#slide-b .note-tail {
+[id$="slide-b"] .note-tail {
     background-color: rgb(175, 0, 175);
     border-right: 5px solid rgb(132, 0, 132);
     border-left: 5px solid rgb(132, 0, 132);
 }
-#slide-b .tail-active {
+[id$="slide-b"] .tail-active {
     background-color: rgb(250, 0, 250);
     box-shadow: -4px 3px 15px rgb(250, 0, 250), 4px 3px 15px rgb(250, 0, 250);
 }
 
-#slide-right .note {
+[id$="slide-right"] .note {
     background-color: rgb(0, 125, 0);
     border-top: 0.5vmin solid rgb(0, 150, 0);
     border-right: 4vmin solid rgb(0, 107, 0);
@@ -133,12 +133,12 @@
         -0.8vmin 0.35vmin 0.8vmin rgb(0, 235, 0),
         0.8vmin 0.35vmin 0.8vmin rgb(0, 235, 0);
 }
-#slide-right .note-tail {
+[id$="slide-right"] .note-tail {
     background-color: rgb(0, 150, 0);
     border-right: 5px solid rgb(0, 107, 0);
     border-left: 5px solid rgb(0, 107, 0);
 }
-#slide-right .tail-active {
+[id$="slide-right"] .tail-active {
     background-color: rgb(0, 235, 0);
     box-shadow: -4px 3px 15px rgb(0, 235, 0), 4px 3px 15px rgb(0, 235, 0);
 }

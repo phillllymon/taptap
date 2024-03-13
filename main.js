@@ -93,7 +93,10 @@ let songStreak = 0;
 let radioCode = "mvn925";
 
 // TEMP FOR SLIDER EXPERIMENT
+let currentSlider = "a-slider";
 let sliderPos = 0;
+let oldSliderPos = 0;
+let movingBothSliders = false;
 
 const masterInfo = {
     algorithm,
