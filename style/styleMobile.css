@@ -23,9 +23,9 @@
 .tapper {
     /* top: 0vh; */
     /* travelLength is 128.5vh to account for top border */
-    border: 1.5vh solid rgb(85, 0, 0);
-    border-left: 3vh solid rgb(85, 0, 0);
-    border-right: 3vh solid rgb(85, 0, 0);
+    border: 1.5vh solid orange;
+    border-left: 3vh solid orange;
+    border-right: 3vh solid orange;
 }
 
 #tappers-inner-container {

@@ -12,42 +12,55 @@
 }
 
 .tapper {
-    border: 1.5vmin solid rgb(85, 0, 0);
-    border-left: 3vmin solid rgb(85, 0, 0);
-    border-right: 3vmin solid rgb(85, 0, 0);
+    border: 1.5vmin solid rgb(199, 129, 0);
+    border-left: 3vmin solid rgb(199, 129, 0);
+    border-right: 3vmin solid rgb(199, 129, 0);
+}
+
+#tapper-left .note-bulb {
+    background-color: rgb(255, 50, 50);
+    border: 4vmin solid rgb(241, 56, 56);
+    border-top: 0.5vmin solid rgb(243, 111, 111);
+    border-bottom: 2vmin solid rgb(226, 0, 0);
+}
+#tapper-a .note-bulb {
+    background-color: rgb(93, 117, 255);
+    border: 4vmin solid rgb(39, 118, 238);
+    border-top: 0.5vmin solid rgb(141, 168, 241);
+    border-bottom: 2vmin solid rgb(0, 98, 226);
+}
+#tapper-b .note-bulb {
+    background-color: rgb(216, 88, 255);
+    border: 4vmin solid rgb(172, 59, 238);
+    border-top: 0.5vmin solid rgb(196, 158, 240);
+    border-bottom: 2vmin solid rgb(136, 0, 214);
+}
+#tapper-right .note-bulb {
+    background-color: rgb(88, 255, 88);
+    border: 4vmin solid rgb(50, 241, 59);
+    border-top: 0.5vmin solid rgb(123, 240, 139);
+    border-bottom: 2vmin solid rgb(18, 219, 18);
 }
 
 #dummy-left {
     background-color: rgb(160, 118, 142);
-    background-color: rgba(56, 23, 23, 0.5);
-    /* background-color: transparent; */
-
-    /* border-left: 0.5vmin outset rgb(56, 23, 23);
-    border-right: 0.5vmin outset rgb(56, 23, 23); */
+    background-color: rgba(56, 23, 23, 0.7);
+    
 }
 #dummy-a {
     background-color: rgb(163, 169, 228);
-    background-color: rgba(34, 37, 68, 0.5);
-    /* background-color: transparent; */
-
-    /* border-left: 0.5vmin outset rgb(34, 37, 68);
-    border-right: 0.5vmin outset rgb(34, 37, 68); */
+    background-color: rgba(34, 37, 68, 0.7);
+    
 }
 #dummy-b {
     background-color: rgb(169, 130, 179);
-    background-color: rgba(70, 30, 82, 0.5);
-    /* background-color: transparent; */
-
-    /* border-left: 0.5vmin outset rgb(70, 30, 82);
-    border-right: 0.5vmin outset rgb(70, 30, 82); */
+    background-color: rgba(70, 30, 82, 0.7);
+    
 }
 #dummy-right {
     background-color: rgb(158, 202, 175);
-    background-color: rgba(25, 36, 29, 0.5);
-    /* background-color: transparent; */
-
-    /* border-left: 0.5vmin outset rgb(25, 36, 29);
-    border-right: 0.5vmin outset rgb(25, 36, 29); */
+    background-color: rgba(25, 36, 29, 0.7);
+    
 }
 
 #slide-left .note {
@@ -136,10 +149,10 @@
     border-top: 0.5vmin solid rgb(255, 77, 77);
     border-bottom: 2vmin solid rgb(255, 98, 98);
     box-shadow:
-        /* 18px 0px 40px rgb(255, 86, 86),
+        18px 0px 40px rgb(255, 86, 86),
         -18px 0px 40px rgb(255, 86, 86),
         0px 0px 25px rgb(255, 86, 86),
-        0px 0px 25px rgb(255, 86, 86), */
+        0px 0px 25px rgb(255, 86, 86),
         18px 0px 40px rgb(255, 86, 86),
         -18px 0px 40px rgb(255, 86, 86),
         0px 0px 25px rgb(255, 86, 86),
@@ -147,10 +160,10 @@
 }
 #dummy-tapper-left .note-middle-lighted {
     box-shadow:
-        /* 18px 0px 20px rgb(255, 86, 86),
+        18px 0px 20px rgb(255, 86, 86),
         -18px 0px 20px rgb(255, 86, 86),
         0px 0px 20px rgb(255, 86, 86),
-        0px 0px 20px rgb(255, 86, 86), */
+        0px 0px 20px rgb(255, 86, 86),
         18px 0px 20px rgb(255, 86, 86),
         -18px 0px 20px rgb(255, 86, 86),
         0px 0px 20px rgb(255, 86, 86),
@@ -163,10 +176,10 @@
     border-top: 0.5vmin solid rgb(77, 205, 255);
     border-bottom: 2vmin solid rgb(98, 218, 255);
     box-shadow:
-        /* 18px 0px 40px rgb(86, 230, 255),
+        18px 0px 40px rgb(86, 230, 255),
         -18px 0px 40px rgb(86, 230, 255),
         0px 0px 25px rgb(86, 230, 255),
-        0px 0px 25px rgb(86, 230, 255), */
+        0px 0px 25px rgb(86, 230, 255),
         18px 0px 40px rgb(86, 230, 255),
         -18px 0px 40px rgb(86, 230, 255),
         0px 0px 25px rgb(86, 230, 255),
@@ -174,10 +187,10 @@
 }
 #dummy-tapper-a .note-middle-lighted {
     box-shadow:
-        /* 18px 0px 20px rgb(115, 211, 255),
+        18px 0px 20px rgb(115, 211, 255),
         -18px 0px 20px rgb(115, 211, 255),
         0px 0px 20px rgb(115, 211, 255),
-        0px 0px 20px rgb(115, 211, 255), */
+        0px 0px 20px rgb(115, 211, 255),
         18px 0px 20px rgb(115, 211, 255),
         -18px 0px 20px rgb(115, 211, 255),
         0px 0px 20px rgb(115, 211, 255),
@@ -190,10 +203,10 @@
     border-top: 0.5vmin solid rgb(192, 124, 255);
     border-bottom: 2vmin solid rgb(207, 125, 255);
     box-shadow:
-        /* 18px 0px 40px rgb(200, 119, 255),
+        18px 0px 40px rgb(200, 119, 255),
         -18px 0px 40px rgb(200, 119, 255),
         0px 0px 25px rgb(200, 119, 255),
-        0px 0px 25px rgb(200, 119, 255), */
+        0px 0px 25px rgb(200, 119, 255),
         18px 0px 40px rgb(200, 119, 255),
         -18px 0px 40px rgb(200, 119, 255),
         0px 0px 25px rgb(200, 119, 255),
@@ -201,10 +214,10 @@
 }
 #dummy-tapper-b .note-middle-lighted {
     box-shadow:
-        /* 18px 0px 20px rgb(178, 96, 255),
+        18px 0px 20px rgb(178, 96, 255),
         -18px 0px 20px rgb(178, 96, 255),
         0px 0px 20px rgb(178, 96, 255),
-        0px 0px 20px rgb(178, 96, 255), */
+        0px 0px 20px rgb(178, 96, 255),
         18px 0px 20px rgb(178, 96, 255),
         -18px 0px 20px rgb(178, 96, 255),
         0px 0px 20px rgb(178, 96, 255),
@@ -217,10 +230,10 @@
     border-top: 0.5vmin solid rgb(77, 255, 86);
     border-bottom: 2vmin solid rgb(98, 255, 132);
     box-shadow:
-        /* 18px 0px 40px rgb(86, 255, 108),
+        18px 0px 40px rgb(86, 255, 108),
         -18px 0px 40px rgb(86, 255, 108),
         0px 0px 25px rgb(86, 255, 108),
-        0px 0px 25px rgb(86, 255, 108), */
+        0px 0px 25px rgb(86, 255, 108),
         18px 0px 40px rgb(86, 255, 108),
         -18px 0px 40px rgb(86, 255, 108),
         0px 0px 25px rgb(86, 255, 108),
@@ -228,10 +241,10 @@
 }
 #dummy-tapper-right .note-middle-lighted {
     box-shadow:
-        /* 18px 0px 20px rgb(86, 255, 108),
+        18px 0px 20px rgb(86, 255, 108),
         -18px 0px 20px rgb(86, 255, 108),
         0px 0px 20px rgb(86, 255, 108),
-        0px 0px 20px rgb(86, 255, 108), */
+        0px 0px 20px rgb(86, 255, 108),
         18px 0px 20px rgb(86, 255, 108),
         -18px 0px 20px rgb(86, 255, 108),
         0px 0px 20px rgb(86, 255, 108),

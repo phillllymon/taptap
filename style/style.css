@@ -143,12 +143,12 @@
     transform-style: preserve-3d;
     transform: rotateX(20deg);
     /* transform: rotateX(35deg); */
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     opacity: 1;
     display: flex;
     flex-direction: row;
-    /* border-left: 0.5vmin inset rgb(168, 0, 93);
-    border-right: 0.5vmin inset rgb(168, 0, 93); */
+    border-left: 0.5vmin outset rgb(199, 129, 0);
+    border-right: 0.5vmin outset rgb(199, 129, 0);
 }
 
 .three-wide-slides-container {
@@ -164,8 +164,8 @@
     width: 25vmin;
     height: 50%;
     box-sizing: border-box;
-    /* border-left: 0.5vmin outset rgb(168, 0, 93);
-    border-right: 0.5vmin outset rgb(168, 0, 93); */
+    border-left: 0.5vmin inset rgb(199, 129, 0);
+    border-right: 0.5vmin inset rgb(199, 129, 0);
     text-align: center;
 }
 
@@ -241,13 +241,13 @@
     top: 0vmin;
     width: 100%;
     height: 1.5vmin;
-    box-shadow: 0px 3px 5px rgb(31, 0, 17);
+    /* box-shadow: 0px 1px 3px rgb(216, 140, 0); */
 }
 #lower-shadow-bar {
     top: 100%;
-    box-shadow: 0px 2.5px 5px rgb(94, 0, 51);
+    box-shadow: 0px 2.5px 5px rgb(163, 106, 0);
     box-sizing: border-box;
-    border-bottom: 2px solid rgb(99, 0, 54);
+    border-bottom: 2px solid rgb(163, 106, 0);
     transform: translate(0vmin, -4.5vmin);
     /* ^this is a mystery - why does -4.5vmin get it to the right spot? */
 }
