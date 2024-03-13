@@ -38,7 +38,7 @@
 #tapper-right .note-bulb {
     background-color: rgb(88, 255, 88);
     border: 4vmin solid rgb(50, 241, 59);
-    border-top: 0.5vmin solid rgb(123, 240, 139);
+    border-top: 0.5vmin solid rgb(89, 238, 109);
     border-bottom: 2vmin solid rgb(18, 219, 18);
 }
 
@@ -159,6 +159,7 @@
         0px 0px 25px rgb(255, 86, 86);
 }
 #dummy-tapper-left .note-middle-lighted {
+    background-color: rgb(255, 86, 86);
     box-shadow:
         18px 0px 20px rgb(255, 86, 86),
         -18px 0px 20px rgb(255, 86, 86),
@@ -186,6 +187,7 @@
         0px 0px 25px rgb(86, 230, 255);
 }
 #dummy-tapper-a .note-middle-lighted {
+    background-color: rgb(115, 211, 255);
     box-shadow:
         18px 0px 20px rgb(115, 211, 255),
         -18px 0px 20px rgb(115, 211, 255),
@@ -199,29 +201,30 @@
 
 #dummy-tapper-b .note-lighted {
     background-color: rgb(205, 144, 255);
-    border: 4vmin solid rgb(198, 128, 255);
+    border: 4vmin solid rgb(201, 140, 250);
     border-top: 0.5vmin solid rgb(192, 124, 255);
-    border-bottom: 2vmin solid rgb(207, 125, 255);
+    border-bottom: 2vmin solid rgb(216, 147, 255);
     box-shadow:
-        18px 0px 40px rgb(200, 119, 255),
-        -18px 0px 40px rgb(200, 119, 255),
-        0px 0px 25px rgb(200, 119, 255),
-        0px 0px 25px rgb(200, 119, 255),
-        18px 0px 40px rgb(200, 119, 255),
-        -18px 0px 40px rgb(200, 119, 255),
-        0px 0px 25px rgb(200, 119, 255),
-        0px 0px 25px rgb(200, 119, 255);
+        18px 0px 40px rgb(178, 96, 255),
+        -18px 0px 40px rgb(178, 96, 255),
+        0px 0px 25px rgb(178, 96, 255),
+        0px 0px 25px rgb(178, 96, 255),
+        18px 0px 40px rgb(178, 96, 255),
+        -18px 0px 40px rgb(178, 96, 255),
+        0px 0px 25px rgb(178, 96, 255),
+        0px 0px 25px rgb(178, 96, 255);
 }
 #dummy-tapper-b .note-middle-lighted {
+    background-color: rgb(200, 119, 255);
     box-shadow:
-        18px 0px 20px rgb(178, 96, 255),
-        -18px 0px 20px rgb(178, 96, 255),
-        0px 0px 20px rgb(178, 96, 255),
-        0px 0px 20px rgb(178, 96, 255),
-        18px 0px 20px rgb(178, 96, 255),
-        -18px 0px 20px rgb(178, 96, 255),
-        0px 0px 20px rgb(178, 96, 255),
-        0px 0px 20px rgb(178, 96, 255);
+        18px 0px 20px rgb(200, 119, 255),
+        -18px 0px 20px rgb(200, 119, 255),
+        0px 0px 20px rgb(200, 119, 255),
+        0px 0px 20px rgb(200, 119, 255),
+        18px 0px 20px rgb(200, 119, 255),
+        -18px 0px 20px rgb(200, 119, 255),
+        0px 0px 20px rgb(200, 119, 255),
+        0px 0px 20px rgb(200, 119, 255);
 }
 
 #dummy-tapper-right .note-lighted {
@@ -230,24 +233,25 @@
     border-top: 0.5vmin solid rgb(77, 255, 86);
     border-bottom: 2vmin solid rgb(98, 255, 132);
     box-shadow:
-        18px 0px 40px rgb(86, 255, 108),
-        -18px 0px 40px rgb(86, 255, 108),
-        0px 0px 25px rgb(86, 255, 108),
-        0px 0px 25px rgb(86, 255, 108),
-        18px 0px 40px rgb(86, 255, 108),
-        -18px 0px 40px rgb(86, 255, 108),
-        0px 0px 25px rgb(86, 255, 108),
-        0px 0px 25px rgb(86, 255, 108);
+        18px 0px 40px rgb(161, 255, 173),
+        -18px 0px 40px rgb(161, 255, 173),
+        0px 0px 25px rgb(161, 255, 173),
+        0px 0px 25px rgb(161, 255, 173),
+        18px 0px 40px rgb(161, 255, 173),
+        -18px 0px 40px rgb(161, 255, 173),
+        0px 0px 25px rgb(161, 255, 173),
+        0px 0px 25px rgb(161, 255, 173);
 }
 #dummy-tapper-right .note-middle-lighted {
+    background-color: rgb(161, 255, 173);
     box-shadow:
-        18px 0px 20px rgb(86, 255, 108),
-        -18px 0px 20px rgb(86, 255, 108),
-        0px 0px 20px rgb(86, 255, 108),
-        0px 0px 20px rgb(86, 255, 108),
-        18px 0px 20px rgb(86, 255, 108),
-        -18px 0px 20px rgb(86, 255, 108),
-        0px 0px 20px rgb(86, 255, 108),
-        0px 0px 20px rgb(86, 255, 108);
+        18px 0px 20px rgb(161, 255, 173),
+        -18px 0px 20px rgb(161, 255, 173),
+        0px 0px 20px rgb(161, 255, 173),
+        0px 0px 20px rgb(161, 255, 173),
+        18px 0px 20px rgb(161, 255, 173),
+        -18px 0px 20px rgb(161, 255, 173),
+        0px 0px 20px rgb(161, 255, 173),
+        0px 0px 20px rgb(161, 255, 173);
 }
 

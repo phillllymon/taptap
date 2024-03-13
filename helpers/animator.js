@@ -224,15 +224,49 @@ function moveNotes(
             document.getElementById("slider").style.top = `${sliderPos}px`;
             note.note.style.top = `${note.position}px`;
             if (note.tail) {
-                note.tail.note.style.top = `${note.tail.position}`;
+                note.tail.note.style.top = `${note.tail.position}px`;
             }
         }
         sliderPos = 0;
     }
 
+    // try replacing slider instead
+    // if (sliderPos > 100000) {
+    //     console.log("REPLACING!!");
+    //     const oldSlider = document.getElementById("slider");
+    //     oldSlider.id = "old-slider";
+    //     const newSlider = document.createElement("div");
+    //     ["slide-left", "slide-a", "slide-b", "slide-right"].forEach((slideId) => {
+    //         document.getElementById(slideId).id = `${slideId}-old`;
+    //         const newSlide = document.createElement("div");
+    //         newSlide.class = "clear-slide";
+    //         newSlide.id = slideId;
+    //         newSlider.appendChild(newSlide);
+    //     });
+    //     newSlider.class = "slider";
+    //     newSlider.id = "slider";
+    //     oldSlider.parentElement.prepend(newSlider);
+
+    //     document.oldSlider = oldSlider;
+    //     document.oldSliderPosition = sliderPos;
+    //     setTimeout(() => {
+    //         oldSlider.remove();
+    //         document.oldSlider = null;
+    //     }, 2000);
+
+        
+    //     sliderPos = 0;
+    // }
+
     // move slider
     sliderPos += movement;
     document.getElementById("slider").style.top = `${sliderPos}px`;
+
+    // move oldSlider if we have one
+    // if (document.oldSlider) {
+    //     document.oldSliderPosition += movement;
+    //     document.oldSlider.style.top = `${document.oldSliderPosition}px`;
+    // }
     
 
     // move notes
