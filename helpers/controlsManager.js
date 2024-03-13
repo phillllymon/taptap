@@ -147,6 +147,8 @@ class ControlsManager {
     selectSlides(n, setNumSlides) {
         const slideA = document.getElementById("slide-a");
         const slideB = document.getElementById("slide-b");
+        const bSlideA = document.getElementById("b-slide-a");
+        const bSlideB = document.getElementById("b-slide-b");
         const clearSlideA = document.getElementById("clear-slide-a");
         const clearSlideB = document.getElementById("clear-slide-b");
         const dummyA = document.getElementById("dummy-a");
@@ -160,6 +162,8 @@ class ControlsManager {
             setNumSlides(2);
             slideA.classList.add("hidden");
             slideB.classList.add("hidden");
+            bSlideA.classList.add("hidden");
+            bSlideB.classList.add("hidden");
             clearSlideA.classList.add("hidden");
             clearSlideB.classList.add("hidden");
             dummyA.classList.add("hidden");
@@ -175,6 +179,8 @@ class ControlsManager {
             document.getElementById("slides-container").classList.add("three-wide-slides-container");
             slideA.classList.remove("hidden");
             slideB.classList.add("hidden");
+            bSlideA.classList.remove("hidden");
+            bSlideB.classList.add("hidden");
             clearSlideA.classList.remove("hidden");
             clearSlideB.classList.add("hidden");
             dummyA.classList.remove("hidden");
@@ -189,6 +195,8 @@ class ControlsManager {
             setNumSlides(4);
             slideA.classList.remove("hidden");
             slideB.classList.remove("hidden");
+            bSlideA.classList.remove("hidden");
+            bSlideB.classList.remove("hidden");
             clearSlideA.classList.remove("hidden");
             clearSlideB.classList.remove("hidden");
             dummyA.classList.remove("hidden");

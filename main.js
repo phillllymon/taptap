@@ -670,16 +670,16 @@ function setupMobile() {
     });
 
     document.addEventListener("touchend", (e) => {
-        if (e.target.id === "dummy-left" || e.target.id === "dummy-tapper-left") {
+        if (e.target.id === "dummy-left" || e.target.id === "dummy-tapper-left" || e.target.id === "a-slide-left" || e.target.id === "b-slide-left") {
             deactivateTapper("tapper-left");
         }
-        if (e.target.id === "dummy-a" || e.target.id === "dummy-tapper-a") {
+        if (e.target.id === "dummy-a" || e.target.id === "dummy-tapper-a" || e.target.id === "a-slide-a" || e.target.id === "b-slide-a") {
             deactivateTapper("tapper-a");
         }
-        if (e.target.id === "dummy-b" || e.target.id === "dummy-tapper-b") {
+        if (e.target.id === "dummy-b" || e.target.id === "dummy-tapper-b" || e.target.id === "a-slide-b" || e.target.id === "b-slide-b") {
             deactivateTapper("tapper-b");
         }
-        if (e.target.id === "dummy-right" || e.target.id === "dummy-tapper-right") {
+        if (e.target.id === "dummy-right" || e.target.id === "dummy-tapper-right" || e.target.id === "a-slide-right" || e.target.id === "b-slide-right") {
             deactivateTapper("tapper-right");
         }
     });
