@@ -89,7 +89,7 @@
     height: 100%;
     animation-name: flash;
     animation-duration: 0.3s;
-    opacity: 1;
+    opacity: 0;
 }
 @keyframes flash {
     0%      {opacity: 0}
@@ -106,7 +106,7 @@
     height: 100%;
     animation-name: lightup;
     animation-duration: 0.3s;
-    opacity: 0;
+    opacity: 1;
 }
 @keyframes lightup {
     0%      {opacity: 0}
