@@ -650,15 +650,21 @@ function setupMobile() {
     }, 500); // without small delay this was getting missed
 
     [
-        ["tapper-left", "slide-left", "note-leaving-left", "dummy-tapper-left", "dummy-left"],
-        ["tapper-right", "slide-right", "note-leaving-right", "dummy-tapper-right", "dummy-right"],
-        ["tapper-a", "slide-a", "note-leaving-left", "dummy-tapper-a", "dummy-a"],
-        ["tapper-b", "slide-b", "note-leaving-right", "dummy-tapper-b", "dummy-b"]
+        ["tapper-left", "slide-left", "note-leaving-left", "dummy-tapper-left", "dummy-left", "slide-left", "b-slide-left"],
+        ["tapper-right", "slide-right", "note-leaving-right", "dummy-tapper-right", "dummy-right", "slide-right", "b-slide-right"],
+        ["tapper-a", "slide-a", "note-leaving-left", "dummy-tapper-a", "dummy-a", "slide-a", "b-slide-a"],
+        ["tapper-b", "slide-b", "note-leaving-right", "dummy-tapper-b", "dummy-b", "slide-b", "b-slide-b"]
     ].forEach((idSet) => {
         document.getElementById(idSet[3]).addEventListener("touchstart", (e) => {
             activateTapper(...idSet);
         });
         document.getElementById(idSet[4]).addEventListener("touchstart", (e) => {
+            activateTapper(...idSet);
+        });
+        document.getElementById(idSet[5]).addEventListener("touchstart", (e) => {
+            activateTapper(...idSet);
+        });
+        document.getElementById(idSet[6]).addEventListener("touchstart", (e) => {
             activateTapper(...idSet);
         });
     });
