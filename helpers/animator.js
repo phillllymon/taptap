@@ -31,6 +31,7 @@ class Animator {
         }
         this.times = [];
 
+        this.noteResults = [];
         this.notesHit = 0;
         this.notesMissed = 0;
         this.arrayNow = [1, 1, 1, 1];
@@ -52,14 +53,32 @@ class Animator {
 
     recordNoteHit() {
         this.notesHit += 1;
-        if (this.notesHit > 30) {
-            this.notesHit = Math.floor(this.notesHit / 2);
-            this.notesMissed = Math.floor(this.notesMissed / 2);
+        this.noteResults.push(true);
+        while (this.noteResults.length > 75) {
+            if (this.noteResults.shift()) {
+                this.notesHit -= 1;
+            } else {
+                this.notesMissed -= 1;
+            }
         }
     }
 
     recordNoteMissed() {
-        this.notesMissed += 1;
+        this.notesMissed += 4;
+        this.noteResults.push(false);
+        this.noteResults.push(false);
+        this.noteResults.push(false);
+        this.noteResults.push(false);
+        while (this.noteResults.length > 75) {
+            if (this.noteResults.shift()) {
+                this.notesHit -= 1;
+            } else {
+                this.notesMissed -= 1;
+            }
+        }
+        document.getElementById("skilz-meter").classList.remove("meter-lit");
+        document.getElementById("skilz-glass").classList.remove("lit");
+        document.getElementById("skilz-light").classList.remove("meter-light");
     }
 
     runAnimation(params) {
@@ -171,8 +190,17 @@ class Animator {
 }
 
 function updateMeter(notesHit, notesMissed) {
-    // const rotation = Math.floor(90 * (notesHit / (notesHit + notesMissed)));
-    // document.getElementById("meter-needle").style.transform = `rotate(-${rotation}deg)`;
+    let percent = 100 - Math.floor(100 * notesHit / (notesHit + notesMissed));
+    if (percent > 98) {
+        percent = 98;
+    }
+    document.getElementById("skilz-ball").style.top = `${percent}%`;
+
+    if (percent === 0) {
+        document.getElementById("skilz-meter").classList.add("meter-lit");
+        document.getElementById("skilz-glass").classList.add("lit");
+        document.getElementById("skilz-light").classList.add("meter-light");
+    }
 }
 
 function moveNotes(

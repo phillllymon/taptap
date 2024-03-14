@@ -505,13 +505,20 @@ function triggerHitNote(slideId, tapperId, hasTail) {
     
     animator.recordNoteHit();
     streak += 1;
+    if (streak < 100) {
+        const newHit = document.createElement("div");
+        newHit.classList.add("hit");
+        document.getElementById("streak-counter").appendChild(newHit);
+    }
     if (streak > masterInfo.songStreak) {
         masterInfo.songStreak = streak;
     }
     masterInfo.songNotesHit += 1;
     const songLabel = document.getElementById("song-label");
-    if (streak > 9) {
+    if (streak > 9 && streak < 200) {
         songLabel.innerText = `STREAK: ${streak}`;
+    } else {
+        songLabel.innerText = masterInfo.currentSong;
     }
     if (streak === 50) {
         songLabel.classList.add("font-bigA");
@@ -526,6 +533,9 @@ function triggerHitNote(slideId, tapperId, hasTail) {
             rockLabel.innerHTML = "";
             labelInUse = false;
         }, 1300);
+        document.getElementById("streak-meter").classList.add("meter-lit");
+        document.getElementById("streak-glass").classList.add("lit");
+        document.getElementById("streak-light").classList.add("meter-light");
     }
     if (streak === 200) {
         document.getElementById("slides").classList.add("on-fire");
@@ -539,6 +549,12 @@ function triggerHitNote(slideId, tapperId, hasTail) {
             rockLabel.innerHTML = "";
             labelInUse = false;
         }, 1300);
+    }
+    if (streak > 200) {
+        if (!labelInUse) {
+            rockLabel.classList.add("static-rock");
+            rockLabel.innerText = streak;
+        }
     }
 }
 
@@ -554,12 +570,18 @@ function triggerMissedNote() {
     setElementText("song-label", masterInfo.currentSong);
     document.getElementById("slides").classList.remove("on-fire");
     document.getElementById("song-label").classList.remove("on-fire");
+
+    document.getElementById("streak-meter").classList.remove("meter-lit");
+    document.getElementById("streak-glass").classList.remove("lit");
+    document.getElementById("streak-light").classList.remove("meter-light");
+    document.getElementById("streak-counter").innerHTML = "";
     
     const rockLabel = document.getElementById("rock-label");
     if (!labelInUse) {
         rockLabel.classList.remove("on-fire");
         rockLabel.classList.remove("rock-label");
     }
+    rockLabel.classList.remove("static-rock");
     
     const theStreak = streak;
     if (theStreak > 25) {

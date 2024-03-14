@@ -76,6 +76,20 @@
     opacity: 0.8;
 }
 
+.static-rock {
+    position: absolute;
+    left: 50%;
+    top: 175px;
+    transform: translate(-50%, 0px);
+    font-size: 11vh;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: orange;
+    z-index: 4;
+    padding: 15px;
+    opacity: 0.4;
+    text-shadow: 0px 0px 10px lightgray;
+}
+
 .rock-label {
     position: absolute;
     left: 50%;
