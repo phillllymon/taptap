@@ -147,6 +147,8 @@ class ControlsManager {
     selectSlides(n, setNumSlides) {
         const slideA = document.getElementById("slide-a");
         const slideB = document.getElementById("slide-b");
+        const aSlideA = document.getElementById("a-slide-a");
+        const aSlideB = document.getElementById("a-slide-b");
         const bSlideA = document.getElementById("b-slide-a");
         const bSlideB = document.getElementById("b-slide-b");
         const clearSlideA = document.getElementById("clear-slide-a");
@@ -160,10 +162,18 @@ class ControlsManager {
         if (n === 2) {
             
             setNumSlides(2);
-            slideA.classList.add("hidden");
-            slideB.classList.add("hidden");
-            bSlideA.classList.add("hidden");
-            bSlideB.classList.add("hidden");
+            if (slideA) {
+                slideA.classList.add("hidden");
+                slideB.classList.add("hidden");
+            }
+            if (aSlideA) {
+                aSlideA.classList.add("hidden");
+                aSlideB.classList.add("hidden");
+            }
+            if (bSlideA) {
+                bSlideA.classList.add("hidden");
+                bSlideB.classList.add("hidden");
+            }
             clearSlideA.classList.add("hidden");
             clearSlideB.classList.add("hidden");
             dummyA.classList.add("hidden");
@@ -177,10 +187,18 @@ class ControlsManager {
         if (n === 3) {
             setNumSlides(3);
             document.getElementById("slides-container").classList.add("three-wide-slides-container");
-            slideA.classList.remove("hidden");
-            slideB.classList.add("hidden");
-            bSlideA.classList.remove("hidden");
-            bSlideB.classList.add("hidden");
+            if (slideA) {
+                slideA.classList.remove("hidden");
+                slideB.classList.add("hidden");
+            }
+            if (aSlideA) {
+                aSlideA.classList.remove("hidden");
+                aSlideB.classList.add("hidden");
+            }
+            if (bSlideA) {
+                bSlideA.classList.remove("hidden");
+                bSlideB.classList.add("hidden");
+            }
             clearSlideA.classList.remove("hidden");
             clearSlideB.classList.add("hidden");
             dummyA.classList.remove("hidden");
@@ -193,10 +211,18 @@ class ControlsManager {
         }
         if (n === 4) {
             setNumSlides(4);
-            slideA.classList.remove("hidden");
-            slideB.classList.remove("hidden");
-            bSlideA.classList.remove("hidden");
-            bSlideB.classList.remove("hidden");
+            if (slideA) {
+                slideA.classList.remove("hidden");
+                slideB.classList.remove("hidden");
+            }
+            if (aSlideA) {
+                aSlideA.classList.remove("hidden");
+                aSlideB.classList.remove("hidden");
+            }
+            if (bSlideA) {
+                bSlideA.classList.remove("hidden");
+                bSlideB.classList.remove("hidden");
+            }
             clearSlideA.classList.remove("hidden");
             clearSlideB.classList.remove("hidden");
             dummyA.classList.remove("hidden");

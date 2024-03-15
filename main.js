@@ -505,10 +505,11 @@ function triggerHitNote(slideId, tapperId, hasTail) {
     
     animator.recordNoteHit();
     streak += 1;
+    
     if (streak < 100) {
         const newHit = document.createElement("div");
         newHit.classList.add("hit");
-        document.getElementById("streak-counter").appendChild(newHit);
+        document.getElementById("streak-channel").appendChild(newHit);
     }
     if (streak > masterInfo.songStreak) {
         masterInfo.songStreak = streak;
@@ -533,9 +534,7 @@ function triggerHitNote(slideId, tapperId, hasTail) {
             rockLabel.innerHTML = "";
             labelInUse = false;
         }, 1300);
-        document.getElementById("streak-meter").classList.add("meter-lit");
-        document.getElementById("streak-glass").classList.add("lit");
-        document.getElementById("streak-light").classList.add("meter-light");
+        document.getElementById("streak-channel").classList.add("streak-channel-lit");
     }
     if (streak === 200) {
         document.getElementById("slides").classList.add("on-fire");
@@ -571,10 +570,9 @@ function triggerMissedNote() {
     document.getElementById("slides").classList.remove("on-fire");
     document.getElementById("song-label").classList.remove("on-fire");
 
-    document.getElementById("streak-meter").classList.remove("meter-lit");
-    document.getElementById("streak-glass").classList.remove("lit");
-    document.getElementById("streak-light").classList.remove("meter-light");
-    document.getElementById("streak-counter").innerHTML = "";
+    document.getElementById("streak-channel").classList.remove("streak-channel-lit");
+    document.getElementById("streak-channel").innerHTML = "";
+    
     
     const rockLabel = document.getElementById("rock-label");
     if (!labelInUse) {

@@ -1,142 +1,111 @@
-#skilz-meter {
-    position: absolute;
-    left: 0px;
-    top: 80vh;
-    width: 8vh;
-    height: 50vh;
-    transform: translate(-9.5vh, 0%);
-    border-left: 1vh ridge rgb(199, 129, 0);
-    border-bottom: 0.75vh groove rgb(199, 129, 0);
-    border-top: 0.75vh ridge rgb(199, 129, 0);
-    border-bottom-left-radius: 1vh;
-    border-top-left-radius: 1vh;
-    z-index: -3;
-    /* box-shadow: 15px 0px 20px white, -15px 10px 20px white, 15px 10px 20px white, -15px 0px 20px white; */
-}
-.meter-lit {
-    box-shadow: 15px 0px 20px white, -15px 10px 20px white;
-}
-
-#green-patch {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 20%;
-    background-color: rgb(0, 70, 0);
-    opacity: 0.6;
-}
-#black-patch {
-    position: absolute;
-    top: 20%;
-    left: 0%;
-    width: 100%;
-    height: 60%;
-    background-color: black;
-    opacity: 0.6;
-}
-#red-patch {
-    position: absolute;
-    top: 80%;
-    left: 0%;
-    width: 100%;
-    height: 20%;
-    background-color: rgb(138, 0, 0);
-    opacity: 0.6;
-}
-#skilz-ball {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 8vh;
-    height: 1.5vh;
-    transform: translate(-50%, 0%);
-    /* border-radius: 20%; */
-    background-color: white;
-    box-shadow: 15px 0px 30px white, -15px 0px 30px white, 15px 0px 30px white, -15px 0px 30px white;
-    opacity: 1;
-}
-.meter-glass {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(255, 231, 188);
-    box-sizing: border-box;
-    border: 1.5vh solid rgb(241, 219, 177);
-    border-top: 1vh solid rgb(241, 219, 177);
-    border-bottom: 1vh solid rgb(219, 199, 163);
-    opacity: 0.3;
-    /* box-shadow:
-        18px 6px 40px rgb(255, 231, 188),
-        -18px 6px 40px rgb(255, 231, 188),
-        18px 6px 40px rgb(255, 215, 188),
-        -18px 6px 40px rgb(255, 215, 188),
-        0px 0px 25px rgb(255, 231, 188),
-        0px 0px 25px rgb(255, 231, 188),
-        0px 0px 25px rgb(255, 215, 188),
-        0px 0px 25px rgb(255, 215, 188); */
-}
-.lit {
-    box-shadow:
-        18px 6px 50px rgb(255, 231, 188),
-        -18px 6px 50px rgb(255, 231, 188),
-        /* 18px 6px 40px rgb(255, 215, 188),
-        -18px 6px 40px rgb(255, 215, 188), */
-        0px 0px 35px rgb(255, 231, 188),
-        0px 0px 35px rgb(255, 231, 188);
-        /* 0px 0px 25px rgb(255, 215, 188),
-        0px 0px 25px rgb(255, 215, 188); */
-}
-.meter-light {
-    position: absolute;
-    top: 1vh;
-    left: 1.5vh;
-    width: 5vh;
-    height: 48vh;
-    opacity: 0.7;
-    background-color: rgba(255, 224, 188, 0.7);
-    box-shadow:
-        18px 6px 30px rgb(255, 224, 188),
-        -18px 6px 30px rgb(255, 224, 188);
-        /* 0px 0px 20px rgb(255, 220, 188),
-        0px 0px 20px rgb(255, 220, 188); */
-}
-
-
 #streak-meter {
     position: absolute;
     left: 100%;
-    top: 80vh;
+    top: 115vh;
     width: 8vh;
-    height: 50vh;
-    transform: translate(0.5vh, 0%);
-    background-color: rgba(0, 1, 54, 0.6);
-    border-right: 1vh groove rgb(199, 129, 0);
-    border-bottom: 0.75vh groove rgb(199, 129, 0);
-    border-top: 0.75vh ridge rgb(199, 129, 0);
-    border-bottom-right-radius: 1vh;
-    border-top-right-radius: 1vh;
-    z-index: -3;
-}
-
-#streak-counter {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
+    height: 29vh;
+    transform: translate(2.5vh, 0%);
+    background-color: rgb(199, 129, 0);
+    box-shadow: 0px 2.5px 5px rgb(163, 106, 0);
+    border-radius: 2vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: start;
+    align-items: center;
 }
 
 .hit {
-    height: 1%;
     width: 100%;
-    border-bottom: 1px solid black;
-    background-color: darkorange;
+    height: 1%;
     box-sizing: border-box;
-    opacity: 0.8;
+    border-top: 1px solid blue;
+    background-color: rgb(0, 228, 228);
 }
+#streak-channel {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+.streak-channel-lit {
+    background-color: rgb(0, 228, 228);
+    border: 0.35vh inset rgb(0, 228, 228);
+    box-shadow: 
+        0.75vh 0vh 2vh rgb(0, 228, 228),
+        -0.75vh 0vh 2vh rgb(0, 228, 228),
+        0.75vh 0vh 2.5vh rgb(0, 228, 228),
+        -0.75vh 0vh 2.5vh rgb(0, 228, 228);
+}
+
+#skilz-meter {
+    position: absolute;
+    left: 0px;
+    top: 115vh;
+    width: 8vh;
+    height: 29vh;
+    transform: translate(-10.5vh, 0%);
+    background-color: rgb(199, 129, 0);
+    box-shadow: 0px 2.5px 5px rgb(163, 106, 0);
+    border-radius: 2vh; 
+}
+
+.skilz-channel {
+    position: absolute;
+    left: 3vh;
+    top: 1vh;
+    width: 2vh;
+    height: 27vh;
+    background-color: rgb(2, 0, 90);
+    box-sizing: border-box;
+    border: 0.35vh inset rgb(199, 129, 0);
+    border-bottom: 0.2vh inset rgb(199, 129, 0);
+    border-radius: 1vh;
+}
+.skilz-channel-lit {
+    background-color: rgb(144, 0, 228);
+    border: 0.35vh inset rgb(144, 0, 228);
+    box-shadow: 
+        0.75vh 0vh 2vh rgb(144, 0, 228),
+        -0.75vh 0vh 2vh rgb(144, 0, 228);
+}
+
+#skilz-ball {
+    position: absolute;
+    left: 50%;
+    top: 98%;
+    width: 2vh;
+    height: 0.75vh;
+    transform: translate(-50%, 0%);
+    background-color: rgb(144, 0, 228);
+    border-radius: 50%;
+    box-shadow:
+        /* 0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228), */
+        0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        -0.75vh 0vh 1.5vh rgb(144, 0, 228),
+        /* 1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228), */
+        1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        1.5vh 0vh 1.5vh rgb(144, 0, 228),
+        -1.5vh 0vh 1.5vh rgb(144, 0, 228);
+}
+
+
+
+
+

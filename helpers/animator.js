@@ -54,31 +54,28 @@ class Animator {
     recordNoteHit() {
         this.notesHit += 1;
         this.noteResults.push(true);
-        while (this.noteResults.length > 75) {
+        while (this.noteResults.length > 50) {
             if (this.noteResults.shift()) {
                 this.notesHit -= 1;
             } else {
                 this.notesMissed -= 1;
             }
         }
+        updateMeter(this.notesHit, this.notesMissed);
     }
 
     recordNoteMissed() {
-        this.notesMissed += 4;
+        this.notesMissed += 2;
         this.noteResults.push(false);
         this.noteResults.push(false);
-        this.noteResults.push(false);
-        this.noteResults.push(false);
-        while (this.noteResults.length > 75) {
+        while (this.noteResults.length > 50) {
             if (this.noteResults.shift()) {
                 this.notesHit -= 1;
             } else {
                 this.notesMissed -= 1;
             }
         }
-        document.getElementById("skilz-meter").classList.remove("meter-lit");
-        document.getElementById("skilz-glass").classList.remove("lit");
-        document.getElementById("skilz-light").classList.remove("meter-light");
+        updateMeter(this.notesHit, this.notesMissed);
     }
 
     runAnimation(params) {
@@ -172,7 +169,7 @@ class Animator {
             this.masterInfo.slideLength,
             dt
         );
-        updateMeter(this.notesHit, this.notesMissed);
+        
 
         if (this.animating) {
             // TEST ONLY
@@ -189,18 +186,55 @@ class Animator {
     }
 }
 
-function updateMeter(notesHit, notesMissed) {
-    let percent = 100 - Math.floor(100 * notesHit / (notesHit + notesMissed));
-    if (percent > 98) {
-        percent = 98;
-    }
-    document.getElementById("skilz-ball").style.top = `${percent}%`;
 
-    if (percent === 0) {
-        document.getElementById("skilz-meter").classList.add("meter-lit");
-        document.getElementById("skilz-glass").classList.add("lit");
-        document.getElementById("skilz-light").classList.add("meter-light");
+function updateMeter(notesHit, notesMissed) {
+    let fraction = 1.0 * notesHit / (notesHit + notesMissed);
+
+
+    let percent = Math.floor(100 * fraction);
+    if (percent < 2) {
+        percent = 2;
     }
+    if (percent > 98) {
+        percent = 100;
+        document.getElementById("skilz-channel").classList.add("skilz-channel-lit");
+    } else {
+        document.getElementById("skilz-channel").classList.remove("skilz-channel-lit");
+    }
+    document.getElementById("skilz-ball").style.top = `${100 - percent}%`;
+
+
+    // const cutoff = fraction * 6;
+
+    // for (let i = 1; i < 7; i++) { // forgive me....
+    //     const lightA = document.getElementById(`light-${2 * i}`);
+    //     const lightB = document.getElementById(`light-${(2 * i) - 1}`);
+    //     if (i > cutoff) {
+    //         lightA.classList.remove(litClasses[2 * i]);
+    //         lightB.classList.remove(litClasses[(2 * i) - 1]);
+    //     } else {
+    //         lightA.classList.add(litClasses[2 * i]);
+    //         lightB.classList.add(litClasses[(2 * i) - 1]);
+
+    //     }
+    // }
+
+
+    // if (percent > 98) {
+    //     percent = 100;
+    //     document.getElementById("skilz-label").classList.add("skilz-label-lit");
+    // } else {
+    //     document.getElementById("skilz-label").classList.remove("skilz-label-lit");
+    // }
+    // if (percent < 2) {
+    //     percent = 0;
+    //     document.getElementById("skilz-light-top").classList.remove("skilz-light-top-lit");
+    // } else {
+    //     document.getElementById("skilz-light-top").classList.add("skilz-light-top-lit");
+    // }
+    // document.getElementById("skilz-beam").style.height = `${percent}%`;
+
+    
 }
 
 function moveNotes(

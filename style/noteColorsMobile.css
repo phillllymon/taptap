@@ -14,9 +14,17 @@
 
 
 .tapper {
-    border: 1.5vh solid rgb(199, 129, 0);
+    border: 1.25vh solid rgb(199, 129, 0);
     border-left: 3vh solid rgb(199, 129, 0);
     border-right: 3vh solid rgb(199, 129, 0);
+}
+#lower-shadow-bar {
+    top: 100%;
+    box-shadow: 0px 2.5px 5px rgb(163, 106, 0);
+    box-sizing: border-box;
+    border-bottom: 2px solid rgb(163, 106, 0);
+    transform: translate(0vh, -5vh);
+    /* ^this is a mystery - why does -4.5vmin get it to the right spot? */
 }
 
 #tapper-left .note-bulb {
@@ -66,14 +74,14 @@
 }
 
 [id$="slide-left"] .note {
-    background-color: rgb(125, 0, 0);
+    background-color: rgb(255, 188, 188);
     border-top: 0.35vh solid rgb(150, 0, 0);
     border-right: 3vh solid rgb(107, 0, 0);
     border-left: 3vh solid rgb(107, 0, 0);
     border-bottom: 1.5vh solid rgb(85, 0, 0);
     box-shadow:
-        -0.8vmin 0.35vmin 0.8vmin rgb(235, 0, 0),
-        0.8vmin 0.35vmin 0.8vmin rgb(235, 0, 0);
+        -0.8vh 0.2vh 0.8vh rgb(235, 0, 0),
+        0.8vh 0.2vh 0.8vh rgb(235, 0, 0);
 }
 [id$="slide-left"] .note-tail {
     background-color: rgb(150, 0, 0);
@@ -86,14 +94,14 @@
 }
 
 [id$="slide-a"] .note {
-    background-color: rgb(59, 59, 255);
+    background-color: rgb(188, 215, 255);
     border-top: 0.35vh solid rgb(95, 95, 255);
     border-right: 3vh solid rgb(33, 33, 255);
     border-left: 3vh solid rgb(33, 33, 255);
     border-bottom: 1.5vh solid rgb(0, 0, 255);
     box-shadow:
-        -0.8vmin 0.35vmin 0.8vmin rgb(41, 177, 255),
-        0.8vmin 0.35vmin 0.8vmin rgb(41, 177, 255);
+        -0.8vh 0.2vh 0.8vh rgb(41, 177, 255),
+        0.8vh 0.2vh 0.8vh rgb(41, 177, 255);
 }
 [id$="slide-a"] .note-tail {
     background-color: rgb(42, 92, 255);
@@ -106,14 +114,14 @@
 }
 
 [id$="slide-b"] .note {
-    background-color: rgb(150, 0, 150);
+    background-color: rgb(249, 188, 255);
     border-top: 0.35vh solid rgb(175, 0, 175);
     border-right: 3vh solid rgb(132, 0, 132);
     border-left: 3vh solid rgb(132, 0, 132);
     border-bottom: 1.5vh solid rgb(110, 0, 110);
     box-shadow:
-        -0.8vmin 0.35vmin 0.8vmin rgb(250, 0, 250),
-        0.8vmin 0.35vmin 0.8vmin rgb(250, 0, 250);
+        -0.8vh 0.2vh 0.8vh rgb(250, 0, 250),
+        0.8vh 0.2vh 0.8vh rgb(250, 0, 250);
 }
 [id$="slide-b"] .note-tail {
     background-color: rgb(175, 0, 175);
@@ -126,14 +134,14 @@
 }
 
 [id$="slide-right"] .note {
-    background-color: rgb(0, 125, 0);
+    background-color: rgb(188, 255, 191);
     border-top: 0.35vh solid rgb(0, 150, 0);
     border-right: 3vh solid rgb(0, 107, 0);
     border-left: 3vh solid rgb(0, 107, 0);
     border-bottom: 1.5vh solid rgb(0, 85, 0);
     box-shadow:
-        -0.8vmin 0.35vmin 0.8vmin rgb(0, 235, 0),
-        0.8vmin 0.35vmin 0.8vmin rgb(0, 235, 0);
+        -0.8vh 0.2vh 0.8vh rgb(0, 235, 0),
+        0.8vh 0.2vh 0.8vh rgb(0, 235, 0);
 }
 [id$="slide-right"] .note-tail {
     background-color: rgb(0, 150, 0);
@@ -258,9 +266,9 @@
 }
 
 #skilz-meter {
-    top: 70vh;
+    top: 90vh;
 }
 #streak-meter {
-    top: 70vh;
+    top: 90vh;
 }
 
