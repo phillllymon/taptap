@@ -157,7 +157,8 @@ function setMessage(message) {
 
 function saveToDatabase(name, str) {
     return new Promise((resolve) => {
-        fetch("https://graffiti.red/API/public/", {
+        fetch("https://beatburner.com/api/", {
+        // fetch("https://graffiti.red/API/public/", {
             method: "POST",
             body: JSON.stringify({
                 action: "set",
@@ -174,7 +175,8 @@ function saveToDatabase(name, str) {
 
 function getFromDatabase(name) {
     return new Promise((resolve) => {
-        fetch("https://graffiti.red/API/public/", {
+        fetch("https://beatburner.com/api/", {
+        // fetch("https://graffiti.red/API/public/", {
             method: "POST",
             body: JSON.stringify({
                 action: "retrieve",

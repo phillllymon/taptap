@@ -1,4 +1,4 @@
-console.log("initiating game");
+console.log("initiating beatburner");
 
 const twangs = [
     new Audio("./effects/twang6.m4a"),
