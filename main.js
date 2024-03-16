@@ -91,6 +91,7 @@ let songNotesMissed = 0;
 let songStreak = 0;
 
 let radioCode = "mvn925";
+let songMode = "demo";
 
 // TEMP FOR SLIDER EXPERIMENT
 let currentSlider = "a-slider";
@@ -113,6 +114,7 @@ const masterInfo = {
     slideLength,
     songAtStart,
     songDelay,
+    songMode,
     songNotesHit,
     songNotesMissed,
     songStreak,
@@ -702,5 +704,26 @@ function setupMobile() {
         if (e.target.id === "dummy-right" || e.target.id === "dummy-tapper-right" || e.target.id === "a-slide-right" || e.target.id === "b-slide-right") {
             deactivateTapper("tapper-right");
         }
+    });
+}
+
+
+
+// stats
+const session_id = Math.floor((Math.random() * 1000000000000000)).toString();
+
+sendStat();
+setInterval(() => {
+    sendStat();
+}, 180000); // update every 3 minutes
+// }, 10000);
+
+function sendStat() {
+    fetch("https://beatburner.com/api/session.php", {
+        method: "POST",
+        body: JSON.stringify({
+            session: session_id,
+            mode: masterInfo.songMode
+        })
     });
 }
