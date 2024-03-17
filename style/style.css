@@ -510,3 +510,24 @@
     background-color: green;
     z-index: 3;
 }
+
+#open-feedback-link {
+    position: fixed;
+    left: 1vh;
+    top: 1vh;
+    color: gray;
+    cursor: pointer;
+    font-size: 2vh;
+    z-index: 3;
+    user-select: none;
+    font-family: sans-serif;
+    text-shadow: 0px 0px 0.25vh white; 
+}
+#give-feedback-modal {
+    font-size: 2vh;
+    width: 50vh;
+    z-index: 6;
+}
+#feedback-message {
+    width: 90%;
+}

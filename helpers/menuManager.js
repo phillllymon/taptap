@@ -22,8 +22,47 @@ class MenuManager {
 
         this.activateMainMenu();
         this.activateFeedbackMenu();
+        this.activateGiveFeedbackMenu();
 
         this.showMenu("source-menu");
+    }
+
+    activateGiveFeedbackMenu() {
+        setButtonClick("open-feedback-link", () => {
+            userFeedbackOpen = true;
+            document.getElementById("give-feedback-modal").classList.remove("hidden");
+            document.getElementById("give-feedback-modal").classList.add("menu");
+        });
+        setButtonClick("cancel-give-feedback", () => {
+            document.getElementById("give-feedback-modal").classList.add("hidden");
+            document.getElementById("give-feedback-modal").classList.remove("menu");
+            userFeedbackOpen = false;
+        });
+        setButtonClick("submit-give-feedback", () => {
+            const message = document.getElementById("feedback-message").value;
+            if (message.length < 3) {
+                alert("Cannot submit empty message!");
+            } else {
+                let email = document.getElementById("feedback-email").value;
+                if (email.length < 1) {
+                    email = "none";
+                }
+                fetch("https://beatburner.com/api/feedback.php", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        message: message,
+                        email: email
+                    })
+                }).then(() => {
+                    document.getElementById("feedback-message").value = "";
+                    document.getElementById("feedback-email").value = "";
+                    document.getElementById("give-feedback-modal").classList.add("hidden");
+                    document.getElementById("give-feedback-modal").classList.remove("menu");
+                    userFeedbackOpen = false;
+                    alert("Thanks!");
+                });
+            }
+        });
     }
 
     activateFeedbackMenu() {

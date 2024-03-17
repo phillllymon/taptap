@@ -202,7 +202,11 @@ showSongControlButton("button-play");
 
 
 // setup for items handled on this page
+userFeedbackOpen = false;
 document.addEventListener("keypress", (e) => {
+    if (userFeedbackOpen) {
+        return;
+    }
     // e.preventDefault();
     e.stopPropagation();
     if (masterInfo.waitingForKey) {
@@ -220,6 +224,9 @@ document.addEventListener("keypress", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
+    if (userFeedbackOpen) {
+        return;
+    }
     if(e.code === tapperKeys[0]) {
         e.preventDefault();
         if (!targetTails["slide-left"] && !activeTappers["tapper-left"]) {
@@ -251,6 +258,9 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("keyup", (e) => {
+    if (userFeedbackOpen) {
+        return;
+    }
     if(e.code === tapperKeys[0]) {
         deactivateTapper("tapper-left");
     }
@@ -712,7 +722,7 @@ function setupMobile() {
 // stats
 const session_id = Math.floor((Math.random() * 1000000000000000)).toString();
 
-sendStat();
+setTimeout(sendStat, 30000);
 setInterval(() => {
     sendStat();
 }, 180000); // update every 3 minutes

@@ -19,6 +19,18 @@
 <body>
     <center>
         <div id="game-container" class="game-container">
+            <div id="open-feedback-link">feedback</div>
+            <div id="give-feedback-modal" class="hidden">
+                Send a message to the creators of Beat Burner. Any feedback is helpful!
+                Be sure to include your email if you'd like a reply.
+                <br>
+                <br>
+                <textarea id="feedback-message" placeholder="message"></textarea>
+                <br>
+                <input type="text" id="feedback-email" placeholder="email (optional)" />
+                <button id="cancel-give-feedback">Cancel</button>
+                <button id="submit-give-feedback" >Submit</button>
+            </div>
             <div id="modal-background" class="hidden"></div>
             <div id="connecting-radio" class="hidden">
                 <div class="menu-title">
